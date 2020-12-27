@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": [
+      "error"
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error"
+    ],
+    "@typescript-eslint/no-explicit-any": 2,
+    "quotes": "off",
+    "@typescript-eslint/quotes": [
+      "error",
+      "single"
+    ]
+  }
+}
