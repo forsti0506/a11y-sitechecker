@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/a11y-full-checker.iml" filepath="$PROJECT_DIR$/.idea/a11y-full-checker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/a11y-sitechecker.iml" filepath="$PROJECT_DIR$/.idea/a11y-sitechecker.iml" />
     </modules>
   </component>
 </project>
