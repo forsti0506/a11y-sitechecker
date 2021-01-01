@@ -1,10 +1,10 @@
 import * as fs from 'fs';
-import {AxePuppeteer} from '@axe-core/puppeteer';
+import { AxePuppeteer } from '@axe-core/puppeteer';
 import * as chalk from 'chalk';
 import * as puppeteer from 'puppeteer';
 import * as JSDOM from 'jsdom';
-import {Spec} from 'axe-core';
-import {A11ySitecheckerResult} from './models/a11y-sitechecker-result';
+import { Spec } from 'axe-core';
+import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
 
 const alreadyVisited = [];
 const alreadyParsed = [];
@@ -19,7 +19,11 @@ let results: A11ySitecheckerResult = {
     timestamp: '',
     toolOptions: undefined,
     url: '',
-    violations: [], violationsByUrl: [], inapplicable: [], incomplete: [], passes: []
+    violations: [],
+    violationsByUrl: [],
+    inapplicable: [],
+    incomplete: [],
+    passes: [],
 };
 
 function getEscaped(link: string): string {
@@ -38,7 +42,7 @@ export async function analyzeSite(url: string, axeSpecs: Spec): Promise<A11ySite
     const page = await browser.newPage();
     await page.setViewport({
         width: 1920,
-        height: 1080
+        height: 1080,
     });
 
     await analyzeUrl(page, url, axeSpecs);
@@ -57,7 +61,7 @@ export async function analyzeSite(url: string, axeSpecs: Spec): Promise<A11ySite
         if (!alreadyParsed.includes(link)) {
             const res: A11ySitecheckerResult = await analyzeSite(link, axeSpecs);
             alreadyParsed.push(link);
-            results = {...results, ...res};
+            results = { ...results, ...res };
         }
         count++;
     }
@@ -65,38 +69,35 @@ export async function analyzeSite(url: string, axeSpecs: Spec): Promise<A11ySite
 }
 
 function getLinks(html: string, url: string): string[] {
-    const dom = new JSDOM.JSDOM(html, {contentType: 'text/html'});
+    const dom = new JSDOM.JSDOM(html, { contentType: 'text/html' });
     const links: string[] = [];
     const rootDomain = new URL(url).hostname;
-    dom.window.document.querySelectorAll('a').forEach(
-        (element: HTMLAnchorElement) => {
-            let link = element.href;
-            if (isAbsoluteUrl(link) && link.includes(rootDomain)) {
-                if (link.startsWith('//')) {
-                    link = url.startsWith('https') ? 'https:' + link : 'http:' + link;
-                }
-                if (!link.endsWith('/') && !link.includes('#') && !isFile(link)) {
-                    link = link + '/';
-                }
-                if (!links.includes(link) && !isFile(link)) {
-                    links.push(link);
-                }
-            } else if (!isAbsoluteUrl(link) && !link.includes('#')) {
-                let absoluteUrl = url + '/' + link;
-                if (!absoluteUrl.endsWith('/') && !isFile(absoluteUrl)) {
-                    absoluteUrl = absoluteUrl + '/';
-                }
-                if (!links.includes(absoluteUrl) && !isFile(absoluteUrl)) {
-                    links.push(absoluteUrl);
-                }
-            } else if (!notCheckedLinks.includes(link)) {
-                notCheckedLinks.push(link);
+    dom.window.document.querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
+        let link = element.href;
+        if (isAbsoluteUrl(link) && link.includes(rootDomain)) {
+            if (link.startsWith('//')) {
+                link = url.startsWith('https') ? 'https:' + link : 'http:' + link;
             }
+            if (!link.endsWith('/') && !link.includes('#') && !isFile(link)) {
+                link = link + '/';
+            }
+            if (!links.includes(link) && !isFile(link)) {
+                links.push(link);
+            }
+        } else if (!isAbsoluteUrl(link) && !link.includes('#')) {
+            let absoluteUrl = url + '/' + link;
+            if (!absoluteUrl.endsWith('/') && !isFile(absoluteUrl)) {
+                absoluteUrl = absoluteUrl + '/';
+            }
+            if (!links.includes(absoluteUrl) && !isFile(absoluteUrl)) {
+                links.push(absoluteUrl);
+            }
+        } else if (!notCheckedLinks.includes(link)) {
+            notCheckedLinks.push(link);
         }
-    );
+    });
     return links;
 }
-
 
 function isAbsoluteUrl(url): boolean {
     return /^(?:[a-z]+:)?\/\//i.test(url);
@@ -104,25 +105,25 @@ function isAbsoluteUrl(url): boolean {
 
 async function analyzeUrl(page, url: string, axeSpecs: Spec, backUrl?: string): Promise<void> {
     log(chalk.blue('Currently analyzing ' + url));
-    await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.goto(url, { waitUntil: 'networkidle2' });
     if (!fs.existsSync('images')) {
         fs.mkdirSync('images');
     }
-    await page.screenshot({path: 'images/' + getEscaped(url) + '.png'});
+    await page.screenshot({ path: 'images/' + getEscaped(url) + '.png' });
     alreadyParsed.push(url);
     try {
         const axe = await new AxePuppeteer(page);
         axe.configure(axeSpecs);
         const axeResults = await axe.analyze();
         // results.violations = {...results.violations, ...axeResults.violations};
-        results.violationsByUrl.push({url: url, violations: axeResults.violations});
+        results.violationsByUrl.push({ url: url, violations: axeResults.violations });
         alreadyVisited.push(url);
         log(chalk.green('Finished analyze of url.'));
     } catch (error) {
-        log(chalk.red( error + '. Analyze not stopped.'));
+        log(chalk.red(error + '. Analyze not stopped.'));
     }
-    if(backUrl) {
-        await page.goto(backUrl, {waitUntil: 'networkidle2'});
+    if (backUrl) {
+        await page.goto(backUrl, { waitUntil: 'networkidle2' });
     }
 }
 
