@@ -1,4 +1,4 @@
-import {ImpactValue, Result, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner} from 'axe-core';
+import { ImpactValue, Result, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
 
 export interface A11ySitecheckerResult {
     toolOptions: RunOptions;
