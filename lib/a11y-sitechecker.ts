@@ -3,6 +3,7 @@ import {AxePuppeteer} from '@axe-core/puppeteer';
 import * as chalk from 'chalk';
 import * as puppeteer from 'puppeteer';
 import * as JSDOM from 'jsdom';
+import {Spec} from 'axe-core';
 import {A11ySitecheckerResult} from './models/a11y-sitechecker-result';
 
 const alreadyVisited = [];
@@ -25,7 +26,7 @@ function getEscaped(link: string): string {
     return link.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
 }
 
-export async function analyzeSite(url: string): Promise<A11ySitecheckerResult> {
+export async function analyzeSite(url: string, axeSpecs: Spec): Promise<A11ySitecheckerResult> {
     if (!url.startsWith('https://')) {
         url = 'https://' + url;
     }
@@ -40,13 +41,13 @@ export async function analyzeSite(url: string): Promise<A11ySitecheckerResult> {
         height: 1080
     });
 
-    await analyzeUrl(page, url);
+    await analyzeUrl(page, url, axeSpecs);
     const html = await page.content();
     const links = getLinks(html, url);
 
     for (const link of links) {
         if (!alreadyVisited.includes(link)) {
-            await analyzeUrl(page, link, url);
+            await analyzeUrl(page, link, axeSpecs, url);
         }
     }
     await browser.close();
@@ -54,7 +55,7 @@ export async function analyzeSite(url: string): Promise<A11ySitecheckerResult> {
     for (const link of links) {
         if (count >= 1) break;
         if (!alreadyParsed.includes(link)) {
-            const res: A11ySitecheckerResult = await analyzeSite(link);
+            const res: A11ySitecheckerResult = await analyzeSite(link, axeSpecs);
             alreadyParsed.push(link);
             results = {...results, ...res};
         }
@@ -101,7 +102,7 @@ function isAbsoluteUrl(url): boolean {
     return /^(?:[a-z]+:)?\/\//i.test(url);
 }
 
-async function analyzeUrl(page, url: string, backUrl?: string): Promise<void> {
+async function analyzeUrl(page, url: string, axeSpecs: Spec, backUrl?: string): Promise<void> {
     log(chalk.blue('Currently analyzing ' + url));
     await page.goto(url, {waitUntil: 'networkidle2'});
     if (!fs.existsSync('images')) {
@@ -110,7 +111,9 @@ async function analyzeUrl(page, url: string, backUrl?: string): Promise<void> {
     await page.screenshot({path: 'images/' + getEscaped(url) + '.png'});
     alreadyParsed.push(url);
     try {
-        const axeResults = await new AxePuppeteer(page).analyze();
+        const axe = await new AxePuppeteer(page);
+        axe.configure(axeSpecs);
+        const axeResults = await axe.analyze();
         // results.violations = {...results.violations, ...axeResults.violations};
         results.violationsByUrl.push({url: url, violations: axeResults.violations});
         alreadyVisited.push(url);

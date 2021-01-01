@@ -1,7 +1,11 @@
 {
   "name": "a11y-sitechecker",
-  "version": "0.0.1-alpha-2",
+  "version": "0.0.1-alpha-4",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forsti0506/a11y-sitechecker.git"
+  },
   "main": "./lib/a11y-sitechecker.js",
   "types": "./lib/a11y-sitechecker.d.ts",
   "dependencies": {
@@ -33,10 +37,10 @@
     "lint": "eslint . --ext .ts"
   },
   "bin": {
-    "a11y-full-checker": "./bin/a11y-sitechecker.js"
+    "a11y-sitechecker": "./bin/a11y-sitechecker.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Martin Forstner",
   "license": "ISC",
   "files": [
     "dist/"

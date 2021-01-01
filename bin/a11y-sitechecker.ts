@@ -8,9 +8,11 @@ import * as fs from 'fs';
 import * as prettyjson from 'prettyjson';
 import {A11ySitecheckerResult, FullCheckerSingleResult, NodeResult} from '../lib/models/a11y-sitechecker-result';
 import {analyzeSite} from '../lib/a11y-sitechecker';
+import {Spec} from 'axe-core';
+import * as puppeteer from "puppeteer";
 
 
-const config: Config = {json: false, resultsPath: 'results'};
+const config: Config = {json: true, resultsPath: 'results', axeConfig: {}};
 
 // Here we're using Commander to specify the CLI options
 commander
@@ -22,7 +24,7 @@ commander
     )
     .option(
         '--config <string>',
-        'Provide a config.json. Relative Path from your main folder'
+        'Provide a config.json'
     )
     .option(
         '-T, --threshold <number>',
@@ -74,27 +76,49 @@ function mergeResults(report: A11ySitecheckerResult): A11ySitecheckerResult {
 }
 
 // Start the promise chain to actually run everything
-Promise.resolve()
-    .then(() => {
-        config.json = commander.json;
-        if(commander.config) {
-            const configFile = JSON.parse(fs.readFileSync(commander.config).toString('utf-8'));
-            if(configFile.json && configFile.json && typeof configFile.json === 'boolean') {
-                config.json = configFile.json;
-            }
-            if(configFile.resultsPath && configFile.resultsPath && typeof configFile.resultsPath === 'string') {
-                config.resultsPath = configFile.resultsPath;
-            }
+(async (): Promise<void> => {
+    config.json = commander.json;
+    if(commander.config) {
+        const configFile = JSON.parse(fs.readFileSync(commander.config).toString('utf-8'));
+        if(configFile.json && configFile.json && typeof configFile.json === 'boolean') {
+            config.json = configFile.json;
         }
+        if(configFile.resultsPath && typeof configFile.resultsPath === 'string') {
+            config.resultsPath = configFile.resultsPath;
+        }
+        if(configFile.axeConfig.locale && typeof configFile.axeConfig.locale === 'string') {
+            config.axeConfig.locale = configFile.axeConfig.locale;
+        }
+        if(configFile.axeConfig.localePath && typeof configFile.axeConfig.localePath === 'string') {
+            config.axeConfig.localePath = configFile.axeConfig.localePath;
+        }
+    }
+    const axeConfig: Spec = {};
+    if(config.axeConfig?.locale) {
+        axeConfig.locale = JSON.parse(fs.readFileSync('node_modules/axe-core/locales/' + config.axeConfig.locale +'.json').toString('utf-8'));
+    } else if(config.axeConfig?.localePath) {
+        axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
+    }
+    await next(axeConfig);
+})();
 
-    })
-    .then(() => {
-        console.log(chalk.blue('#############################################################################################'));
+
+async function next(axeSpecs: Spec): Promise<void> {
+        try {
+            console.log(chalk.blue('#############################################################################################'));
+
         console.log(chalk.blue(`Start accessibility Test for ${commander.args[0]}`));
         console.log(chalk.blue('#############################################################################################'));
-        return analyzeSite(commander.args[0]);
-    })
-    .then(report => {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setViewport({
+        width: 1920,
+        height: 1080
+        });
+
+        let report = await analyzeSite(commander.args[0], axeSpecs);
+
+
         report = mergeResults(report);
         if(config.json) {
             writeToJsonFile(JSON.stringify(report, null, 2), config.resultsPath);
@@ -110,9 +134,10 @@ Promise.resolve()
         } else {
             process.exit(0);
         }
-    })
-    .catch(error => {
+    }
+    catch(error) {
         // Handle any errors
         console.error(error.message);
         process.exit(1);
-    });
+    }
+}
