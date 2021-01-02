@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.12...v1.0.13) (2021-01-02)
+
+
+### Bug Fixes
+
+* new tag added ([e7650de](https://github.com/forsti0506/a11y-sitechecker/commit/e7650de21391de99f57b32938720445cd72c5130))
+
 ## [1.0.12](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.11...v1.0.12) (2021-01-02)
 
 
