@@ -90,8 +90,10 @@
           ]
         }
       ],
-      "@semantic-release/git",
-      [
+      ["@semantic-release/git",{
+        "assets": ["dist/package.json"]
+      }],
+        [
         "@semantic-release/github",
         {
           "assets": "release/*.tgz"
