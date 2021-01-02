@@ -44,7 +44,17 @@
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
   },
-  "keywords": [],
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "testing",
+    "automated testing",
+    "accessibility testing",
+    "universal design",
+    "Design4all",
+    "automation",
+    "test"
+  ],
   "author": "Martin Forstner",
   "license": "ISC",
   "files": [
