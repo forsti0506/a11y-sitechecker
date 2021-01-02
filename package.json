@@ -66,7 +66,7 @@
     "accessible"
   ],
   "author": "Martin Forstner",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "files": [
     "lib",
     "bin"
