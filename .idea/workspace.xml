@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -70,7 +71,7 @@
       <recent name="F:\OneDrive\Uni\a11y-full-checker" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="npm.postpublish">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -87,16 +88,6 @@
       <command value="run" />
       <scripts>
         <script value="build" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="install" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="install" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -122,11 +113,21 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+    <configuration name="postpublish (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/dist/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="postpublish" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="postpublish" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
-        <script value="start" />
+        <script value="postpublish" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -134,11 +135,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.postpublish" />
+        <item itemvalue="npm.postpublish (1)" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.lint" />
         <item itemvalue="npm.lint (1)" />
-        <item itemvalue="npm.install" />
-        <item itemvalue="npm.start" />
       </list>
     </recent_temporary>
   </component>
@@ -153,7 +154,7 @@
       <workItem from="1608931412164" duration="36601000" />
       <workItem from="1609075029361" duration="48320000" />
       <workItem from="1609539437235" duration="210000" />
-      <workItem from="1609539667036" duration="11953000" />
+      <workItem from="1609539667036" duration="12797000" />
     </task>
     <servers />
   </component>
