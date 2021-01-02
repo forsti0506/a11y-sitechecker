@@ -95,6 +95,7 @@
           "assets": "release/*.tgz"
         }
       ],
+
       "@semantic-release/git"
     ]
   },
