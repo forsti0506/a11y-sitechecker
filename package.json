@@ -49,7 +49,7 @@
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
     "semantic-release": "semantic-release --debug=true",
-    "postversion": "copyfiles -r package.json .."
+    "postpublish": "copyfiles -r package.json .."
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -89,7 +89,7 @@
         }
       ],
       ["@semantic-release/git",{
-        "assets": ["dist/package.json"]
+        "assets": ["CHANGELOG.md"]
       }],
         [
         "@semantic-release/github",
