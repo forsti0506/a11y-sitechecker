@@ -97,7 +97,6 @@
         }
       ],
       [
-
         "@semantic-release/git",
         {
           "assets": [
