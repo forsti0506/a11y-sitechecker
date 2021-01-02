@@ -28,6 +28,9 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/npm": "^7.0.9",
+    "@semantic-release/release-notes-generator": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
     "eslint": "^7.16.0",
@@ -43,7 +46,8 @@
     "build": "tsc && copyfiles README.md dist",
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "postpublish": "cp -r package.json .."
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -65,7 +69,28 @@
     "dist/"
   ],
   "release": {
-    "branches": ["main", "next"]
+    "branches": [
+      "main",
+      "next"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "dist"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ]
+        }
+      ]
+    ]
   },
   "husky": {
     "hooks": {
@@ -79,6 +104,8 @@
     ]
   },
   "commitlint": {
-    "extends": ["@commitlint/config-conventional"]
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
