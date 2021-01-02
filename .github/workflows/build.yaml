@@ -33,7 +33,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          cp "dist/package.json" ..
+          mv dist/package.json ..
           git commit -am "Move package.json from dist after release [skip ci]"
       - name: Push changes
         uses: ad-m/github-push-action@master
