@@ -96,9 +96,11 @@
           "assets": "release/*.tgz"
         }
       ],
-      ["@semantic-release/git", {
-        "assets": "package.json"
-      }]
+      [
+        "@semantic-release/git", {
+          "assets": ["package.json"]
+        }
+      ]
     ]
   },
   "husky": {
