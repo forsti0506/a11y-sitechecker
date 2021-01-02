@@ -37,5 +37,5 @@ jobs:
           git commit -am "Move package.json from dist after release [skip ci]"
       - name: Push changes
         uses: ad-m/github-push-action@master
-        env:
+        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
