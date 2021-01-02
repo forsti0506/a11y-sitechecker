@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "tsc && copyfiles README.md dist",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "exit 0",
     "lint": "eslint . --ext .ts",
     "semantic-release": "semantic-release"
   },
