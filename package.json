@@ -48,7 +48,8 @@
     "build": "tsc && copyfiles README.md dist",
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "postpublish": "copyfiles package.json .."
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -95,7 +96,9 @@
           "assets": "release/*.tgz"
         }
       ],
-      "@semantic-release/git"
+      ["@semantic-release/git", {
+        "assets": "package.json"
+      }]
     ]
   },
   "husky": {
