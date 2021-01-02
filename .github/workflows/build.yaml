@@ -21,7 +21,7 @@ jobs:
         run: npm test
 
       - name: Package
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: npm run semantic-release
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
