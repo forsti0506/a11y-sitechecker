@@ -1,3 +1,10 @@
+## [1.0.23](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.22...v1.0.23) (2021-01-02)
+
+
+### Bug Fixes
+
+* move file instead of copying ([2dbcc5f](https://github.com/forsti0506/a11y-sitechecker/commit/2dbcc5f9b491292312ccc16f315951c0e4f1a872))
+
 ## [1.0.22](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.21...v1.0.22) (2021-01-02)
 
 
