@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.14...v1.0.15) (2021-01-02)
+
+
+### Bug Fixes
+
+* semantic release debug mode ([6a7b63c](https://github.com/forsti0506/a11y-sitechecker/commit/6a7b63cfa5051bb60cee7c02ebe76c1bf65a32f9))
+
 ## [1.0.14](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.13...v1.0.14) (2021-01-02)
 
 
