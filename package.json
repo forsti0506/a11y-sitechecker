@@ -48,8 +48,7 @@
     "build": "tsc && copyfiles README.md dist",
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
-    "semantic-release": "semantic-release",
-    "postpublish": "copyfiles -r dist/package.json . && copyfiles -r dist/npm-shrinkwrap.json ."
+    "semantic-release": "semantic-release"
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -90,16 +89,7 @@
           ]
         }
       ],
-      [
         "@semantic-release/git",
-        {
-          "assets": [
-            "CHANGELOG.md",
-            "package.json"
-          ],
-          "message": "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
-      ],
       [
         "@semantic-release/github",
         {
