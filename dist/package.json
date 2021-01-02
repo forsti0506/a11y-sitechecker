@@ -1,6 +1,6 @@
 {
     "name": "a11y-sitechecker",
-    "version": "1.0.16",
+    "version": "1.0.17",
     "description": "",
     "repository": {
         "type": "git",
@@ -48,7 +48,8 @@
         "build": "tsc && copyfiles README.md dist",
         "test": "exit 0",
         "lint": "eslint . --ext .ts",
-        "semantic-release": "semantic-release --debug=true"
+        "semantic-release": "semantic-release --debug=true",
+        "postpublish": "copyfiles -r package.json .."
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -84,10 +85,7 @@
                 "@semantic-release/npm",
                 {
                     "pkgRoot": "dist",
-                    "tarballDir": "release",
-                    "assets": [
-                        "dist/**"
-                    ]
+                    "tarballDir": "release"
                 }
             ],
             [
