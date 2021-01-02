@@ -1,3 +1,10 @@
+## [1.0.22](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.21...v1.0.22) (2021-01-02)
+
+
+### Bug Fixes
+
+* use github token ([ee7c521](https://github.com/forsti0506/a11y-sitechecker/commit/ee7c52185b12de38042b6bf0352467f87e8a4bb2))
+
 ## [1.0.21](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.20...v1.0.21) (2021-01-02)
 
 
