@@ -1,3 +1,10 @@
+## [1.0.14](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.13...v1.0.14) (2021-01-02)
+
+
+### Bug Fixes
+
+* licence ([24cadac](https://github.com/forsti0506/a11y-sitechecker/commit/24cadac4d59f6b6c4d12e7fe9165f5d8fcf3a643))
+
 ## [1.0.13](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.12...v1.0.13) (2021-01-02)
 
 
