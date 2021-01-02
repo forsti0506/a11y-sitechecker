@@ -67,7 +67,7 @@
   "author": "Martin Forstner",
   "license": "ISC",
   "files": [
-    "dist/**"
+    "dist/**/*"
   ],
   "release": {
     "branches": [
