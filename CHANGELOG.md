@@ -1,3 +1,11 @@
+## [1.0.11](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.10...v1.0.11) (2021-01-02)
+
+
+### Bug Fixes
+
+* fixes ([9ec1cd1](https://github.com/forsti0506/a11y-sitechecker/commit/9ec1cd135a9006ce4a66686430d92bed77aa59ad))
+* merges ([91b5cc0](https://github.com/forsti0506/a11y-sitechecker/commit/91b5cc0912759d02a0eb86635bf55bc0a9a64bef))
+
 ## [1.0.10](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.9...v1.0.10) (2021-01-02)
 
 
