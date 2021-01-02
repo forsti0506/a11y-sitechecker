@@ -26,6 +26,8 @@
     "typescript": "^4.1.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
     "eslint": "^7.16.0",
@@ -34,14 +36,14 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "husky": "^4.3.6",
-    "lint-staged": "^10.5.3"
+    "lint-staged": "^10.5.3",
+    "semantic-release": "^17.3.1"
   },
   "scripts": {
     "build": "tsc && copyfiles README.md dist",
-    "prepublishOnly": "git commit -am \"Publishing %s\"",
-    "postpublish": "git push && npm version patch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "semantic-release": "semantic-release"
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -62,9 +64,13 @@
   "files": [
     "dist/"
   ],
+  "release": {
+    "branches": ["main", "next"]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
