@@ -31,6 +31,11 @@ jobs:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Copy package json
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           cp "dist/package.json" ..
           git commit -am "Move package.json from dist after release [skip ci]"
-          git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
