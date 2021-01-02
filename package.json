@@ -49,7 +49,7 @@
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
     "semantic-release": "semantic-release --debug=true",
-    "postpublish": "copyfiles -r package.json .."
+    "postversion": "copyfiles -r package.json .."
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
