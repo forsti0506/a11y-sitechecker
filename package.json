@@ -46,8 +46,7 @@
     "build": "tsc && copyfiles README.md dist",
     "test": "exit 0",
     "lint": "eslint . --ext .ts",
-    "semantic-release": "semantic-release",
-    "postpublish": "cp -r package.json .."
+    "semantic-release": "semantic-release"
   },
   "bin": {
     "a11y-sitechecker": "./bin/a11y-sitechecker.js"
@@ -79,17 +78,19 @@
       [
         "@semantic-release/npm",
         {
-          "pkgRoot": "dist"
+          "pkgRoot": "dist",
+          "assets": [
+            "dist/**"
+          ]
         }
       ],
       [
         "@semantic-release/github",
         {
-          "assets": [
-            "dist/**"
-          ]
+          "assets": "release/*.tgz"
         }
-      ]
+      ],
+      "@semantic-release/git"
     ]
   },
   "husky": {
