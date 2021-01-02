@@ -77,5 +77,8 @@
     "**/*.{js,ts,tsx}": [
       "eslint --cache --fix"
     ]
+  },
+  "commitlint": {
+    "extends": ["@commitlint/config-conventional"]
   }
 }
