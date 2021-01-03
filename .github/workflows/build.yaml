@@ -23,23 +23,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-      - name: Package
-        if: github.ref == 'refs/heads/main'
-        run: npm run semantic-release
-        env:
-            GITHUB_TOKEN: ${{ secrets.GIT_PERSONAL_TOKEN }}
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Copy package json
-        if: github.ref == 'refs/heads/main'
-        working-directory: ./dist
-        run: |
-          git config --local user.email "martin@forsti.eu"
-          git config --local user.name "Martin Forstner"
-          mv -v package.json ..
-          git commit -am "Move package.json from dist after release [skip ci]"
-      - name: Push changes
-        if: github.ref == 'refs/heads/main'
-        uses: ad-m/github-push-action@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GIT_PERSONAL_TOKEN }}
