@@ -7,6 +7,8 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       - name: Install node
         uses: actions/setup-node@v1
@@ -32,8 +34,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         working-directory: ./dist
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "martin@forsti.eu"
+          git config --local user.name "Martin Forstner"
           mv -v package.json ..
           git commit -am "Move package.json from dist after release [skip ci]"
       - name: Push changes
