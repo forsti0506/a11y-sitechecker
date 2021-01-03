@@ -1,3 +1,10 @@
+## [1.0.25](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.24...v1.0.25) (2021-01-03)
+
+
+### Bug Fixes
+
+* logging for moving file ([e1857d3](https://github.com/forsti0506/a11y-sitechecker/commit/e1857d339aaa085eb5329b284c51af9b71a60c66))
+
 ## [1.0.24](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.23...v1.0.24) (2021-01-03)
 
 
