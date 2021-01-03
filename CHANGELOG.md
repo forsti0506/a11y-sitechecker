@@ -1,3 +1,10 @@
+## [1.0.26](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.25...v1.0.26) (2021-01-03)
+
+
+### Bug Fixes
+
+* mv ([3efdd8d](https://github.com/forsti0506/a11y-sitechecker/commit/3efdd8d7ed6862ceeba094433c437eed006abc79))
+
 ## [1.0.25](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.24...v1.0.25) (2021-01-03)
 
 
