@@ -1,3 +1,14 @@
+## [1.0.28](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.27...v1.0.28) (2021-01-03)
+
+
+### Bug Fixes
+
+* build script ([462dcb2](https://github.com/forsti0506/a11y-sitechecker/commit/462dcb25c469a5a7b21f96ce5ea4255160c63ad6))
+* persist credentials false ([1b43417](https://github.com/forsti0506/a11y-sitechecker/commit/1b43417fd971580c8afeb6334d6df1175f4fde67))
+* personal token ([bbb3e4a](https://github.com/forsti0506/a11y-sitechecker/commit/bbb3e4a2443f51aeeeb4e45ddacb1d74ef1a946f))
+* prod build without source maps ([7ef068e](https://github.com/forsti0506/a11y-sitechecker/commit/7ef068e9d1c27b170787fe59764fa5be9db7b653))
+* to test pr review ([bcf78c4](https://github.com/forsti0506/a11y-sitechecker/commit/bcf78c472b1b44862fd91b2149b9ec2bbc7a8b5f))
+
 ## [1.0.27](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.26...v1.0.27) (2021-01-03)
 
 
