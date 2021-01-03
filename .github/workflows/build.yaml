@@ -8,7 +8,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v2
         with:
-          persist-credentials: false
+          token: ${{ secrets.GIT_PERSONAL_TOKEN }}
 
       - name: Install node
         uses: actions/setup-node@v1
@@ -42,4 +42,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: ad-m/github-push-action@master
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_PERSONAL_TOKEN }}
