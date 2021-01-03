@@ -1,3 +1,10 @@
+## [1.0.31](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.30...v1.0.31) (2021-01-03)
+
+
+### Bug Fixes
+
+* workflow scripts ([ae7b693](https://github.com/forsti0506/a11y-sitechecker/commit/ae7b693510de5d700e4af0d06205439b7eb07e11))
+
 ## [1.0.30](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.29...v1.0.30) (2021-01-03)
 
 
