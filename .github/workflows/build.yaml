@@ -5,7 +5,6 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-
       - name: Git checkout
         uses: actions/checkout@v2
 
