@@ -49,7 +49,7 @@
         "build:prod": "tsc --project tsconfig.prod.json && copyfiles README.md dist",
         "test": "exit 0",
         "lint": "eslint . --ext .ts",
-        "semantic-release": "semantic-release --debug=true"
+        "semantic-release": "semantic-release"
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"
