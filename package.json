@@ -46,6 +46,7 @@
     },
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
+        "build:prod": "tsc --project tsconfig.prod.json && copyfiles README.md dist",
         "test": "exit 0",
         "lint": "eslint . --ext .ts",
         "semantic-release": "semantic-release --debug=true"
