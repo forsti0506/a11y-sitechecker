@@ -1,3 +1,12 @@
+## [1.0.30](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.29...v1.0.30) (2021-01-03)
+
+
+### Bug Fixes
+
+* pr pipeline ([a43c113](https://github.com/forsti0506/a11y-sitechecker/commit/a43c113a250703aebda16fc2dce72ba17dd72fc3))
+* pr pipeline ([2c5cd1a](https://github.com/forsti0506/a11y-sitechecker/commit/2c5cd1a20a2a9812e1a2a1383b9b0cf43e31c0a1))
+* workflow scripts ([b4e544e](https://github.com/forsti0506/a11y-sitechecker/commit/b4e544e5ad199b3dee7f4ed4f21fdac47ec78bb0))
+
 ## [1.0.29](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.28...v1.0.29) (2021-01-03)
 
 
