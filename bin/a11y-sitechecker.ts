@@ -15,6 +15,7 @@ import {
 import { analyzeSite } from '../lib/a11y-sitechecker';
 import { Result, Spec } from 'axe-core';
 import * as puppeteer from 'puppeteer';
+import { Page } from 'puppeteer';
 
 const config: Config = { json: true, resultsPath: 'results', axeConfig: {} };
 
@@ -142,6 +143,9 @@ function mergeResults(report: A11ySitecheckerResult): A11ySitecheckerResult {
         if (configFile.axeConfig.localePath && typeof configFile.axeConfig.localePath === 'string') {
             config.axeConfig.localePath = configFile.axeConfig.localePath;
         }
+        if (configFile.login) {
+            config.login = configFile.login;
+        }
     }
     const axeConfig: Spec = {};
     if (config.axeConfig?.locale) {
@@ -171,7 +175,10 @@ async function next(axeSpecs: Spec): Promise<void> {
             height: 1080,
         });
 
-        let report = await analyzeSite(commander.args[0], axeSpecs);
+        await executeLogin(commander.args[0], page);
+
+        let report = await analyzeSite(commander.args[0], axeSpecs, page, config);
+        await browser.close();
         report.url = commander.args[0];
         report = mergeResults(report);
         if (config.json) {
@@ -194,5 +201,29 @@ async function next(axeSpecs: Spec): Promise<void> {
         // Handle any errors
         console.error(error.message);
         process.exit(1);
+    }
+}
+
+async function executeLogin(url: string, page: Page): Promise<void> {
+    if (!config.login) {
+        return;
+    }
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+    await page.screenshot({ path: 'images/yeah.png' });
+    for (const step of config.login) {
+        for (const input of step.input) {
+            await page.type(input.selector, input.value);
+            await page.screenshot({ path: 'images/yeah.png' });
+        }
+        await page.click(step.submit);
+    }
+    await page.screenshot({ path: 'images/login.png' });
+    try {
+        await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        await page.screenshot({ path: 'images/lopin2.png' });
+    } catch (e) {
+        // eslint-disable-next-line prettier/prettier
+        console.log(chalk.red('No Navigation after Login. Please check if it\'s working as expected!'));
     }
 }
