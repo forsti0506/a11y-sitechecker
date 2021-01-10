@@ -16,7 +16,7 @@ let results: A11ySitecheckerResult = {
     testEngine: undefined,
     testEnvironment: undefined,
     testRunner: undefined,
-    timestamp: '',
+    timestamp: new Date().toISOString(),
     toolOptions: undefined,
     url: '',
     violations: [],
@@ -24,6 +24,7 @@ let results: A11ySitecheckerResult = {
     inapplicable: [],
     incomplete: [],
     passes: [],
+    analyzedUrls: [],
 };
 
 function getEscaped(link: string): string {
@@ -65,6 +66,7 @@ export async function analyzeSite(url: string, axeSpecs: Spec): Promise<A11ySite
         }
         count++;
     }
+    results.analyzedUrls = alreadyParsed;
     return results;
 }
 
@@ -116,7 +118,18 @@ async function analyzeUrl(page, url: string, axeSpecs: Spec, backUrl?: string): 
         axe.configure(axeSpecs);
         const axeResults = await axe.analyze();
         // results.violations = {...results.violations, ...axeResults.violations};
-        results.violationsByUrl.push({ url: url, violations: axeResults.violations });
+        results.violationsByUrl.push({
+            url: url,
+            violations: axeResults.violations,
+            passes: axeResults.passes,
+            inapplicable: axeResults.inapplicable,
+            incomplete: axeResults.incomplete,
+            testEngine: axeResults.testEngine,
+            testEnvironment: axeResults.testEnvironment,
+            testRunner: axeResults.testRunner,
+            timestamp: axeResults.timestamp,
+            toolOptions: axeResults.toolOptions,
+        });
         alreadyVisited.push(url);
         log(chalk.green('Finished analyze of url.'));
     } catch (error) {
