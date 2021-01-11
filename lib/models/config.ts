@@ -5,4 +5,17 @@ export interface Config {
         locale?: string;
         localePath?: string;
     };
+    login?: LoginStep[];
+    saveImages?: boolean;
+    imagesPath?: string;
+}
+
+interface LoginStep {
+    input: Input[];
+    submit: string;
+}
+
+interface Input {
+    selector: string;
+    value: string;
 }

@@ -7,16 +7,25 @@ export interface A11ySitecheckerResult {
     testEnvironment: TestEnvironment;
     url: string;
     timestamp: string;
+    passes: FullCheckerSingleResult[];
+    incomplete: FullCheckerSingleResult[];
+    inapplicable: FullCheckerSingleResult[];
+    violations: FullCheckerSingleResult[];
+    violationsByUrl: ResultsByUrl[];
+    analyzedUrls: string[];
+}
+
+export interface ResultsByUrl {
+    url: string;
+    violations: Result[];
+    toolOptions: RunOptions;
+    testEngine: TestEngine;
+    testRunner: TestRunner;
+    testEnvironment: TestEnvironment;
+    timestamp: string;
     passes: Result[];
     incomplete: Result[];
     inapplicable: Result[];
-    violations: FullCheckerSingleResult[];
-    violationsByUrl: ResultsByUrl[];
-}
-
-interface ResultsByUrl {
-    url: string;
-    violations: Result[];
 }
 
 export interface FullCheckerSingleResult {

@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/build.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/release.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/release.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +17,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="JsBowerSettings">
     <node-interpreter value="project" />
@@ -47,7 +56,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.14.16" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.github/workflows" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../a11y-sitechecker-dashboard" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -73,18 +82,7 @@
       <recent name="F:\OneDrive\Uni\a11y-full-checker" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.postpublish">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="npm.build">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -137,8 +135,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.postpublish" />
         <item itemvalue="npm.build" />
+        <item itemvalue="npm.postpublish" />
         <item itemvalue="npm.postpublish (1)" />
         <item itemvalue="npm.lint" />
         <item itemvalue="npm.lint (1)" />
@@ -156,7 +154,11 @@
       <workItem from="1608931412164" duration="36601000" />
       <workItem from="1609075029361" duration="48320000" />
       <workItem from="1609539437235" duration="210000" />
-      <workItem from="1609539667036" duration="27610000" />
+      <workItem from="1609539667036" duration="47258000" />
+      <workItem from="1610136900284" duration="6207000" />
+      <workItem from="1610190703281" duration="1999000" />
+      <workItem from="1610274577711" duration="11956000" />
+      <workItem from="1610311475006" duration="1963000" />
     </task>
     <servers />
   </component>
