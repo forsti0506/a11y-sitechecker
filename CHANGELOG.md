@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.31...v1.1.0) (2021-01-11)
+
+
+### Bug Fixes
+
+* updated dependencies ([b503a7b](https://github.com/forsti0506/a11y-sitechecker/commit/b503a7bcdc589683fd64ba7b184a3d9998cc0433))
+
+
+### Features
+
+* debug modus of semantic-release removed ([b3cb856](https://github.com/forsti0506/a11y-sitechecker/commit/b3cb856b03215181933800215ec27b010087065f))
+* new parsing algorithm ([d2c9817](https://github.com/forsti0506/a11y-sitechecker/commit/d2c9817a7a5d42354772fa8b98de59c101bbaddb))
+
 ## [1.0.31](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.30...v1.0.31) (2021-01-03)
 
 
