@@ -1,3 +1,44 @@
+## [1.0.31](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.30...v1.0.31) (2021-01-03)
+
+
+### Bug Fixes
+
+* workflow scripts ([ae7b693](https://github.com/forsti0506/a11y-sitechecker/commit/ae7b693510de5d700e4af0d06205439b7eb07e11))
+
+## [1.0.30](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.29...v1.0.30) (2021-01-03)
+
+
+### Bug Fixes
+
+* pr pipeline ([a43c113](https://github.com/forsti0506/a11y-sitechecker/commit/a43c113a250703aebda16fc2dce72ba17dd72fc3))
+* pr pipeline ([2c5cd1a](https://github.com/forsti0506/a11y-sitechecker/commit/2c5cd1a20a2a9812e1a2a1383b9b0cf43e31c0a1))
+* workflow scripts ([b4e544e](https://github.com/forsti0506/a11y-sitechecker/commit/b4e544e5ad199b3dee7f4ed4f21fdac47ec78bb0))
+
+## [1.0.29](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.28...v1.0.29) (2021-01-03)
+
+
+### Bug Fixes
+
+* token ([88f0432](https://github.com/forsti0506/a11y-sitechecker/commit/88f0432b57bc22650dedcf79dcb5228ba2405342))
+
+## [1.0.28](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.27...v1.0.28) (2021-01-03)
+
+
+### Bug Fixes
+
+* build script ([462dcb2](https://github.com/forsti0506/a11y-sitechecker/commit/462dcb25c469a5a7b21f96ce5ea4255160c63ad6))
+* persist credentials false ([1b43417](https://github.com/forsti0506/a11y-sitechecker/commit/1b43417fd971580c8afeb6334d6df1175f4fde67))
+* personal token ([bbb3e4a](https://github.com/forsti0506/a11y-sitechecker/commit/bbb3e4a2443f51aeeeb4e45ddacb1d74ef1a946f))
+* prod build without source maps ([7ef068e](https://github.com/forsti0506/a11y-sitechecker/commit/7ef068e9d1c27b170787fe59764fa5be9db7b653))
+* to test pr review ([bcf78c4](https://github.com/forsti0506/a11y-sitechecker/commit/bcf78c472b1b44862fd91b2149b9ec2bbc7a8b5f))
+
+## [1.0.27](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.26...v1.0.27) (2021-01-03)
+
+
+### Bug Fixes
+
+* only valid for main branch ([150de28](https://github.com/forsti0506/a11y-sitechecker/commit/150de28ff1e1ab5afa13e5f07064ce0663b5c185))
+
 ## [1.0.26](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.25...v1.0.26) (2021-01-03)
 
 
