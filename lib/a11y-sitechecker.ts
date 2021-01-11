@@ -43,7 +43,7 @@ export async function analyzeSite(
     if (!url.startsWith('https://')) {
         url = 'https://' + url;
     }
-    if (!url.endsWith('/')) {
+    if (!url.endsWith('/') && !isFile(url)) {
         url = url + '/';
     }
 
