@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.0...v1.1.1) (2021-01-11)
+
+
+### Bug Fixes
+
+* file links are not ended with slashes anymore ([1f846cc](https://github.com/forsti0506/a11y-sitechecker/commit/1f846cc703ae375adcad81752423d0a71ac2a4c4))
+
 # [1.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.31...v1.1.0) (2021-01-11)
 
 
