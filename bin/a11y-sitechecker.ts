@@ -146,7 +146,7 @@ function mergeResults(report: A11ySitecheckerResult): A11ySitecheckerResult {
         if (configFile.login) {
             config.login = configFile.login;
         }
-        if (configFile.pupeteer?.args) {
+        if (configFile.launchOptions) {
             config.launchOptions = configFile.launchOptions;
         }
     }
