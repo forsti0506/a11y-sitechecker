@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +170,7 @@
       <workItem from="1610190703281" duration="1999000" />
       <workItem from="1610274577711" duration="11956000" />
       <workItem from="1610311475006" duration="2560000" />
-      <workItem from="1610398274155" duration="1829000" />
+      <workItem from="1610398274155" duration="3004000" />
     </task>
     <servers />
   </component>

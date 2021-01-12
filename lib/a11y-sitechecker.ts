@@ -40,7 +40,7 @@ export async function analyzeSite(
     page: Page,
     config: Config,
 ): Promise<A11ySitecheckerResult> {
-    if (!url.startsWith('https://')) {
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
         url = 'https://' + url;
     }
     if (!url.endsWith('/') && !isFile(url)) {

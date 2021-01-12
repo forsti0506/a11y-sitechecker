@@ -146,6 +146,9 @@ function mergeResults(report: A11ySitecheckerResult): A11ySitecheckerResult {
         if (configFile.login) {
             config.login = configFile.login;
         }
+        if (configFile.pupeteer?.args) {
+            config.launchOptions = configFile.launchOptions;
+        }
     }
     const axeConfig: Spec = {};
     if (config.axeConfig?.locale) {
@@ -168,7 +171,7 @@ async function next(axeSpecs: Spec): Promise<void> {
         console.log(
             chalk.blue('#############################################################################################'),
         );
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch(config.launchOptions);
         const page = await browser.newPage();
         await page.setViewport({
             width: 1920,
