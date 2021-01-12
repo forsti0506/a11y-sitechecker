@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.2...v1.1.3) (2021-01-12)
+
+
+### Bug Fixes
+
+* correct input for parsing config ([7559df4](https://github.com/forsti0506/a11y-sitechecker/commit/7559df44311c00a71e901feb1e31eb3f5ec0f696))
+
 ## [1.1.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.1...v1.1.2) (2021-01-12)
 
 
