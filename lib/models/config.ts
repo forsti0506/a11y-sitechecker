@@ -1,3 +1,5 @@
+import { LaunchOptions } from 'puppeteer';
+
 export interface Config {
     json: boolean;
     resultsPath: string;
@@ -8,6 +10,7 @@ export interface Config {
     login?: LoginStep[];
     saveImages?: boolean;
     imagesPath?: string;
+    launchOptions?: LaunchOptions;
 }
 
 interface LoginStep {
