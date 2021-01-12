@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.1...v1.1.2) (2021-01-12)
+
+
+### Bug Fixes
+
+* pupeteer launch options added + http enabled ([ddabb45](https://github.com/forsti0506/a11y-sitechecker/commit/ddabb45ac7ad3914d02ec7d570524cb50bafe591))
+
 ## [1.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.0...v1.1.1) (2021-01-11)
 
 
