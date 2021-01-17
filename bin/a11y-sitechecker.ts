@@ -203,6 +203,7 @@ async function next(axeSpecs: Spec): Promise<void> {
     } catch (error) {
         // Handle any errors
         console.error(error.message);
+        console.error(error.stackTrace);
         process.exit(1);
     }
 }
@@ -216,6 +217,7 @@ async function executeLogin(url: string, page: Page): Promise<void> {
     await page.screenshot({ path: 'images/yeah.png' });
     for (const step of config.login) {
         for (const input of step.input) {
+            await page.waitForSelector(input.selector);
             await page.type(input.selector, input.value);
             await page.screenshot({ path: 'images/yeah.png' });
         }
@@ -224,6 +226,7 @@ async function executeLogin(url: string, page: Page): Promise<void> {
     await page.screenshot({ path: 'images/login.png' });
     try {
         await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         await page.screenshot({ path: 'images/lopin2.png' });
     } catch (e) {
         // eslint-disable-next-line prettier/prettier

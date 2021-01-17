@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/utils/UniqueSelector.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/utils/helper-functions.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,13 +86,15 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.build">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -168,7 +175,10 @@
       <workItem from="1610190703281" duration="1999000" />
       <workItem from="1610274577711" duration="11956000" />
       <workItem from="1610311475006" duration="2560000" />
-      <workItem from="1610398274155" duration="3450000" />
+      <workItem from="1610398274155" duration="4326000" />
+      <workItem from="1610746182712" duration="30000" />
+      <workItem from="1610787286532" duration="10318000" />
+      <workItem from="1610873326173" duration="21763000" />
     </task>
     <servers />
   </component>
