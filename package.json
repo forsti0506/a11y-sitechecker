@@ -17,7 +17,7 @@
         "chalk": "^4.1.0",
         "commander": "^6.2.1",
         "jsdom": "^16.4.0",
-        "prettier": "^2.2.1",
+        "odiff": "^1.4.2",
         "prettyjson": "^1.2.1",
         "puppeteer": "^5.5.0",
         "typescript": "^4.1.3"
@@ -42,7 +42,8 @@
         "eslint-plugin-promise": "^4.2.1",
         "husky": "^4.3.7",
         "lint-staged": "^10.5.3",
-        "semantic-release": "^17.3.1"
+        "semantic-release": "^17.3.1",
+        "prettier": "^2.2.1"
     },
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
