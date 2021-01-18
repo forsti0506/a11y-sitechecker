@@ -11,6 +11,7 @@ export interface Config {
     saveImages?: boolean;
     imagesPath?: string;
     launchOptions?: LaunchOptions;
+    ignoreElementAttributeValues?: string[];
 }
 
 interface LoginStep {

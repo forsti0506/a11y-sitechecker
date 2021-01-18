@@ -1,0 +1,89 @@
+import * as JSDOM from 'jsdom';
+import * as chalk from 'chalk';
+import { getUniqueSelector } from './UniqueSelector';
+import { isAbsoluteUrl, shoouldElementBeIgnored } from './helper-functions';
+
+export interface RootDomain {
+    value: string;
+}
+const debug = console.debug;
+
+export function getLinks(
+    html: string,
+    url: string,
+    elementsToIgnore: string[],
+    alreadyParsed: string[],
+    rootDomain: RootDomain,
+    elementsToClick: Map<string, string[]>,
+    notCheckedLinks: string[],
+    alreadyVisited: string[],
+): string[] {
+    if (alreadyParsed.includes(url)) {
+        return [];
+    }
+    const dom = new JSDOM.JSDOM(html, { contentType: 'text/html' });
+    const links: string[] = [];
+    if (!rootDomain.value) {
+        debug(chalk.green('RootDomain was set to: ' + url));
+        rootDomain.value = url;
+    }
+    dom.window.document.querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
+        let link = element.href;
+        if (link === '' && element.getAttributeNames().includes('ng-click')) {
+            const shouldElementBeIgnored = shoouldElementBeIgnored(element, elementsToIgnore);
+            if (!shouldElementBeIgnored) {
+                const uniqueSelector = getUniqueSelector(element, dom);
+                if (elementsToClick.has(url)) {
+                    elementsToClick.get(url).push(uniqueSelector);
+                } else {
+                    elementsToClick.set(url, [uniqueSelector]);
+                }
+            } else {
+                debug(chalk.yellow('Element ignored, because of given array: ' + element));
+            }
+        }
+        if (isAbsoluteUrl(link) && link.includes(rootDomain.value)) {
+            if (link.startsWith('//')) {
+                link = url.startsWith('https') ? 'https:' + link : 'http:' + link;
+            }
+            if (link.endsWith('/')) {
+                link = link.substring(0, link.length - 1);
+            }
+            if (!links.includes(link) && !alreadyVisited.includes(link)) {
+                links.push(link);
+            }
+        } else if (!isAbsoluteUrl(link) && !link.includes('#')) {
+            let absoluteUrl = new URL(link, url).href;
+            if (absoluteUrl.endsWith('/')) {
+                absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
+            }
+            if (
+                !links.includes(absoluteUrl) &&
+                !alreadyVisited.includes(absoluteUrl) &&
+                absoluteUrl.includes(rootDomain.value)
+            ) {
+                links.push(absoluteUrl);
+            }
+        } else if (!notCheckedLinks.includes(link)) {
+            notCheckedLinks.push(link);
+        }
+    });
+    dom.window.document
+        .querySelectorAll('button, select, details, [tabindex]:not([tabindex="-1"])')
+        .forEach((element: HTMLAnchorElement) => {
+            if (!element.hasAttribute('disabled') && !shoouldElementBeIgnored(element, elementsToIgnore)) {
+                const uniqueSelector = getUniqueSelector(element, dom);
+                if (elementsToClick.has(url)) {
+                    if (!elementsToClick.get(url).includes(uniqueSelector)) {
+                        elementsToClick.get(url).push(uniqueSelector);
+                    }
+                } else {
+                    elementsToClick.set(url, [uniqueSelector]);
+                }
+            } else {
+                debug(chalk.yellow('Element ignored, because of given array or disabled: ' + element));
+            }
+        });
+    alreadyParsed.push(url);
+    return links;
+}
