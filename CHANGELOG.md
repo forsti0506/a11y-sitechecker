@@ -1,3 +1,37 @@
+## [1.1.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.2...v1.1.3) (2021-01-12)
+
+
+### Bug Fixes
+
+* correct input for parsing config ([7559df4](https://github.com/forsti0506/a11y-sitechecker/commit/7559df44311c00a71e901feb1e31eb3f5ec0f696))
+
+## [1.1.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.1...v1.1.2) (2021-01-12)
+
+
+### Bug Fixes
+
+* pupeteer launch options added + http enabled ([ddabb45](https://github.com/forsti0506/a11y-sitechecker/commit/ddabb45ac7ad3914d02ec7d570524cb50bafe591))
+
+## [1.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.0...v1.1.1) (2021-01-11)
+
+
+### Bug Fixes
+
+* file links are not ended with slashes anymore ([1f846cc](https://github.com/forsti0506/a11y-sitechecker/commit/1f846cc703ae375adcad81752423d0a71ac2a4c4))
+
+# [1.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.31...v1.1.0) (2021-01-11)
+
+
+### Bug Fixes
+
+* updated dependencies ([b503a7b](https://github.com/forsti0506/a11y-sitechecker/commit/b503a7bcdc589683fd64ba7b184a3d9998cc0433))
+
+
+### Features
+
+* debug modus of semantic-release removed ([b3cb856](https://github.com/forsti0506/a11y-sitechecker/commit/b3cb856b03215181933800215ec27b010087065f))
+* new parsing algorithm ([d2c9817](https://github.com/forsti0506/a11y-sitechecker/commit/d2c9817a7a5d42354772fa8b98de59c101bbaddb))
+
 ## [1.0.31](https://github.com/forsti0506/a11y-sitechecker/compare/v1.0.30...v1.0.31) (2021-01-03)
 
 
