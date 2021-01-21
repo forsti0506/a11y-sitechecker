@@ -1,12 +1,14 @@
 import { Spec } from 'axe-core';
-import * as commander from 'commander';
 import * as fs from 'fs';
 import { error, setDebugMode } from './helper-functions';
 import { Config } from '../models/config';
-export const config: Config = { json: true, resultsPath: 'results', axeConfig: {} };
 
-export function setupConfig(): Spec {
+export function setupConfig(commander): Config {
+    const config: Config = { json: true, resultsPath: 'results', axeConfig: {}, threshold: undefined };
     config.json = commander.json;
+    if (!config.threshold) {
+        config.threshold = parseInt(commander.threshold);
+    }
     if (commander.config) {
         try {
             const configFile = JSON.parse(fs.readFileSync(commander.config).toString('utf-8'));
@@ -16,10 +18,10 @@ export function setupConfig(): Spec {
             if (configFile.resultsPath && typeof configFile.resultsPath === 'string') {
                 config.resultsPath = configFile.resultsPath;
             }
-            if (configFile.axeConfig.locale && typeof configFile.axeConfig.locale === 'string') {
+            if (configFile.axeConfig?.locale && typeof configFile.axeConfig.locale === 'string') {
                 config.axeConfig.locale = configFile.axeConfig.locale;
             }
-            if (configFile.axeConfig.localePath && typeof configFile.axeConfig.localePath === 'string') {
+            if (configFile.axeConfig?.localePath && typeof configFile.axeConfig.localePath === 'string') {
                 config.axeConfig.localePath = configFile.axeConfig.localePath;
             }
             if (configFile.login) {
@@ -48,6 +50,11 @@ export function setupConfig(): Spec {
             throw e;
         }
     }
+
+    return config;
+}
+
+export function setupAxeConfig(config: Config): Spec {
     const axeConfig: Spec = {};
     if (config.axeConfig?.locale) {
         axeConfig.locale = JSON.parse(

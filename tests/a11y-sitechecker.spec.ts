@@ -1,30 +1,28 @@
 import 'jasmine';
-import * as child from 'child_process';
+
+import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
+import { next } from '../bin/a11y-sitechecker';
 
 describe('a11y-sitechecker-bin', function () {
     beforeEach(function () {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+        spyOn(process, 'exit').and.stub();
     });
 
-    it('add', async () => {
-        const result = await cli(['-j', '--config=./tests/config.json', '-T=100', 'www.test.at'], '.');
-        expect(result).toBe(0);
+    it('testcall', async (done) => {
+        const commander = { json: true, config: './tests/config.json' };
+        const config = setupConfig(commander);
+        config.threshold = 1000;
+        config.axeConfig.locale = 'de';
+        const axeConfig = setupAxeConfig(config);
+
+        next(config, axeConfig, 'www.forsti.eu').then(
+            (e) => {
+                done();
+            },
+            (error) => {
+                console.log(error);
+            },
+        );
     });
 });
-
-function cli(args, cwd): Promise<number> {
-    return new Promise((resolve) => {
-        child
-            .spawn('a11y-sitechecker', args, {
-                shell: true,
-                stdio: 'inherit',
-            })
-            .on('exit', (code) => {
-                if (code === 0) {
-                    resolve(0);
-                } else {
-                    resolve(code);
-                }
-            });
-    });
-}

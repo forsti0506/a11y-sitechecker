@@ -14,6 +14,7 @@ export interface Config {
     ignoreElementAttributeValues?: string[];
     urlsToAnalyze?: string[];
     analyzeClicksWithoutNavigation?: boolean;
+    threshold: number;
 }
 
 interface LoginStep {

@@ -4,14 +4,15 @@ import * as pkg from '../package.json';
 import * as commander from 'commander';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
-import * as prettyjson from 'prettyjson';
+// import * as prettyjson from 'prettyjson';
 import { analyzeSite } from '../lib/a11y-sitechecker';
 import { Spec } from 'axe-core';
 import * as puppeteer from 'puppeteer';
 import { executeLogin } from '../lib/utils/login';
 import { mergeResults } from '../lib/utils/result-functions';
 import { log } from '../lib/utils/helper-functions';
-import { config, setupConfig } from '../lib/utils/setup-config';
+import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
+import { Config } from '../lib/models/config';
 
 // Here we're using Commander to specify the CLI options
 commander
@@ -37,17 +38,20 @@ function writeToJsonFile(data: string, path: string): void {
 }
 
 (async (): Promise<void> => {
-    const axeConfig = setupConfig();
-    await next(axeConfig);
+    if (commander.args[0]) {
+        const config = setupConfig(commander);
+        const axeConfig = setupAxeConfig(config);
+        await next(config, axeConfig, commander.args[0]);
+    }
 })();
 
-async function next(axeSpecs: Spec): Promise<void> {
+export async function next(config: Config, axeSpecs: Spec, url: string): Promise<void> {
     try {
         log(
             chalk.blue('#############################################################################################'),
         );
 
-        log(chalk.blue(`Start accessibility Test for ${commander.args[0]}`));
+        log(chalk.blue(`Start accessibility Test for ${url}`));
         log(
             chalk.blue('#############################################################################################'),
         );
@@ -58,24 +62,24 @@ async function next(axeSpecs: Spec): Promise<void> {
             height: 1080,
         });
 
-        await executeLogin(commander.args[0], page, config);
+        await executeLogin(url, page, config);
         /* istanbul ignore next */
-        let report = await analyzeSite(commander.args[0], axeSpecs, page, config);
+        let report = await analyzeSite(url, axeSpecs, page, config);
         await browser.close();
-        report.url = commander.args[0];
+        report.url = url;
         report = mergeResults(report);
         if (config.json) {
             writeToJsonFile(JSON.stringify(report, null, 2), config.resultsPath);
         } else {
-            log(
-                prettyjson.render(report, {
-                    keysColor: 'blue',
-                    dashColor: 'black',
-                    stringColor: 'black',
-                }),
-            );
+            // log(
+            //     prettyjson.render(report, {
+            //         keysColor: 'blue',
+            //         dashColor: 'black',
+            //         stringColor: 'black',
+            //     }),
+            // );
         }
-        if (report.violations.length >= parseInt(commander.threshold, 10)) {
+        if (report.violations.length >= config.threshold) {
             process.exit(2);
         } else {
             process.exit(0);
