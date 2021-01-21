@@ -3,7 +3,6 @@
 import * as pkg from '../package.json';
 import * as commander from 'commander';
 import * as chalk from 'chalk';
-import { Config } from '../lib/models/config';
 import * as fs from 'fs';
 import * as prettyjson from 'prettyjson';
 import { analyzeSite } from '../lib/a11y-sitechecker';
@@ -11,15 +10,14 @@ import { Spec } from 'axe-core';
 import * as puppeteer from 'puppeteer';
 import { executeLogin } from '../lib/utils/login';
 import { mergeResults } from '../lib/utils/result-functions';
-import { log, setDebugMode } from '../lib/utils/helper-functions';
-
-const config: Config = { json: true, resultsPath: 'results', axeConfig: {} };
+import { log } from '../lib/utils/helper-functions';
+import { config, setupConfig } from '../lib/utils/setup-config';
 
 // Here we're using Commander to specify the CLI options
 commander
     .version(pkg.version)
     .usage('[options] <paths>')
-    .option('-j, --json', 'Output results as JSON')
+    .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console')
     .option('--config <string>', 'Provide a config.json')
     .option(
         '-T, --threshold <number>',
@@ -36,49 +34,6 @@ function writeToJsonFile(data: string, path: string): void {
         fs.mkdirSync(path);
     }
     fs.writeFileSync(path + '/results.json', data);
-}
-
-function setupConfig(): Spec {
-    config.json = commander.json;
-    if (commander.config) {
-        const configFile = JSON.parse(fs.readFileSync(commander.config).toString('utf-8'));
-        if (configFile.json && configFile.json && typeof configFile.json === 'boolean') {
-            config.json = configFile.json;
-        }
-        if (configFile.resultsPath && typeof configFile.resultsPath === 'string') {
-            config.resultsPath = configFile.resultsPath;
-        }
-        if (configFile.axeConfig.locale && typeof configFile.axeConfig.locale === 'string') {
-            config.axeConfig.locale = configFile.axeConfig.locale;
-        }
-        if (configFile.axeConfig.localePath && typeof configFile.axeConfig.localePath === 'string') {
-            config.axeConfig.localePath = configFile.axeConfig.localePath;
-        }
-        if (configFile.login) {
-            config.login = configFile.login;
-        }
-        if (configFile.launchOptions) {
-            config.launchOptions = configFile.launchOptions;
-        }
-        if (configFile.imagesPath) {
-            config.imagesPath = configFile.imagesPath;
-        }
-        if (configFile.ignoreElementAttributeValues) {
-            config.ignoreElementAttributeValues = configFile.ignoreElementAttributeValues;
-        }
-        if (configFile.debugMode) {
-            setDebugMode(configFile.debugMode);
-        }
-    }
-    const axeConfig: Spec = {};
-    if (config.axeConfig?.locale) {
-        axeConfig.locale = JSON.parse(
-            fs.readFileSync('node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
-        );
-    } else if (config.axeConfig?.localePath) {
-        axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
-    }
-    return axeConfig;
 }
 
 (async (): Promise<void> => {
@@ -104,7 +59,7 @@ async function next(axeSpecs: Spec): Promise<void> {
         });
 
         await executeLogin(commander.args[0], page, config);
-
+        /* istanbul ignore next */
         let report = await analyzeSite(commander.args[0], axeSpecs, page, config);
         await browser.close();
         report.url = commander.args[0];

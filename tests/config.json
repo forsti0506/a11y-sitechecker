@@ -1,0 +1,16 @@
+{
+  "json": false,
+  "axeConfig": {
+    "locale": "de"
+  },
+  "launchOptions": {
+    "headless": false,
+    "args": [
+    ]
+  },
+  "debugMode": true,
+  "urlsToAnalyze": [
+    "http://www.forsti.eu"
+  ],
+  "analyzeClicksWithoutNavigation": false
+}

@@ -10,7 +10,7 @@ import { getLinks } from './utils/get-links';
 const alreadyVisited = [];
 const alreadyParsed = [];
 const notCheckedLinks = [];
-const alreadyClicked = [];
+const alreadyClicked: Map<string, string[]> = new Map<string, string[]>();
 const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
 const rootDomain = { value: '' };
@@ -36,87 +36,97 @@ export async function analyzeSite(
     page: Page,
     config: Config,
 ): Promise<A11ySitecheckerResult> {
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
-        url = 'https://' + url;
-    }
-    if (url.endsWith('/')) {
-        url = url.substring(0, url.length - 1);
-    }
-    log('Start analyze of ' + url);
-
-    await analyzeUrl(page, url, axeSpecs, config);
-
-    const html = await page.content();
-    const links = getLinks(
-        html,
-        url,
-        config.ignoreElementAttributeValues,
-        alreadyParsed,
-        rootDomain,
-        elementsToClick,
-        notCheckedLinks,
-        alreadyVisited,
-    );
-
-    let i = 1;
-    for (const link of links) {
-        debug('Visiting ' + i++ + ' of ' + links.length);
-        if (!alreadyVisited.includes(link)) {
-            await analyzeUrl(page, link, axeSpecs, config);
+    if (config.urlsToAnalyze) {
+        for (const urlPath of config.urlsToAnalyze) {
+            await analyzeUrl(page, urlPath, axeSpecs, config);
         }
-    }
+    } else {
+        if (!url.startsWith('https://') && !url.startsWith('http://')) {
+            url = 'https://' + url;
+        }
+        if (url.endsWith('/')) {
+            url = url.substring(0, url.length - 1);
+        }
+        log('Start analyze of ' + url);
 
-    debug('All links of ' + url + ' visited. Now Clicking elements');
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await waitForHTML(page);
+        await analyzeUrl(page, url, axeSpecs, config);
 
-    if (elementsToClick.get(url)?.length > 0) {
-        i = 1;
-        for (const element of elementsToClick.get(url)) {
-            debug('Clicking ' + i++ + ' of ' + elementsToClick.get(url).length);
-            if (element && !alreadyClicked.includes(element)) {
-                debug('Element to be clicked: ' + element);
-                try {
-                    alreadyClicked.push(element);
-                    await page.evaluate((element) => {
-                        (document.querySelector(element) as HTMLElement).click();
-                    }, element);
-                    await waitForHTML(page);
-                } catch (e) {
-                    log('Seems like element not found.' + e);
-                }
-                try {
-                    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 });
-                    await analyzeSite(page.url(), axeSpecs, page, config);
-                } catch (e) {
-                    log('seems like click was no navigation. Analyze and do it. ' + e);
-                    if (page.url() !== url && !alreadyVisited.includes(url)) {
-                        await analyzeSite(page.url(), axeSpecs, page, config);
-                    } else {
-                        debug('Experimintal feature!');
-                        const axe = await new AxePuppeteer(page);
-                        axe.configure(axeSpecs);
-                        const axeResults = await axe.analyze();
-                        pushResults(url + '_' + element + '_clicked', axeResults);
+        const html = await page.content();
+        const links = getLinks(
+            html,
+            url,
+            config.ignoreElementAttributeValues,
+            alreadyParsed,
+            rootDomain,
+            elementsToClick,
+            notCheckedLinks,
+            alreadyVisited,
+        );
+
+        let i = 1;
+        for (const link of links) {
+            debug('Visiting ' + i++ + ' of ' + links.length);
+            if (!alreadyVisited.includes(link)) {
+                await analyzeUrl(page, link, axeSpecs, config);
+            }
+        }
+
+        debug('All links of ' + url + ' visited. Now Clicking elements');
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await waitForHTML(page);
+
+        if (elementsToClick.get(url)?.length > 0) {
+            i = 1;
+            for (const element of elementsToClick.get(url)) {
+                debug('Clicking ' + i++ + ' of ' + elementsToClick.get(url).length);
+                if (element && !alreadyClicked.get(url)?.includes(element)) {
+                    debug('Element to be clicked: ' + element);
+                    try {
+                        if (alreadyClicked.get(url)) {
+                            alreadyClicked.get(url).push(element);
+                        } else {
+                            alreadyClicked.set(url, [url]);
+                        }
+                        await page.evaluate((element) => {
+                            (document.querySelector(element) as HTMLElement).click();
+                        }, element);
+                        await waitForHTML(page);
+                    } catch (e) {
+                        log('Seems like element not found. ' + e);
                     }
-                    await page.goto(url, { waitUntil: 'load' });
-                    await waitForHTML(page);
+                    try {
+                        await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 });
+                        await waitForHTML(page);
+                        await analyzeSite(page.url(), axeSpecs, page, config);
+                    } catch (e) {
+                        log('seems like click was no navigation. Analyze and do it. ' + e);
+                        if (page.url() !== url && !alreadyVisited.includes(url)) {
+                            await analyzeSite(page.url(), axeSpecs, page, config);
+                            await page.goto(url, { waitUntil: 'load' });
+                            await waitForHTML(page);
+                        } else if (config.analyzeClicksWithoutNavigation) {
+                            debug('Experimintal feature! Please check if there are to much clicks!');
+                            const axe = await new AxePuppeteer(page);
+                            axe.configure(axeSpecs);
+                            const axeResults = await axe.analyze();
+                            pushResults(url + '_' + element + '_clicked', axeResults);
+                        }
+                    }
                 }
             }
         }
-    }
 
-    i = 1;
-    for (const link of links) {
-        debug('parsing' + i++ + ' of ' + links.length);
-        if (!alreadyParsed.includes(link)) {
-            const res: A11ySitecheckerResult = await analyzeSite(link, axeSpecs, page, config);
-            debug('Finished analyze of Site: ' + link);
-            results = { ...results, ...res };
+        i = 1;
+        for (const link of links) {
+            debug('parsing' + i++ + ' of ' + links.length);
+            if (!alreadyParsed.includes(link)) {
+                const res: A11ySitecheckerResult = await analyzeSite(link, axeSpecs, page, config);
+                debug('Finished analyze of Site: ' + link);
+                results = { ...results, ...res };
+            }
         }
     }
     results.analyzedUrls = alreadyVisited;
-
     return results;
 }
 

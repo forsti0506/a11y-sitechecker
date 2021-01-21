@@ -19,8 +19,7 @@
         "jsdom": "^16.4.0",
         "odiff": "^1.4.2",
         "prettyjson": "^1.2.1",
-        "puppeteer": "^5.5.0",
-        "typescript": "^4.1.3"
+        "puppeteer": "^5.5.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^11.0.0",
@@ -30,27 +29,33 @@
         "@semantic-release/github": "^7.2.0",
         "@semantic-release/npm": "^7.0.9",
         "@semantic-release/release-notes-generator": "^9.0.1",
+        "@types/jasmine": "^3.6.3",
         "@typescript-eslint/eslint-plugin": "^4.12.0",
         "@typescript-eslint/parser": "^4.12.0",
         "copyfiles": "^2.4.1",
-        "eslint-config-prettier": "^7.1.0",
-        "eslint-plugin-prettier": "^3.3.1",
         "eslint": "^7.17.0",
+        "eslint-config-prettier": "^7.1.0",
         "eslint-config-standard": "^16.0.2",
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-promise": "^4.2.1",
         "husky": "^4.3.7",
+        "jasmine": "^3.6.4",
+        "jasmine-spec-reporter": "^6.0.0",
         "lint-staged": "^10.5.3",
+        "nyc": "^15.1.0",
+        "prettier": "^2.2.1",
         "semantic-release": "^17.3.1",
-        "prettier": "^2.2.1"
+        "ts-node": "^9.1.1",
+        "typescript": "^4.1.3"
     },
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
         "build:prod": "tsc --project tsconfig.prod.json && copyfiles README.md dist",
-        "test": "exit 0",
         "lint": "eslint . --ext .ts",
-        "semantic-release": "semantic-release"
+        "semantic-release": "semantic-release",
+        "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json"
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"
