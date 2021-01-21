@@ -4,7 +4,7 @@
     "locale": "de"
   },
   "launchOptions": {
-    "headless": false,
+    "headless": true,
     "args": [
     ]
   },
