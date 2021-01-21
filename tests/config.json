@@ -1,0 +1,18 @@
+{
+  "json": false,
+  "axeConfig": {
+    "locale": "de"
+  },
+  "launchOptions": {
+    "headless": true,
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ]
+  },
+  "debugMode": true,
+  "urlsToAnalyze": [
+    "http://www.forsti.eu"
+  ],
+  "analyzeClicksWithoutNavigation": false
+}

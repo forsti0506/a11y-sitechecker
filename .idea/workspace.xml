@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/utils/get-links.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/utils/login.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/utils/result-functions.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/models/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utils/helper-functions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/helper-functions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils/setup-config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/setup-config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,9 +55,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.15.1" />
-    <property name="javascript.nodejs.core.library.typings.version" value="14.14.16" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../a11y-sitechecker-dashboard" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.3" />
+    <property name="javascript.nodejs.core.library.typings.version" value="14.14.22" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -77,23 +74,28 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\OneDrive\Uni\a11y-full-checker\tests" />
+      <recent name="F:\OneDrive\Uni\a11y-full-checker\bin" />
       <recent name="F:\OneDrive\Uni\a11y-full-checker\.github\workflows" />
       <recent name="F:\OneDrive\Uni\a11y-full-checker" />
       <recent name="F:\OneDrive\Uni\a11y-full-checker\lib\bin" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\OneDrive\Uni\a11y-full-checker\tests" />
       <recent name="F:\OneDrive\Uni\a11y-full-checker\bin" />
       <recent name="F:\OneDrive\Uni\a11y-full-checker" />
     </key>
   </component>
   <component name="RunManager" selected="npm.build">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -108,21 +110,11 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="lint (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/dist/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="lint" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="lint" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+    <configuration name="coverage" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
-        <script value="lint" />
+        <script value="coverage" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -148,13 +140,23 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="npm.build" />
+        <item itemvalue="npm.test" />
+        <item itemvalue="npm.coverage" />
         <item itemvalue="npm.postpublish" />
         <item itemvalue="npm.postpublish (1)" />
-        <item itemvalue="npm.lint" />
-        <item itemvalue="npm.lint (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -178,12 +180,31 @@
       <workItem from="1610746182712" duration="30000" />
       <workItem from="1610787286532" duration="10318000" />
       <workItem from="1610873326173" duration="21767000" />
-      <workItem from="1610986717690" duration="12809000" />
+      <workItem from="1610986717690" duration="13027000" />
+      <workItem from="1611250328815" duration="16812000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts</url>
+          <line>20</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts</url>
+          <line>23</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -12,6 +12,9 @@ export interface Config {
     imagesPath?: string;
     launchOptions?: LaunchOptions;
     ignoreElementAttributeValues?: string[];
+    urlsToAnalyze?: string[];
+    analyzeClicksWithoutNavigation?: boolean;
+    threshold: number;
 }
 
 interface LoginStep {

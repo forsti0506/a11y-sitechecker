@@ -26,7 +26,7 @@ jobs:
         run: npm run-script build:prod
 
       - name: Run tests
-        run: npm test
+        run: npm run test
 
       - name: Package
         if: github.ref == 'refs/heads/main'
