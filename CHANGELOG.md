@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.2.0...v1.3.0) (2021-01-18)
+
+
+### Features
+
+* refactoring + new html waiter for waiting ([a4f28ed](https://github.com/forsti0506/a11y-sitechecker/commit/a4f28ed63216cd7dbc632a5b54ac1be81fb9d8d8))
+
+# [1.2.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.3...v1.2.0) (2021-01-17)
+
+
+### Features
+
+* improvements with parsing for links which are not really links (buttons,...) ([5bb8397](https://github.com/forsti0506/a11y-sitechecker/commit/5bb8397a04f13acfadc7d71a7cfd0e6e7be237a7))
+
 ## [1.1.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.1.2...v1.1.3) (2021-01-12)
 
 
