@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.3.0...v1.4.0) (2021-01-21)
+
+
+### Bug Fixes
+
+* headless true in test ([906b60d](https://github.com/forsti0506/a11y-sitechecker/commit/906b60d1341da4f3b66824f542f9d8594d90c369))
+* pupeteer options for test ([3870c5a](https://github.com/forsti0506/a11y-sitechecker/commit/3870c5a0966cdbff3648421a9582fe5a71f78cc2))
+* rebuild the scripts ([f11bf59](https://github.com/forsti0506/a11y-sitechecker/commit/f11bf59bd139d3210396da81ef6fb3ca5e7883dd))
+* test execution in build file updated ([34ce4ff](https://github.com/forsti0506/a11y-sitechecker/commit/34ce4ff07566aeec147e4ceeadc0a8cce0e76783))
+
+
+### Features
+
+* modus to define urls, some more settings and readme updated ([7db5c18](https://github.com/forsti0506/a11y-sitechecker/commit/7db5c1824c155756f14b6bdb066f7fb8304a6c32))
+
 # [1.3.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.2.0...v1.3.0) (2021-01-18)
 
 
