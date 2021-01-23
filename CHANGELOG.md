@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.1...v1.5.2) (2021-01-23)
+
+
+### Bug Fixes
+
+* new entry models ([c1ed243](https://github.com/forsti0506/a11y-sitechecker/commit/c1ed24391886c96d9e9031efd6f6453295e95528))
+
 ## [1.5.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.0...v1.5.1) (2021-01-23)
 
 
