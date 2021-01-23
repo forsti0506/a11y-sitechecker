@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.0...v1.5.1) (2021-01-23)
+
+
+### Bug Fixes
+
+* result saved not resultByUrl ([9bb418f](https://github.com/forsti0506/a11y-sitechecker/commit/9bb418f621c67f0e44a833ad390a4a5d29cdfd71))
+
 # [1.5.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.4.0...v1.5.0) (2021-01-23)
 
 
