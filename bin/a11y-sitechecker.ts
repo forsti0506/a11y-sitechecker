@@ -85,7 +85,7 @@ export async function next(config: Config, axeSpecs: Spec, url: string): Promise
         result.url = url;
         mergeResults(report, result);
         if (config.json) {
-            writeToJsonFile(JSON.stringify(report, null, 2), config.resultsPath);
+            writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPath);
         } else {
             log(
                 prettyjson.render(report, {
