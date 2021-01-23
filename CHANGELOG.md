@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.4.0...v1.5.0) (2021-01-23)
+
+
+### Bug Fixes
+
+* folder path for axe locale ([621aa29](https://github.com/forsti0506/a11y-sitechecker/commit/621aa29073000143b3ce999fa48294403a0dbd2d))
+
+
+### Features
+
+* updated strategy for models ([d858713](https://github.com/forsti0506/a11y-sitechecker/commit/d858713a728859ddacbca25d9827f3c77c69dac9))
+
 # [1.4.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.3.0...v1.4.0) (2021-01-21)
 
 
