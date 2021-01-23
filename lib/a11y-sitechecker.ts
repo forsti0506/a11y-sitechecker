@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { Spec } from 'axe-core';
-import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
+import { ResultsByUrl } from './models/a11y-sitechecker-result';
 import { Page } from 'puppeteer';
 import { Config } from './models/config';
 import { debug, error, getEscaped, log, saveScreenshot, success, waitForHTML } from './utils/helper-functions';
@@ -15,27 +15,9 @@ const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
 const rootDomain = { value: '' };
 
-let results: A11ySitecheckerResult = {
-    testEngine: undefined,
-    testEnvironment: undefined,
-    testRunner: undefined,
-    timestamp: new Date().toISOString(),
-    toolOptions: undefined,
-    url: '',
-    violations: [],
-    violationsByUrl: [],
-    inapplicable: [],
-    incomplete: [],
-    passes: [],
-    analyzedUrls: [],
-};
+const resultsByUrl: ResultsByUrl[] = [];
 
-export async function analyzeSite(
-    url: string,
-    axeSpecs: Spec,
-    page: Page,
-    config: Config,
-): Promise<A11ySitecheckerResult> {
+export async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultsByUrl[]> {
     if (config.urlsToAnalyze) {
         for (const urlPath of config.urlsToAnalyze) {
             await analyzeUrl(page, urlPath, axeSpecs, config);
@@ -120,18 +102,17 @@ export async function analyzeSite(
         for (const link of links) {
             debug('parsing' + i++ + ' of ' + links.length);
             if (!alreadyParsed.includes(link)) {
-                const res: A11ySitecheckerResult = await analyzeSite(link, axeSpecs, page, config);
+                const recResults = await analyzeSite(link, axeSpecs, page, config);
+                resultsByUrl.push(...recResults);
                 debug('Finished analyze of Site: ' + link);
-                results = { ...results, ...res };
             }
         }
     }
-    results.analyzedUrls = alreadyVisited;
-    return results;
+    return resultsByUrl;
 }
 
 function pushResults(url: string, axeResults): void {
-    results.violationsByUrl.push({
+    resultsByUrl.push({
         url: url,
         violations: axeResults.violations,
         passes: axeResults.passes,

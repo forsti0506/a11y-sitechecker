@@ -11,7 +11,6 @@ export interface A11ySitecheckerResult {
     incomplete: FullCheckerSingleResult[];
     inapplicable: FullCheckerSingleResult[];
     violations: FullCheckerSingleResult[];
-    violationsByUrl: ResultsByUrl[];
     analyzedUrls: string[];
 }
 

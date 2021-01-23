@@ -58,7 +58,7 @@ export function setupAxeConfig(config: Config): Spec {
     const axeConfig: Spec = {};
     if (config.axeConfig?.locale) {
         axeConfig.locale = JSON.parse(
-            fs.readFileSync('node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
+            fs.readFileSync('./node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
         );
     } else if (config.axeConfig?.localePath) {
         axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));

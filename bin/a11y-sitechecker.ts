@@ -4,7 +4,7 @@ import * as pkg from '../package.json';
 import * as commander from 'commander';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
-// import * as prettyjson from 'prettyjson';
+import * as prettyjson from 'prettyjson';
 import { analyzeSite } from '../lib/a11y-sitechecker';
 import { Spec } from 'axe-core';
 import * as puppeteer from 'puppeteer';
@@ -13,6 +13,7 @@ import { mergeResults } from '../lib/utils/result-functions';
 import { log } from '../lib/utils/helper-functions';
 import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
 import { Config } from '../lib/models/config';
+import { A11ySitecheckerResult } from '../lib/models/a11y-sitechecker-result';
 
 // Here we're using Commander to specify the CLI options
 commander
@@ -63,23 +64,38 @@ export async function next(config: Config, axeSpecs: Spec, url: string): Promise
         });
 
         await executeLogin(url, page, config);
+
+        const result: A11ySitecheckerResult = {
+            testEngine: undefined,
+            testEnvironment: undefined,
+            testRunner: undefined,
+            timestamp: new Date().toISOString(),
+            toolOptions: undefined,
+            url: '',
+            violations: [],
+            inapplicable: [],
+            incomplete: [],
+            passes: [],
+            analyzedUrls: [],
+        };
+
         /* istanbul ignore next */
-        let report = await analyzeSite(url, axeSpecs, page, config);
+        const report = await analyzeSite(url, axeSpecs, page, config);
         await browser.close();
-        report.url = url;
-        report = mergeResults(report);
+        result.url = url;
+        mergeResults(report, result);
         if (config.json) {
             writeToJsonFile(JSON.stringify(report, null, 2), config.resultsPath);
         } else {
-            // log(
-            //     prettyjson.render(report, {
-            //         keysColor: 'blue',
-            //         dashColor: 'black',
-            //         stringColor: 'black',
-            //     }),
-            // );
+            log(
+                prettyjson.render(report, {
+                    keysColor: 'blue',
+                    dashColor: 'black',
+                    stringColor: 'black',
+                }),
+            );
         }
-        if (report.violations.length >= config.threshold) {
+        if (result.violations.length >= config.threshold) {
             process.exit(2);
         } else {
             process.exit(0);

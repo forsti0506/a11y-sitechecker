@@ -64,26 +64,26 @@ export function setResult(
     return violations;
 }
 
-export function mergeResults(report: A11ySitecheckerResult): A11ySitecheckerResult {
-    for (const result of report.violationsByUrl) {
-        for (const violation of result.violations) {
-            report.violations = setResult(report.violations, violation, result);
+export function mergeResults(resultsByUrls: ResultsByUrl[], result: A11ySitecheckerResult): A11ySitecheckerResult {
+    for (const resultByUrl of resultsByUrls) {
+        result.analyzedUrls.push(resultByUrl.url);
+        for (const violation of resultByUrl.violations) {
+            result.violations = setResult(result.violations, violation, resultByUrl);
         }
-        for (const violation of result.incomplete) {
-            report.incomplete = setResult(report.incomplete, violation, result);
+        for (const violation of resultByUrl.incomplete) {
+            result.incomplete = setResult(result.incomplete, violation, resultByUrl);
         }
-        for (const violation of result.inapplicable) {
-            report.inapplicable = setResult(report.inapplicable, violation, result);
+        for (const violation of resultByUrl.inapplicable) {
+            result.inapplicable = setResult(result.inapplicable, violation, resultByUrl);
         }
-        for (const violation of result.passes) {
-            report.passes = setResult(report.passes, violation, result);
+        for (const violation of resultByUrl.passes) {
+            result.passes = setResult(result.passes, violation, resultByUrl);
         }
     }
     //set report details to first url (should be always the same)
-    report.toolOptions = report.violationsByUrl[0].toolOptions;
-    report.testRunner = report.violationsByUrl[0].testRunner;
-    report.testEnvironment = report.violationsByUrl[0].testEnvironment;
-    report.testEngine = report.violationsByUrl[0].testEngine;
-    report.violationsByUrl = null;
-    return report;
+    result.toolOptions = resultsByUrls[0].toolOptions;
+    result.testRunner = resultsByUrls[0].testRunner;
+    result.testEnvironment = resultsByUrls[0].testEnvironment;
+    result.testEngine = resultsByUrls[0].testEngine;
+    return result;
 }
