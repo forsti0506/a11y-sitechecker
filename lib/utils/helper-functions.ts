@@ -1,5 +1,6 @@
 import { Page } from 'puppeteer';
 import * as chalk from 'chalk';
+import * as fs from 'fs';
 
 let debugMode = false;
 
@@ -91,4 +92,14 @@ export async function saveScreenshot(page: Page, path: string, fileName: string,
             log(error + '. Image not saved. Analyze not stopped!');
         }
     }
+}
+
+export function writeToJsonFile(data: string, path: string): void {
+    log(chalk.blue('#############################################################################################'));
+    log(chalk.blue(`Writing results to ${path}/results.json`));
+    log(chalk.blue('#############################################################################################'));
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+    }
+    fs.writeFileSync(path + '/results.json', data);
 }

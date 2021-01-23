@@ -1,7 +1,7 @@
 import 'jasmine';
 
 import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
-import { next } from '../bin/a11y-sitechecker';
+import { entry } from '../dist';
 
 describe('a11y-sitechecker-bin', function () {
     beforeEach(function () {
@@ -16,7 +16,7 @@ describe('a11y-sitechecker-bin', function () {
         config.axeConfig.locale = 'de';
         const axeConfig = setupAxeConfig(config);
 
-        next(config, axeConfig, 'www.forsti.eu').then(
+        entry(config, axeConfig, 'www.forsti.eu').then(
             (e) => {
                 done();
             },

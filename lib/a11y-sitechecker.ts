@@ -1,11 +1,25 @@
 import * as fs from 'fs';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { Spec } from 'axe-core';
-import { ResultsByUrl } from './models/a11y-sitechecker-result';
+import { A11ySitecheckerResult, ResultsByUrl } from './models/a11y-sitechecker-result';
 import { Page } from 'puppeteer';
 import { Config } from './models/config';
-import { debug, error, getEscaped, log, saveScreenshot, success, waitForHTML } from './utils/helper-functions';
+import {
+    debug,
+    error,
+    getEscaped,
+    log,
+    saveScreenshot,
+    success,
+    waitForHTML,
+    writeToJsonFile,
+} from './utils/helper-functions';
 import { getLinks } from './utils/get-links';
+import * as chalk from 'chalk';
+import * as puppeteer from 'puppeteer';
+import { executeLogin } from './utils/login';
+import { mergeResults } from './utils/result-functions';
+import * as prettyjson from 'prettyjson';
 
 const alreadyVisited = [];
 const alreadyParsed = [];
@@ -17,7 +31,78 @@ const rootDomain = { value: '' };
 
 const resultsByUrl: ResultsByUrl[] = [];
 
-export async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultsByUrl[]> {
+export async function entry(
+    config: Config,
+    axeSpecs: Spec,
+    url: string,
+    expectedReturn?: boolean,
+): Promise<A11ySitecheckerResult> {
+    try {
+        log(
+            chalk.blue('#############################################################################################'),
+        );
+
+        log(chalk.blue(`Start accessibility Test for ${url}`));
+        log(
+            chalk.blue('#############################################################################################'),
+        );
+        const browser = await puppeteer.launch(config.launchOptions);
+        const page = (await browser.pages())[0];
+        await page.setViewport({
+            width: 1920,
+            height: 1080,
+        });
+
+        await executeLogin(url, page, config);
+
+        const result: A11ySitecheckerResult = {
+            testEngine: undefined,
+            testEnvironment: undefined,
+            testRunner: undefined,
+            timestamp: new Date().toISOString(),
+            toolOptions: undefined,
+            url: '',
+            violations: [],
+            inapplicable: [],
+            incomplete: [],
+            passes: [],
+            analyzedUrls: [],
+        };
+
+        /* istanbul ignore next */
+        const report = await analyzeSite(url, axeSpecs, page, config);
+        await browser.close();
+        result.url = url;
+        mergeResults(report, result);
+        if (config.json && !expectedReturn) {
+            writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPath);
+        } else if (!expectedReturn) {
+            log(
+                prettyjson.render(report, {
+                    keysColor: 'blue',
+                    dashColor: 'black',
+                    stringColor: 'black',
+                }),
+            );
+        }
+        if (result.violations.length >= config.threshold) {
+            process.exit(2);
+        } else {
+            if (expectedReturn) {
+                return result;
+            } else {
+                process.exit(0);
+            }
+        }
+    } catch (error) {
+        // Handle any errors
+        console.error(error.message);
+        console.error(error.stackTrace);
+        process.exit(1);
+    }
+}
+
+async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultsByUrl[]> {
     if (config.urlsToAnalyze) {
         for (const urlPath of config.urlsToAnalyze) {
             await analyzeUrl(page, urlPath, axeSpecs, config);
