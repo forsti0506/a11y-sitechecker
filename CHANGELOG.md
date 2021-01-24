@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.3...v1.6.0) (2021-01-24)
+
+
+### Features
+
+* new configurations added ([efd7116](https://github.com/forsti0506/a11y-sitechecker/commit/efd71168dbe3ba1781f46e0b96c9e6705ebf93ea))
+
 ## [1.5.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.2...v1.5.3) (2021-01-24)
 
 
