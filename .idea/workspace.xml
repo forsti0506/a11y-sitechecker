@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="53a603c8-c216-4f17-8228-0fc3f4e18333" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/bin/a11y-sitechecker.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/a11y-sitechecker.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/utils/helper-functions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/helper-functions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils/login.ts" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/login.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,19 +85,6 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.build">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -181,7 +166,8 @@
       <workItem from="1610787286532" duration="10318000" />
       <workItem from="1610873326173" duration="21767000" />
       <workItem from="1610986717690" duration="13027000" />
-      <workItem from="1611250328815" duration="24196000" />
+      <workItem from="1611250328815" duration="28301000" />
+      <workItem from="1611494009803" duration="298000" />
     </task>
     <servers />
   </component>
@@ -194,13 +180,11 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts</url>
           <line>20</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/tests/a11y-sitechecker.spec.ts</url>
           <line>23</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>

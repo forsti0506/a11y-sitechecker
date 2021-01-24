@@ -7,10 +7,15 @@ export async function executeLogin(url: string, page: Page, config: Config): Pro
     if (!config.login) {
         return;
     }
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await waitForHTML(page);
-    await saveScreenshot(page, config.imagesPath, 'loginSite.png', config.saveImages);
-    await page.screenshot({ path: 'images/yeah.png' });
+    try {
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await page.waitForNavigation({ waitUntil: 'networkidle2' });
+        await waitForHTML(page);
+        await saveScreenshot(page, config.imagesPath, 'loginSite.png', config.saveImages);
+    } catch (e) {
+        await waitForHTML(page);
+        await saveScreenshot(page, config.imagesPath, 'loginSite.png', config.saveImages);
+    }
     for (const step of config.login) {
         for (const input of step.input) {
             await page.waitForSelector(input.selector);

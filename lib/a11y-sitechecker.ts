@@ -167,12 +167,13 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
                         await analyzeSite(page.url(), axeSpecs, page, config);
                     } catch (e) {
                         log('seems like click was no navigation. Analyze and do it. ' + e);
+                        await waitForHTML(page);
                         if (page.url() !== url && !alreadyVisited.includes(url)) {
                             await analyzeSite(page.url(), axeSpecs, page, config);
                             await page.goto(url, { waitUntil: 'load' });
                             await waitForHTML(page);
                         } else if (config.analyzeClicksWithoutNavigation) {
-                            debug('Experimintal feature! Please check if there are to much clicks!');
+                            debug('Experimintal feature! Please check if there are to many clicks!');
                             const axe = await new AxePuppeteer(page);
                             axe.configure(axeSpecs);
                             const axeResults = await axe.analyze();
