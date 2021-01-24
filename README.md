@@ -1,7 +1,7 @@
 # a11y-sitechecker
 
 A11y-sitecheker is a tool to check a whole site against accessibility criteria. It uses <a href="https://github.com/dequelabs/axe-core">axe-core</a> to check whole sites for accessibility issues.
-It is crawling the first given Domain and tries to find all links recursivly. In addition it is possible to click elements which have a tabindex > 0 (links are ignored there).
+It is crawling the first given Domain and tries to find all links recursivly. In addition it is possible to click elements which have a tabindex >= 0 (links are ignored there).
 
 ## Current state
 It is under development! Please don't use it in critical environments! 
@@ -28,7 +28,7 @@ The available options on the commandline are:
 
 ### Configuration File
 
-Every configuration which is not done, is by default false or undefined if not explicitly mentioned!
+Every configuration which is not inserted in the config file is by default false or undefined if not explicitly mentioned!
 
 Define if output should be to a json file. You can additionally add a path to store the results.json file!
 ```json
@@ -98,6 +98,14 @@ You can define the links you like to analyze. Therefore only the links mentioned
 ```json
 {
   "urlsToAnalyze": ["www.test.at"]
+} 
+```
+
+It is possible to analyze clickable Items, which are not links (buttons who change the view,...). By default it searches by this selector : "button, select, details, [tabindex]:not([tabindex="-1"])" You can activate this by:
+```json
+{
+  "analyzeClicks": true,
+  "clickableItemSelector": "button, details"
 } 
 ```
 

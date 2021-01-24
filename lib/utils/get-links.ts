@@ -2,6 +2,7 @@ import * as JSDOM from 'jsdom';
 import * as chalk from 'chalk';
 import { getUniqueSelector } from './UniqueSelector';
 import { isAbsoluteUrl, shoouldElementBeIgnored } from './helper-functions';
+import { Config } from '../models/config';
 
 export interface RootDomain {
     value: string;
@@ -11,7 +12,7 @@ const debug = console.debug;
 export function getLinks(
     html: string,
     url: string,
-    elementsToIgnore: string[],
+    config: Config,
     alreadyParsed: string[],
     rootDomain: RootDomain,
     elementsToClick: Map<string, string[]>,
@@ -24,13 +25,14 @@ export function getLinks(
     const dom = new JSDOM.JSDOM(html, { contentType: 'text/html' });
     const links: string[] = [];
     if (!rootDomain.value) {
-        debug(chalk.green('RootDomain was set to: ' + url));
-        rootDomain.value = url;
+        const rootDomainURL = new URL(url);
+        rootDomain.value = (rootDomainURL.hostname + rootDomainURL.pathname).replace('www.', '');
+        debug(chalk.green('RootDomain was set to: ' + rootDomain.value));
     }
     dom.window.document.querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
         let link = element.href;
         if (link === '' && element.getAttributeNames().includes('ng-click')) {
-            const shouldElementBeIgnored = shoouldElementBeIgnored(element, elementsToIgnore);
+            const shouldElementBeIgnored = shoouldElementBeIgnored(element, config.ignoreElementAttributeValues);
             if (!shouldElementBeIgnored) {
                 const uniqueSelector = getUniqueSelector(element, dom);
                 if (elementsToClick.has(url)) {
@@ -68,22 +70,32 @@ export function getLinks(
             notCheckedLinks.push(link);
         }
     });
-    dom.window.document
-        .querySelectorAll('button, select, details, [tabindex]:not([tabindex="-1"])')
-        .forEach((element: HTMLAnchorElement) => {
-            if (!element.hasAttribute('disabled') && !shoouldElementBeIgnored(element, elementsToIgnore)) {
-                const uniqueSelector = getUniqueSelector(element, dom);
-                if (elementsToClick.has(url)) {
-                    if (!elementsToClick.get(url).includes(uniqueSelector)) {
-                        elementsToClick.get(url).push(uniqueSelector);
+    if (config.analyzeClicks) {
+        debug(chalk.yellow('Searching all clickable Items'));
+        dom.window.document
+            .querySelectorAll(
+                config.clickableItemSelector
+                    ? config.clickableItemSelector
+                    : 'button, select, details, [tabindex]:not([tabindex="-1"])',
+            )
+            .forEach((element: HTMLAnchorElement) => {
+                if (
+                    !element.hasAttribute('disabled') &&
+                    !shoouldElementBeIgnored(element, config.ignoreElementAttributeValues)
+                ) {
+                    const uniqueSelector = getUniqueSelector(element, dom);
+                    if (elementsToClick.has(url)) {
+                        if (!elementsToClick.get(url).includes(uniqueSelector)) {
+                            elementsToClick.get(url).push(uniqueSelector);
+                        }
+                    } else {
+                        elementsToClick.set(url, [uniqueSelector]);
                     }
                 } else {
-                    elementsToClick.set(url, [uniqueSelector]);
+                    debug(chalk.yellow('Element ignored, because of given array or disabled: ' + element));
                 }
-            } else {
-                debug(chalk.yellow('Element ignored, because of given array or disabled: ' + element));
-            }
-        });
+            });
+    }
     alreadyParsed.push(url);
     return links;
 }
