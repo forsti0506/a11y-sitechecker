@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.2...v1.5.3) (2021-01-24)
+
+
+### Bug Fixes
+
+* login improvements ([8007276](https://github.com/forsti0506/a11y-sitechecker/commit/80072766cceeb8e02ffa077b126669c3109890af))
+
 ## [1.5.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.1...v1.5.2) (2021-01-23)
 
 
