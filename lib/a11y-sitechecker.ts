@@ -21,9 +21,9 @@ import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import * as prettyjson from 'prettyjson';
 
-const alreadyVisited = [];
-const alreadyParsed = [];
-const notCheckedLinks = [];
+const alreadyVisited: string[] = [];
+const alreadyParsed: string[] = [];
+const notCheckedLinks: string[] = [];
 const alreadyClicked: Map<string, string[]> = new Map<string, string[]>();
 const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
@@ -188,8 +188,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
         for (const link of links) {
             debug('parsing' + i++ + ' of ' + links.length);
             if (!alreadyParsed.includes(link)) {
-                const recResults = await analyzeSite(link, axeSpecs, page, config);
-                resultsByUrl.push(...recResults);
+                await analyzeSite(link, axeSpecs, page, config);
                 debug('Finished analyze of Site: ' + link);
             }
         }
