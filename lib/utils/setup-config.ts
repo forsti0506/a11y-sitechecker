@@ -45,6 +45,9 @@ export function setupConfig(commander): Config {
             if (configFile.debugMode) {
                 setDebugMode(configFile.debugMode);
             }
+            if (configFile.analyzeClicks) {
+                config.analyzeClicks = configFile.analyzeClicks;
+            }
         } catch (e) {
             error(e);
             throw e;

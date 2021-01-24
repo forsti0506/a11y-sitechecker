@@ -122,7 +122,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
         const links = getLinks(
             html,
             url,
-            config.ignoreElementAttributeValues,
+            config,
             alreadyParsed,
             rootDomain,
             elementsToClick,

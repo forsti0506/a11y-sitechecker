@@ -76,6 +76,7 @@ export function getEscaped(link: string): string {
     return link.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
 }
 export function shoouldElementBeIgnored(element: HTMLAnchorElement, elementstoIgnore: string[]): boolean {
+    if (!elementstoIgnore) return false;
     let shouldElementBeIgnored = false;
     for (let i = 0; i < element.attributes.length; i++) {
         shouldElementBeIgnored = elementstoIgnore.some((e) => element.attributes.item(i).nodeValue.includes(e));

@@ -13,6 +13,8 @@ export interface Config {
     launchOptions?: LaunchOptions;
     ignoreElementAttributeValues?: string[];
     urlsToAnalyze?: string[];
+    clickableItemSelector?: string;
+    analyzeClicks?: boolean;
     analyzeClicksWithoutNavigation?: boolean;
     threshold: number;
 }
