@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.0...v1.6.1) (2021-01-24)
+
+
+### Bug Fixes
+
+* bug for doubling violations fixed ([4bcd165](https://github.com/forsti0506/a11y-sitechecker/commit/4bcd1659433a17e11c244536c2ddda8d437bb1c1))
+
 # [1.6.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.3...v1.6.0) (2021-01-24)
 
 
