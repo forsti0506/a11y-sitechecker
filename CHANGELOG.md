@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.3...v1.6.4) (2021-01-31)
+
+
+### Bug Fixes
+
+* runoptions for all ([12bb545](https://github.com/forsti0506/a11y-sitechecker/commit/12bb54511ca9c758dacea3f313d2bf6e35cc9e69))
+
 ## [1.6.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.2...v1.6.3) (2021-01-31)
 
 
