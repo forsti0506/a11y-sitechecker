@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.1...v1.6.2) (2021-01-31)
+
+
+### Bug Fixes
+
+* idea files and run with experimental tag ([e675645](https://github.com/forsti0506/a11y-sitechecker/commit/e675645fb698555fbafa2386bc77bd1e25240cc1))
+
 ## [1.6.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.0...v1.6.1) (2021-01-24)
 
 
