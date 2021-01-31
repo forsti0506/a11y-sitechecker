@@ -176,6 +176,17 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
                             debug('Experimintal feature! Please check if there are to many clicks!');
                             const axe = await new AxePuppeteer(page);
                             axe.configure(axeSpecs);
+                            axe.options({
+                                runOnly: [
+                                    'wcag2aa',
+                                    'wcag2a',
+                                    'wcag21a',
+                                    'wcag21aa',
+                                    'best-practice',
+                                    'ACT',
+                                    'experimental',
+                                ],
+                            });
                             const axeResults = await axe.analyze();
                             pushResults(url + '_' + element + '_clicked', axeResults);
                         }
