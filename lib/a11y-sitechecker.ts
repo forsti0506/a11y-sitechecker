@@ -102,6 +102,15 @@ export async function entry(
     }
 }
 
+async function setupAxe(page: Page, axeSpecs: Spec): Promise<AxePuppeteer> {
+    const axe = await new AxePuppeteer(page);
+    axe.configure(axeSpecs);
+    axe.options({
+        runOnly: ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
+    });
+    return axe;
+}
+
 async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultsByUrl[]> {
     if (config.urlsToAnalyze) {
         for (const urlPath of config.urlsToAnalyze) {
@@ -174,19 +183,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
                             await waitForHTML(page);
                         } else if (config.analyzeClicksWithoutNavigation) {
                             debug('Experimintal feature! Please check if there are to many clicks!');
-                            const axe = await new AxePuppeteer(page);
-                            axe.configure(axeSpecs);
-                            axe.options({
-                                runOnly: [
-                                    'wcag2aa',
-                                    'wcag2a',
-                                    'wcag21a',
-                                    'wcag21aa',
-                                    'best-practice',
-                                    'ACT',
-                                    'experimental',
-                                ],
-                            });
+                            const axe = await setupAxe(page, axeSpecs);
                             const axeResults = await axe.analyze();
                             pushResults(url + '_' + element + '_clicked', axeResults);
                         }
@@ -250,8 +247,7 @@ async function analyzeUrl(page, url: string, axeSpecs: Spec, config: Config): Pr
 
     let axeResults;
     try {
-        const axe = await new AxePuppeteer(page);
-        axe.configure(axeSpecs);
+        const axe = await setupAxe(page, axeSpecs);
         axeResults = await axe.analyze();
     } catch (e) {
         error(error + '. Error Axe');
