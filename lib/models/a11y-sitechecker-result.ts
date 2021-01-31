@@ -34,6 +34,7 @@ export interface FullCheckerSingleResult {
     id: string;
     impact?: ImpactValue;
     tags: TagValue[];
+    customTags?: string[];
     nodes: NodeResult[];
 }
 export interface NodeResult {
