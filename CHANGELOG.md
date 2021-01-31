@@ -1,3 +1,11 @@
+## [1.6.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.2...v1.6.3) (2021-01-31)
+
+
+### Bug Fixes
+
+* custom tags added to model ([2da4de7](https://github.com/forsti0506/a11y-sitechecker/commit/2da4de7cecd11166d22d8b508bed2a5b2d684450))
+* customtags are optional ([d97ee4a](https://github.com/forsti0506/a11y-sitechecker/commit/d97ee4a7f93c50a006267610061faab16dc3cc50))
+
 ## [1.6.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.1...v1.6.2) (2021-01-31)
 
 
