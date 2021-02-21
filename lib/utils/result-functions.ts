@@ -2,14 +2,14 @@ import {
     A11ySitecheckerResult,
     FullCheckerSingleResult,
     NodeResult,
-    ResultsByUrl,
+    ResultByUrl,
+    Result,
 } from '../models/a11y-sitechecker-result';
-import { Result } from 'axe-core';
 
 export function setResult(
     violations: FullCheckerSingleResult[],
     violation: Result,
-    result: ResultsByUrl,
+    result: ResultByUrl,
 ): FullCheckerSingleResult[] {
     if (violations.filter((v) => v.id === violation.id).length > 0) {
         const reportViolation = violations.filter((v) => v.id === violation.id)[0];
@@ -35,6 +35,7 @@ export function setResult(
                     targetResult: { urls: [result.url], target: node.target },
                     all: node.all,
                     html: node.html,
+                    image: node.image,
                 });
             }
         }
@@ -56,6 +57,7 @@ export function setResult(
                 any: node.any,
                 none: node.none,
                 targetResult: { urls: [result.url], target: JSON.parse(JSON.stringify(node.target)) },
+                image: node.image,
             };
             fullCheckerSingleResult.nodes.push(resultViolation);
         }
@@ -64,7 +66,7 @@ export function setResult(
     return violations;
 }
 
-export function mergeResults(resultsByUrls: ResultsByUrl[], result: A11ySitecheckerResult): A11ySitecheckerResult {
+export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): A11ySitecheckerResult {
     for (const resultByUrl of resultsByUrls) {
         result.analyzedUrls.push(resultByUrl.url);
         for (const violation of resultByUrl.violations) {

@@ -1,4 +1,4 @@
-import { ImpactValue, Result, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
+import { ImpactValue, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
 
 export interface A11ySitecheckerResult {
     toolOptions: RunOptions;
@@ -14,7 +14,7 @@ export interface A11ySitecheckerResult {
     analyzedUrls: string[];
 }
 
-export interface ResultsByUrl {
+export interface ResultByUrl {
     url: string;
     violations: Result[];
     toolOptions: RunOptions;
@@ -25,6 +25,30 @@ export interface ResultsByUrl {
     passes: Result[];
     incomplete: Result[];
     inapplicable: Result[];
+}
+
+export interface Result {
+    description: string;
+    help: string;
+    helpUrl: string;
+    id: string;
+    impact?: ImpactValue;
+    tags: TagValue[];
+    nodes: AxeNodeResult[];
+}
+
+interface AxeNodeResult {
+    html: string;
+    impact?: ImpactValue;
+    target: string[];
+    xpath?: string[];
+    ancestry?: string[];
+    any: CheckResult[];
+    all: CheckResult[];
+    none: CheckResult[];
+    failureSummary?: string;
+    element?: HTMLElement;
+    image?: string;
 }
 
 export interface FullCheckerSingleResult {
@@ -48,6 +72,7 @@ export interface NodeResult {
     none: CheckResult[];
     failureSummary?: string;
     element?: HTMLElement;
+    image: string;
 }
 
 export interface TargetResult {

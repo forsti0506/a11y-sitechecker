@@ -61,17 +61,6 @@ export async function waitForHTML(page: Page, timeout = 30000): Promise<void> {
     }
 }
 
-// export function setValue(obj, path, value): void {
-//     // const a = path.split('.');
-//     let o = obj;
-//     while (path.length - 1) {
-//         const n = path.shift();
-//         if (!(n in o)) o[n] = {};
-//         o = o[n];
-//     }
-//     o[path[0]] = value;
-// }
-
 export function getEscaped(link: string): string {
     return link.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
 }
