@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { Spec } from 'axe-core';
-import { A11ySitecheckerResult, ResultsByUrl } from './models/a11y-sitechecker-result';
+import { A11ySitecheckerResult, ResultByUrl } from './models/a11y-sitechecker-result';
+import { v4 as uuidv4 } from 'uuid';
 import { Page } from 'puppeteer';
 import { Config } from './models/config';
 import {
@@ -29,7 +30,7 @@ const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
 const rootDomain = { value: '' };
 
-const resultsByUrl: ResultsByUrl[] = [];
+const resultsByUrl: ResultByUrl[] = [];
 
 export async function entry(
     config: Config,
@@ -69,7 +70,6 @@ export async function entry(
             analyzedUrls: [],
         };
 
-        /* istanbul ignore next */
         const report = await analyzeSite(url, axeSpecs, page, config);
         await browser.close();
         result.url = url;
@@ -103,7 +103,7 @@ export async function entry(
 }
 
 async function setupAxe(page: Page, axeSpecs: Spec): Promise<AxePuppeteer> {
-    const axe = await new AxePuppeteer(page);
+    const axe = new AxePuppeteer(page);
     axe.configure(axeSpecs);
     axe.options({
         runOnly: ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
@@ -111,7 +111,7 @@ async function setupAxe(page: Page, axeSpecs: Spec): Promise<AxePuppeteer> {
     return axe;
 }
 
-async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultsByUrl[]> {
+async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Config): Promise<ResultByUrl[]> {
     if (config.urlsToAnalyze) {
         for (const urlPath of config.urlsToAnalyze) {
             await analyzeUrl(page, urlPath, axeSpecs, config);
@@ -185,7 +185,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
                             debug('Experimintal feature! Please check if there are to many clicks!');
                             const axe = await setupAxe(page, axeSpecs);
                             const axeResults = await axe.analyze();
-                            pushResults(url + '_' + element + '_clicked', axeResults);
+                            await pushResults(url + '_' + element + '_clicked', axeResults, page, config);
                         }
                     }
                 }
@@ -204,7 +204,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
     return resultsByUrl;
 }
 
-function pushResults(url: string, axeResults): void {
+async function pushResults(url: string, axeResults, page: Page, config: Config): Promise<void> {
     resultsByUrl.push({
         url: url,
         violations: axeResults.violations,
@@ -217,6 +217,7 @@ function pushResults(url: string, axeResults): void {
         timestamp: axeResults.timestamp,
         toolOptions: axeResults.toolOptions,
     });
+    await makeScreenshotsWithErrorsBorderd(resultsByUrl.filter((r) => r.url === url)[0], page, config);
     alreadyVisited.push(url);
     success('Finished analyze of url: ' + url + '. Pushed ' + axeResults.violations.length + ' violations');
 }
@@ -253,6 +254,33 @@ async function analyzeUrl(page, url: string, axeSpecs: Spec, config: Config): Pr
         error(error + '. Error Axe');
     }
     if (axeResults) {
-        pushResults(url, axeResults);
+        await pushResults(url, axeResults, page, config);
+    }
+}
+
+async function makeScreenshotsWithErrorsBorderd(resultByUrl: ResultByUrl, page: Page, config: Config): Promise<void> {
+    debug('make screenshots with border');
+    page.on('console', (log) => {
+        console.log(log.text());
+    });
+    for (const result of resultByUrl.violations) {
+        for (const node of result.nodes) {
+            debug('Adding border to: ' + JSON.stringify(node.target[0]));
+            await page.evaluate((element) => {
+                const dom = document.querySelector(element);
+                if (dom.attributes.style) {
+                    dom.setAttribute('style', dom.getAttribute('style') + ' border: 1px solid red');
+                } else {
+                    dom.setAttribute('style', 'border: 1px solid red');
+                }
+            }, node.target[0]);
+            const image = uuidv4() + '.png';
+            await saveScreenshot(page, config.imagesPath, image, true);
+            node.image = image;
+            await page.evaluate((element) => {
+                const dom = document.querySelector(element);
+                dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red', ''));
+            }, node.target[0]);
+        }
     }
 }
