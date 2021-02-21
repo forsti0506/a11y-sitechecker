@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.4...v1.7.0) (2021-02-21)
+
+
+### Bug Fixes
+
+* ts-node added for tests ([2b8232d](https://github.com/forsti0506/a11y-sitechecker/commit/2b8232d3b30472cbc50a8d2ece35f576ad477289))
+
+
+### Features
+
+* improvements and picture feature ([b173865](https://github.com/forsti0506/a11y-sitechecker/commit/b17386529d7d687b90e632697e48d8c26710c67c))
+
 ## [1.6.4](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.3...v1.6.4) (2021-01-31)
 
 
