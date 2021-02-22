@@ -4,7 +4,7 @@ import { error, setDebugMode } from './helper-functions';
 import { Config } from '../models/config';
 
 export function setupConfig(commander): Config {
-    const config: Config = { json: true, resultsPath: 'results', axeConfig: {}, threshold: undefined };
+    const config: Config = { json: true, resultsPath: 'results', axeConfig: {}, threshold: 0, imagesPath: 'images' };
     config.json = commander.json;
     if (!config.threshold) {
         config.threshold = parseInt(commander.threshold);
@@ -18,10 +18,14 @@ export function setupConfig(commander): Config {
             if (configFile.resultsPath && typeof configFile.resultsPath === 'string') {
                 config.resultsPath = configFile.resultsPath;
             }
-            if (configFile.axeConfig?.locale && typeof configFile.axeConfig.locale === 'string') {
+            if (configFile.axeConfig?.locale && typeof configFile.axeConfig.locale === 'string' && config.axeConfig) {
                 config.axeConfig.locale = configFile.axeConfig.locale;
             }
-            if (configFile.axeConfig?.localePath && typeof configFile.axeConfig.localePath === 'string') {
+            if (
+                configFile.axeConfig?.localePath &&
+                typeof configFile.axeConfig.localePath === 'string' &&
+                config.axeConfig
+            ) {
                 config.axeConfig.localePath = configFile.axeConfig.localePath;
             }
             if (configFile.login) {
@@ -55,6 +59,15 @@ export function setupConfig(commander): Config {
     }
 
     return config;
+}
+
+export function prepareWorkspace(config: Config): void {
+    if (config.imagesPath && !fs.existsSync(config.imagesPath)) {
+        fs.mkdirSync(config.imagesPath);
+    } else if (config.imagesPath) {
+        fs.rmdirSync(config.imagesPath, { recursive: true });
+        fs.mkdirSync(config.imagesPath);
+    }
 }
 
 export function setupAxeConfig(config: Config): Spec {

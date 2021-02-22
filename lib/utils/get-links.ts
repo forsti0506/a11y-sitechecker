@@ -35,8 +35,9 @@ export function getLinks(
             const shouldElementBeIgnored = shoouldElementBeIgnored(element, config.ignoreElementAttributeValues);
             if (!shouldElementBeIgnored) {
                 const uniqueSelector = getUniqueSelector(element, dom);
-                if (elementsToClick.has(url)) {
-                    elementsToClick.get(url).push(uniqueSelector);
+                const elmsToClick = elementsToClick.get(url);
+                if (elementsToClick.has(url) && elmsToClick) {
+                    elmsToClick.push(uniqueSelector);
                 } else {
                     elementsToClick.set(url, [uniqueSelector]);
                 }
@@ -78,15 +79,16 @@ export function getLinks(
                     ? config.clickableItemSelector
                     : 'button, select, details, [tabindex]:not([tabindex="-1"])',
             )
-            .forEach((element: HTMLAnchorElement) => {
+            .forEach((element: Element) => {
                 if (
                     !element.hasAttribute('disabled') &&
                     !shoouldElementBeIgnored(element, config.ignoreElementAttributeValues)
                 ) {
                     const uniqueSelector = getUniqueSelector(element, dom);
-                    if (elementsToClick.has(url)) {
-                        if (!elementsToClick.get(url).includes(uniqueSelector)) {
-                            elementsToClick.get(url).push(uniqueSelector);
+                    const elmsToClick = elementsToClick.get(url);
+                    if (elementsToClick.has(url) && elmsToClick) {
+                        if (!elmsToClick.includes(uniqueSelector)) {
+                            elmsToClick.push(uniqueSelector);
                         }
                     } else {
                         elementsToClick.set(url, [uniqueSelector]);

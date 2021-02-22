@@ -13,7 +13,7 @@ describe('a11y-sitechecker-bin', function () {
         const commander = { json: true, config: './tests/config.json' };
         const config = setupConfig(commander);
         config.threshold = 1000;
-        config.axeConfig.locale = 'de';
+        if (config.axeConfig) config.axeConfig.locale = 'de';
         const axeConfig = setupAxeConfig(config);
 
         entry(config, axeConfig, 'www.forsti.eu').then(

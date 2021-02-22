@@ -11,7 +11,7 @@ export function getUniqueSelector(elSrc: Node, dom: JSDOM.JSDOM): string {
     return '';
 }
 function uniqueQuery(aSel: string[], dom: JSDOM.JSDOM): boolean {
-    return dom.window.document.querySelectorAll(aSel.join('>') || null).length === 1;
+    return dom.window.document.querySelectorAll(aSel.join('>')).length === 1;
 }
 
 function getSelector(aSel, el, sSel, aAttr, dom: JSDOM.JSDOM): boolean {
@@ -32,7 +32,7 @@ function getSelector(aSel, el, sSel, aAttr, dom: JSDOM.JSDOM): boolean {
     for (let i = 0; i < aAttr.length; ++i) {
         if (aAttr[i] === 'data-*') {
             // Build array of data attributes
-            const aDataAttr = [].filter.call(el.attributes, function (attr) {
+            const aDataAttr: Attr[] = [].filter.call(el.attributes, function (attr: Attr) {
                 return attr.name.indexOf('data-') === 0;
             });
             for (let j = 0; j < aDataAttr.length; ++j) {
@@ -57,5 +57,5 @@ function getSelector(aSel, el, sSel, aAttr, dom: JSDOM.JSDOM): boolean {
     n = 1;
     while ((elChild = elChild.previousElementSibling)) ++n;
     aSel[0] = sSel = sSel.replace(/:nth-of-type\(\d+\)/, n > 1 ? ':nth-child(' + n + ')' : ':first-child');
-    return !!uniqueQuery(aSel, dom);
+    return uniqueQuery(aSel, dom);
 }

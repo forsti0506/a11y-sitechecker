@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { AxePuppeteer } from '@axe-core/puppeteer';
 import { Spec } from 'axe-core';
 import { A11ySitecheckerResult, ResultByUrl } from './models/a11y-sitechecker-result';
@@ -21,12 +20,14 @@ import * as puppeteer from 'puppeteer';
 import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import * as prettyjson from 'prettyjson';
+import { prepareWorkspace } from './utils/setup-config';
 
 const alreadyVisited: string[] = [];
 const alreadyParsed: string[] = [];
 const notCheckedLinks: string[] = [];
 const alreadyClicked: Map<string, string[]> = new Map<string, string[]>();
 const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
+const savedScreenshotHtmls: string[] = [];
 
 const rootDomain = { value: '' };
 
@@ -39,6 +40,7 @@ export async function entry(
     expectedReturn?: boolean,
 ): Promise<A11ySitecheckerResult> {
     try {
+        prepareWorkspace(config);
         log(
             chalk.blue('#############################################################################################'),
         );
@@ -151,15 +153,17 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
         await page.goto(url, { waitUntil: 'networkidle2' });
         await waitForHTML(page);
 
-        if (elementsToClick.get(url)?.length > 0) {
+        const elToClick = elementsToClick.get(url);
+        if (elToClick && elToClick.length > 0) {
             i = 1;
-            for (const element of elementsToClick.get(url)) {
-                debug('Clicking ' + i++ + ' of ' + elementsToClick.get(url).length);
+            for (const element of elToClick) {
+                debug('Clicking ' + i++ + ' of ' + elToClick.length);
                 if (element && !alreadyClicked.get(url)?.includes(element)) {
                     debug('Element to be clicked: ' + element);
                     try {
-                        if (alreadyClicked.get(url)) {
-                            alreadyClicked.get(url).push(element);
+                        const alrdyClicked = alreadyClicked.get(url);
+                        if (alrdyClicked) {
+                            alrdyClicked.push(element);
                         } else {
                             alreadyClicked.set(url, [url]);
                         }
@@ -234,9 +238,6 @@ async function analyzeUrl(page, url: string, axeSpecs: Spec, config: Config): Pr
         return;
     }
     log('Currently analyzing ' + url);
-    if (!fs.existsSync('images')) {
-        fs.mkdirSync('images');
-    }
 
     if (config.saveImages) {
         try {
@@ -265,22 +266,28 @@ async function makeScreenshotsWithErrorsBorderd(resultByUrl: ResultByUrl, page: 
     });
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
-            debug('Adding border to: ' + JSON.stringify(node.target[0]));
-            await page.evaluate((element) => {
-                const dom = document.querySelector(element);
-                if (dom.attributes.style) {
-                    dom.setAttribute('style', dom.getAttribute('style') + ' border: 1px solid red');
-                } else {
-                    dom.setAttribute('style', 'border: 1px solid red');
-                }
-            }, node.target[0]);
-            const image = uuidv4() + '.png';
-            await saveScreenshot(page, config.imagesPath, image, true);
-            node.image = image;
-            await page.evaluate((element) => {
-                const dom = document.querySelector(element);
-                dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red', ''));
-            }, node.target[0]);
+            if (!savedScreenshotHtmls.includes(node.html)) {
+                debug('Adding border to: ' + JSON.stringify(node.target[0]));
+                await page.evaluate((element) => {
+                    const dom = document.querySelector(element);
+                    dom.scrollIntoView();
+                    if (dom.attributes.style) {
+                        dom.setAttribute('style', dom.getAttribute('style') + ' border: 1px solid red');
+                    } else {
+                        dom.setAttribute('style', 'border: 1px solid red');
+                    }
+                }, node.target[0]);
+                const image = uuidv4() + '.png';
+                await saveScreenshot(page, config.imagesPath, image, true);
+                node.image = image;
+                await page.evaluate((element) => {
+                    const dom = document.querySelector(element);
+                    dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red', ''));
+                }, node.target[0]);
+                savedScreenshotHtmls.push(node.html);
+            } else {
+                debug('Nothing happend, because already screenshoted: ' + node.html);
+            }
         }
     }
 }
