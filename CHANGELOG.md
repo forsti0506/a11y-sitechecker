@@ -1,3 +1,87 @@
+## [1.6.4](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.3...v1.6.4) (2021-01-31)
+
+
+### Bug Fixes
+
+* runoptions for all ([12bb545](https://github.com/forsti0506/a11y-sitechecker/commit/12bb54511ca9c758dacea3f313d2bf6e35cc9e69))
+
+## [1.6.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.2...v1.6.3) (2021-01-31)
+
+
+### Bug Fixes
+
+* custom tags added to model ([2da4de7](https://github.com/forsti0506/a11y-sitechecker/commit/2da4de7cecd11166d22d8b508bed2a5b2d684450))
+* customtags are optional ([d97ee4a](https://github.com/forsti0506/a11y-sitechecker/commit/d97ee4a7f93c50a006267610061faab16dc3cc50))
+
+## [1.6.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.1...v1.6.2) (2021-01-31)
+
+
+### Bug Fixes
+
+* idea files and run with experimental tag ([e675645](https://github.com/forsti0506/a11y-sitechecker/commit/e675645fb698555fbafa2386bc77bd1e25240cc1))
+
+## [1.6.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.6.0...v1.6.1) (2021-01-24)
+
+
+### Bug Fixes
+
+* bug for doubling violations fixed ([4bcd165](https://github.com/forsti0506/a11y-sitechecker/commit/4bcd1659433a17e11c244536c2ddda8d437bb1c1))
+
+# [1.6.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.3...v1.6.0) (2021-01-24)
+
+
+### Features
+
+* new configurations added ([efd7116](https://github.com/forsti0506/a11y-sitechecker/commit/efd71168dbe3ba1781f46e0b96c9e6705ebf93ea))
+
+## [1.5.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.2...v1.5.3) (2021-01-24)
+
+
+### Bug Fixes
+
+* login improvements ([8007276](https://github.com/forsti0506/a11y-sitechecker/commit/80072766cceeb8e02ffa077b126669c3109890af))
+
+## [1.5.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.1...v1.5.2) (2021-01-23)
+
+
+### Bug Fixes
+
+* new entry models ([c1ed243](https://github.com/forsti0506/a11y-sitechecker/commit/c1ed24391886c96d9e9031efd6f6453295e95528))
+
+## [1.5.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.5.0...v1.5.1) (2021-01-23)
+
+
+### Bug Fixes
+
+* result saved not resultByUrl ([9bb418f](https://github.com/forsti0506/a11y-sitechecker/commit/9bb418f621c67f0e44a833ad390a4a5d29cdfd71))
+
+# [1.5.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.4.0...v1.5.0) (2021-01-23)
+
+
+### Bug Fixes
+
+* folder path for axe locale ([621aa29](https://github.com/forsti0506/a11y-sitechecker/commit/621aa29073000143b3ce999fa48294403a0dbd2d))
+
+
+### Features
+
+* updated strategy for models ([d858713](https://github.com/forsti0506/a11y-sitechecker/commit/d858713a728859ddacbca25d9827f3c77c69dac9))
+
+# [1.4.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.3.0...v1.4.0) (2021-01-21)
+
+
+### Bug Fixes
+
+* headless true in test ([906b60d](https://github.com/forsti0506/a11y-sitechecker/commit/906b60d1341da4f3b66824f542f9d8594d90c369))
+* pupeteer options for test ([3870c5a](https://github.com/forsti0506/a11y-sitechecker/commit/3870c5a0966cdbff3648421a9582fe5a71f78cc2))
+* rebuild the scripts ([f11bf59](https://github.com/forsti0506/a11y-sitechecker/commit/f11bf59bd139d3210396da81ef6fb3ca5e7883dd))
+* test execution in build file updated ([34ce4ff](https://github.com/forsti0506/a11y-sitechecker/commit/34ce4ff07566aeec147e4ceeadc0a8cce0e76783))
+
+
+### Features
+
+* modus to define urls, some more settings and readme updated ([7db5c18](https://github.com/forsti0506/a11y-sitechecker/commit/7db5c1824c155756f14b6bdb066f7fb8304a6c32))
+
 # [1.3.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.2.0...v1.3.0) (2021-01-18)
 
 
