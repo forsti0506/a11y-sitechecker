@@ -1,10 +1,10 @@
 import { ImpactValue, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
 
 export interface A11ySitecheckerResult {
-    toolOptions: RunOptions;
-    testEngine: TestEngine;
-    testRunner: TestRunner;
-    testEnvironment: TestEnvironment;
+    toolOptions: RunOptions | undefined;
+    testEngine: TestEngine | undefined;
+    testRunner: TestRunner | undefined;
+    testEnvironment: TestEnvironment | undefined;
     url: string;
     timestamp: string;
     passes: FullCheckerSingleResult[];
@@ -72,7 +72,7 @@ export interface NodeResult {
     none: CheckResult[];
     failureSummary?: string;
     element?: HTMLElement;
-    image: string;
+    image: string | undefined;
 }
 
 export interface TargetResult {

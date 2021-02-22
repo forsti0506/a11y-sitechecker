@@ -7,9 +7,7 @@ let debugMode = false;
 export function setDebugMode(bool: boolean): void {
     debugMode = bool;
 }
-export function isFile(path: string): boolean {
-    return path.split('/').length > 3 && path.split('/').pop().indexOf('.') > -1;
-}
+
 export function isAbsoluteUrl(url: string): boolean {
     return /^(?:[a-z]+:)?\/\//i.test(url);
 }
@@ -44,11 +42,12 @@ export async function waitForHTML(page: Page, timeout = 30000): Promise<void> {
         const html = await page.content();
         const currentHTMLSize = html.length;
 
-        const bodyHTMLSize = await page.evaluate(() => document.body.innerHTML.length);
+        const bodyHTMLSize = await page.evaluate(() => document.body?.innerHTML?.length);
 
         debug('last: ', lastHTMLSize, ' <> curr: ', currentHTMLSize, ' body html size: ', bodyHTMLSize);
 
-        if (lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize) countStableSizeIterations++;
+        if (lastHTMLSize && bodyHTMLSize && lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize)
+            countStableSizeIterations++;
         else countStableSizeIterations = 0; //reset the counter
 
         if (countStableSizeIterations >= minStableSizeIterations) {
@@ -64,20 +63,26 @@ export async function waitForHTML(page: Page, timeout = 30000): Promise<void> {
 export function getEscaped(link: string): string {
     return link.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
 }
-export function shoouldElementBeIgnored(element: HTMLAnchorElement, elementstoIgnore: string[]): boolean {
+export function shoouldElementBeIgnored(element: Element, elementstoIgnore: string[] | undefined): boolean {
     if (!elementstoIgnore) return false;
     let shouldElementBeIgnored = false;
     for (let i = 0; i < element.attributes.length; i++) {
-        shouldElementBeIgnored = elementstoIgnore.some((e) => element.attributes.item(i).nodeValue.includes(e));
+        shouldElementBeIgnored = elementstoIgnore.some((e) => element.attributes.item(i)?.nodeValue?.includes(e));
         if (shouldElementBeIgnored) break;
     }
     return shouldElementBeIgnored;
 }
 
-export async function saveScreenshot(page: Page, path: string, fileName: string, saveImage: boolean): Promise<void> {
+export async function saveScreenshot(
+    page: Page,
+    path: string | undefined,
+    fileName: string | undefined,
+    saveImage: boolean | undefined,
+): Promise<void> {
     if (saveImage) {
         try {
             await page.screenshot({ path: path + '/' + fileName });
+            debug(path + '/' + fileName + ' saved');
         } catch (error) {
             log(error + '. Image not saved. Analyze not stopped!');
         }
