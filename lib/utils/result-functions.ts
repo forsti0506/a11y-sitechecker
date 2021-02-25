@@ -14,20 +14,8 @@ export function setResult(
     if (violations.filter((v) => v.id === violation.id).length > 0) {
         const reportViolation = violations.filter((v) => v.id === violation.id)[0];
         for (const node of violation.nodes) {
-            if (
-                reportViolation.nodes.filter(
-                    (v) =>
-                        v.targetResult.target.length === node.target.length &&
-                        v.targetResult.target.every((value, index) => value === node.target[index]),
-                ).length > 0
-            ) {
-                reportViolation.nodes
-                    .filter(
-                        (v) =>
-                            v.targetResult.target.length === node.target.length &&
-                            v.targetResult.target.every((value, index) => value === node.target[index]),
-                    )[0]
-                    .targetResult.urls.push(result.url);
+            if (reportViolation.nodes.filter((v) => v.html === node.html).length > 0) {
+                reportViolation.nodes.filter((v) => v.html === node.html)[0].targetResult.urls.push(result.url);
             } else {
                 reportViolation.nodes.push({
                     none: node.none,
