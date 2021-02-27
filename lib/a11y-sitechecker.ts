@@ -96,11 +96,11 @@ export async function entry(
                 process.exit(0);
             }
         }
-    } catch (error) {
+    } catch (err) {
         // Handle any errors
-        console.error(error.message);
-        console.error(error.stackTrace);
-        process.exit(1);
+        error(err.message);
+        debug(err.stackTrace);
+        throw err;
     }
 }
 
