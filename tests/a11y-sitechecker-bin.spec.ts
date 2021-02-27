@@ -1,24 +1,31 @@
-import * as process from 'child_process';
+import * as job from 'child_process';
 
 import 'jasmine';
 
 describe('a11y-sitechecker-bin', function () {
+    beforeEach(function () {
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+    });
+
     it('should be the same url', async (done) => {
         const url = 'forsti.eu';
-        const job = process.spawn('node', ['./dist/bin/a11y-sitechecker.js', url, '--config=config.json']);
-        job.stdout.on('data', (data) => {
-            expect(data.toString()).toContain(
-                '#############################################################################################',
-            );
-            done();
+        const jobSpawn = job.spawn('node', [
+            './dist/bin/a11y-sitechecker.js',
+            url,
+            '--config=tests/config.json',
+            '--threshold=15000',
+        ]);
+        jobSpawn.stdout.on('data', (data) => {
+            console.log(`\n${data}`);
         });
 
-        job.stderr.on('data', (data) => {
+        jobSpawn.stderr.on('data', (data) => {
             console.error(`\n${data}`);
         });
-
-        job.on('exit', function (code, signal) {
-            console.log('child process exited with ' + `code ${code} and signal ${signal}`);
+        jobSpawn.on('exit', (code) => {
+            console.log(code);
+            expect(code).toBe(0);
+            done();
         });
     });
 });

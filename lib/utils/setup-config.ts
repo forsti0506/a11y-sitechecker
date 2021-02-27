@@ -60,6 +60,9 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.analyzeClicks) {
                 config.analyzeClicks = configFile.analyzeClicks;
             }
+            if (configFile.timeout) {
+                config.timeout = configFile.timeout;
+            }
         } catch (e) {
             error(e);
             throw e;

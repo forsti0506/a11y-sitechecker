@@ -1,6 +1,7 @@
 {
   "json": true,
   "imagesPath": "tests/images",
+  "timeout": 15000,
   "axeConfig": {
     "locale": "de"
   },

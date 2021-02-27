@@ -20,7 +20,7 @@ commander
 
 (async (): Promise<void> => {
     if (commander.args[0]) {
-        const config = setupConfig(commander);
+        const config = setupConfig(commander.opts());
         const axeConfig = setupAxeConfig(config);
         await entry(config, axeConfig, commander.args[0]);
     }
