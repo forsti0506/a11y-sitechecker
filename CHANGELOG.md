@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.7.2...v1.8.0) (2021-02-28)
+
+
+### Bug Fixes
+
+* some small fixes + tests added ([ade839f](https://github.com/forsti0506/a11y-sitechecker/commit/ade839f4351b20a0232188c096942efbf57efbd0))
+* tests ([b5eca6a](https://github.com/forsti0506/a11y-sitechecker/commit/b5eca6af8d8954fa01f4bbd3992c269cbd103218))
+
+
+### Features
+
+* tabable images ([00a6491](https://github.com/forsti0506/a11y-sitechecker/commit/00a6491cb5014aa1111ef85b63ff4734db3962be))
+
 ## [1.7.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.7.1...v1.7.2) (2021-02-25)
 
 
