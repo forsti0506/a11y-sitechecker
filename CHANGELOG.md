@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.2...v1.8.3) (2021-02-28)
+
+
+### Bug Fixes
+
+* catching error in expose function ([526ee4b](https://github.com/forsti0506/a11y-sitechecker/commit/526ee4bdfe6792fb05864da370117454933cf1aa))
+
 ## [1.8.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.1...v1.8.2) (2021-02-28)
 
 
