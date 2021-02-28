@@ -12,6 +12,12 @@ export interface A11ySitecheckerResult {
     inapplicable: FullCheckerSingleResult[];
     violations: FullCheckerSingleResult[];
     analyzedUrls: string[];
+    tabableImages: [
+        {
+            url: string;
+            images: string[];
+        },
+    ];
 }
 
 export interface ResultByUrl {
