@@ -1,10 +1,13 @@
 {
-  "json": false,
+  "json": true,
+  "imagesPath": "tests/images",
+  "timeout": 15000,
   "axeConfig": {
     "locale": "de"
   },
   "launchOptions": {
     "headless": true,
+    "devtools": true,
     "args": [
       "--no-sandbox",
       "--disable-setuid-sandbox"
@@ -12,7 +15,7 @@
   },
   "debugMode": true,
   "urlsToAnalyze": [
-    "http://www.forsti.eu"
+    "http://www.orf.at"
   ],
   "analyzeClicksWithoutNavigation": false
 }

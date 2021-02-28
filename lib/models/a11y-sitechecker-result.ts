@@ -25,6 +25,7 @@ export interface ResultByUrl {
     passes: Result[];
     incomplete: Result[];
     inapplicable: Result[];
+    tabableImages: string[];
 }
 
 export interface Result {

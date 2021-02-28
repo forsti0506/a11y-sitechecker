@@ -1,17 +1,25 @@
 import { Spec } from 'axe-core';
 import * as fs from 'fs';
-import { error, setDebugMode } from './helper-functions';
+import { error } from './helper-functions';
 import { Config } from '../models/config';
+import { OptionValues } from 'commander';
 
-export function setupConfig(commander): Config {
-    const config: Config = { json: true, resultsPath: 'results', axeConfig: {}, threshold: 0, imagesPath: 'images' };
-    config.json = commander.json;
+export function setupConfig(options: OptionValues): Config {
+    const config: Config = {
+        json: true,
+        resultsPath: 'results',
+        axeConfig: {},
+        threshold: 0,
+        imagesPath: 'images',
+        timeout: 30,
+    };
+    config.json = options.json;
     if (!config.threshold) {
-        config.threshold = parseInt(commander.threshold);
+        config.threshold = parseInt(options.threshold);
     }
-    if (commander.config) {
+    if (options.config) {
         try {
-            const configFile = JSON.parse(fs.readFileSync(commander.config).toString('utf-8'));
+            const configFile = JSON.parse(fs.readFileSync(options.config).toString('utf-8'));
             if (typeof configFile.json === 'boolean') {
                 config.json = configFile.json;
             }
@@ -47,10 +55,13 @@ export function setupConfig(commander): Config {
                 config.analyzeClicksWithoutNavigation = configFile.analyzeClicksWithoutNavigation;
             }
             if (configFile.debugMode) {
-                setDebugMode(configFile.debugMode);
+                config.debugMode = configFile.debugMode;
             }
             if (configFile.analyzeClicks) {
                 config.analyzeClicks = configFile.analyzeClicks;
+            }
+            if (configFile.timeout) {
+                config.timeout = configFile.timeout;
             }
         } catch (e) {
             error(e);
@@ -62,9 +73,9 @@ export function setupConfig(commander): Config {
 }
 
 export function prepareWorkspace(config: Config): void {
-    if (config.imagesPath && !fs.existsSync(config.imagesPath)) {
+    if (config.imagesPath && !fs.existsSync(config.imagesPath) && config.saveImages) {
         fs.mkdirSync(config.imagesPath);
-    } else if (config.imagesPath) {
+    } else if (config.imagesPath && config.saveImages) {
         fs.rmdirSync(config.imagesPath, { recursive: true });
         fs.mkdirSync(config.imagesPath);
     }

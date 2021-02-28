@@ -2,17 +2,11 @@ import { Page } from 'puppeteer';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
 
-let debugMode = false;
-
-export function setDebugMode(bool: boolean): void {
-    debugMode = bool;
-}
-
 export function isAbsoluteUrl(url: string): boolean {
     return /^(?:[a-z]+:)?\/\//i.test(url);
 }
 
-export function debug(message: string, ...optionalParams: unknown[]): void {
+export function debug(debugMode = false, message: string, ...optionalParams: unknown[]): void {
     if (debugMode) {
         console.debug(chalk.yellow(message, optionalParams));
     }
@@ -30,7 +24,7 @@ export function success(message?: unknown, ...optionalParams: unknown[]): void {
     console.info(chalk.green(message, optionalParams));
 }
 
-export async function waitForHTML(page: Page, timeout = 30000): Promise<void> {
+export async function waitForHTML(page: Page, timeout = 30000, debugMode = false): Promise<void> {
     const checkDurationMsecs = 1000;
     const maxChecks = timeout / checkDurationMsecs;
     let lastHTMLSize = 0;
@@ -44,7 +38,7 @@ export async function waitForHTML(page: Page, timeout = 30000): Promise<void> {
 
         const bodyHTMLSize = await page.evaluate(() => document.body?.innerHTML?.length);
 
-        debug('last: ', lastHTMLSize, ' <> curr: ', currentHTMLSize, ' body html size: ', bodyHTMLSize);
+        debug(debugMode, 'last: ', lastHTMLSize, ' <> curr: ', currentHTMLSize, ' body html size: ', bodyHTMLSize);
 
         if (lastHTMLSize && bodyHTMLSize && lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize)
             countStableSizeIterations++;
@@ -78,11 +72,12 @@ export async function saveScreenshot(
     path: string | undefined,
     fileName: string | undefined,
     saveImage: boolean | undefined,
+    debugMode = false,
 ): Promise<void> {
     if (saveImage) {
         try {
             await page.screenshot({ path: path + '/' + fileName });
-            debug(path + '/' + fileName + ' saved');
+            debug(debugMode, path + '/' + fileName + ' saved');
         } catch (error) {
             log(error + '. Image not saved. Analyze not stopped!');
         }
