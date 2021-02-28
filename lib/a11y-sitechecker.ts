@@ -372,7 +372,6 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
                 const elmtsVisble: ElementVisible[] = JSON.parse(visibleElements);
                 document.getElementById(elmtsVisble[0].element)?.scrollIntoView();
                 for (const ele of elmtsVisble) {
-                    console.log(ele);
                     const elementById = document.getElementById(ele.element);
                     if (elementById) {
                         const rect = elementById.getBoundingClientRect();
