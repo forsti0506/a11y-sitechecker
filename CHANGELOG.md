@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.0...v1.8.1) (2021-02-28)
+
+
+### Bug Fixes
+
+* logs ([e587e0a](https://github.com/forsti0506/a11y-sitechecker/commit/e587e0a35e52ce94d38bbaf7b5ddb5f4673482c8))
+
 # [1.8.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.7.2...v1.8.0) (2021-02-28)
 
 
