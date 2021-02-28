@@ -45,6 +45,9 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.imagesPath) {
                 config.imagesPath = configFile.imagesPath;
             }
+            if (configFile.saveImages) {
+                config.saveImages = configFile.saveImages;
+            }
             if (configFile.ignoreElementAttributeValues) {
                 config.ignoreElementAttributeValues = configFile.ignoreElementAttributeValues;
             }
