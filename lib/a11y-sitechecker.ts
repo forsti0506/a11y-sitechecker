@@ -81,6 +81,7 @@ export async function entry(
             incomplete: [],
             passes: [],
             analyzedUrls: [],
+            tabableImages: [],
         };
 
         const report = await analyzeSite(url, axeSpecs, page, config);
