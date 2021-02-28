@@ -311,7 +311,11 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
     page.on('console', async (log) => {
         debug(config.debugMode, log.text());
     });
-    await page.exposeFunction('debug', debug);
+    try {
+        await page.exposeFunction('debug', debug);
+    } catch (e) {
+        error(e.message + '. Ignored because normally it means thtat Function already there');
+    }
 
     let elementsVisbility = JSON.parse(
         await page.evaluate(async () => {
