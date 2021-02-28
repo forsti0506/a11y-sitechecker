@@ -2,6 +2,7 @@ import { AxePuppeteer } from '@axe-core/puppeteer';
 import { Spec } from 'axe-core';
 import { A11ySitecheckerResult, ResultByUrl } from './models/a11y-sitechecker-result';
 import { v4 as uuidv4 } from 'uuid';
+import * as puppeteer from 'puppeteer';
 import { Page } from 'puppeteer';
 import { Config } from './models/config';
 import {
@@ -16,7 +17,6 @@ import {
 } from './utils/helper-functions';
 import { getLinks } from './utils/get-links';
 import * as chalk from 'chalk';
-import * as puppeteer from 'puppeteer';
 import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import * as prettyjson from 'prettyjson';
@@ -32,6 +32,17 @@ const savedScreenshotHtmls: string[] = [];
 const rootDomain = { value: '' };
 
 const resultsByUrl: ResultByUrl[] = [];
+
+interface ElementVisible {
+    element: string;
+    visible: boolean;
+}
+
+declare global {
+    interface Window {
+        debug(debugMode: boolean, message: string, ...optionalParams: unknown[]): void;
+    }
+}
 
 export async function entry(
     config: Config,
@@ -99,7 +110,7 @@ export async function entry(
     } catch (err) {
         // Handle any errors
         error(err.message);
-        debug(err.stackTrace);
+        debug(config.debugMode, err.stackTrace);
         throw err;
     }
 }
@@ -143,13 +154,13 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
 
         let i = 1;
         for (const link of links) {
-            debug('Visiting ' + i++ + ' of ' + links.length);
+            debug(config.debugMode, 'Visiting ' + i++ + ' of ' + links.length);
             if (!alreadyVisited.includes(link)) {
                 await analyzeUrl(page, link, axeSpecs, config);
             }
         }
 
-        debug('All links of ' + url + ' visited. Now Clicking elements');
+        debug(config.debugMode, 'All links of ' + url + ' visited. Now Clicking elements');
         await page.goto(url, { waitUntil: 'networkidle2' });
         await waitForHTML(page);
 
@@ -157,9 +168,9 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
         if (elToClick && elToClick.length > 0) {
             i = 1;
             for (const element of elToClick) {
-                debug('Clicking ' + i++ + ' of ' + elToClick.length);
+                debug(config.debugMode, 'Clicking ' + i++ + ' of ' + elToClick.length);
                 if (element && !alreadyClicked.get(url)?.includes(element)) {
-                    debug('Element to be clicked: ' + element);
+                    debug(config.debugMode, 'Element to be clicked: ' + element);
                     try {
                         const alrdyClicked = alreadyClicked.get(url);
                         if (alrdyClicked) {
@@ -186,7 +197,7 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
                             await page.goto(url, { waitUntil: 'load' });
                             await waitForHTML(page);
                         } else if (config.analyzeClicksWithoutNavigation) {
-                            debug('Experimintal feature! Please check if there are to many clicks!');
+                            debug(config.debugMode, 'Experimintal feature! Please check if there are to many clicks!');
                             const axe = await setupAxe(page, axeSpecs);
                             const axeResults = await axe.analyze();
                             await pushResults(url + '_' + element + '_clicked', axeResults, page, config);
@@ -198,10 +209,10 @@ async function analyzeSite(url: string, axeSpecs: Spec, page: Page, config: Conf
 
         i = 1;
         for (const link of links) {
-            debug('parsing' + i++ + ' of ' + links.length);
+            debug(config.debugMode, 'parsing' + i++ + ' of ' + links.length);
             if (!alreadyParsed.includes(link)) {
                 await analyzeSite(link, axeSpecs, page, config);
-                debug('Finished analyze of Site: ' + link);
+                debug(config.debugMode, 'Finished analyze of Site: ' + link);
             }
         }
     }
@@ -220,6 +231,7 @@ async function pushResults(url: string, axeResults, page: Page, config: Config):
         testRunner: axeResults.testRunner,
         timestamp: axeResults.timestamp,
         toolOptions: axeResults.toolOptions,
+        tabableImages: [],
     });
     await makeScreenshotsWithErrorsBorderd(resultsByUrl.filter((r) => r.url === url)[0], page, config);
     alreadyVisited.push(url);
@@ -229,12 +241,12 @@ async function pushResults(url: string, axeResults, page: Page, config: Config):
 async function analyzeUrl(page, url: string, axeSpecs: Spec, config: Config): Promise<void> {
     if ((await page.url()) !== url) {
         await page.goto(url, { waitUntil: 'load' });
-        await waitForHTML(page);
+        await waitForHTML(page, 30000, config.debugMode);
     } else {
-        debug('URL already open.' + url);
+        debug(config.debugMode, 'URL already open.' + url);
     }
     if (alreadyVisited.includes(url)) {
-        debug('Already visited: ' + url);
+        debug(config.debugMode, 'Already visited: ' + url);
         return;
     }
     log('Currently analyzing ' + url);
@@ -257,17 +269,18 @@ async function analyzeUrl(page, url: string, axeSpecs: Spec, config: Config): Pr
     if (axeResults) {
         await pushResults(url, axeResults, page, config);
     }
+    await markAllTabableItems(page, url, config);
 }
 
 async function makeScreenshotsWithErrorsBorderd(resultByUrl: ResultByUrl, page: Page, config: Config): Promise<void> {
-    debug('make screenshots with border');
+    debug(config.debugMode, 'make screenshots with border');
     page.on('console', (log) => {
-        console.log(log.text());
+        debug(config.debugMode, log.text());
     });
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
-                debug('Adding border to: ' + JSON.stringify(node.target[0]));
+                debug(config.debugMode, 'Adding border to: ' + JSON.stringify(node.target[0]));
                 await page.evaluate((element) => {
                     const dom = document.querySelector(element);
                     dom.scrollIntoView();
@@ -278,7 +291,7 @@ async function makeScreenshotsWithErrorsBorderd(resultByUrl: ResultByUrl, page: 
                     }
                 }, node.target[0]);
                 const image = uuidv4() + '.png';
-                await saveScreenshot(page, config.imagesPath, image, true);
+                await saveScreenshot(page, config.imagesPath, image, config.saveImages);
                 node.image = image;
                 await page.evaluate((element) => {
                     const dom = document.querySelector(element);
@@ -286,8 +299,100 @@ async function makeScreenshotsWithErrorsBorderd(resultByUrl: ResultByUrl, page: 
                 }, node.target[0]);
                 savedScreenshotHtmls.push(node.html);
             } else {
-                debug('Nothing happend, because already screenshoted: ' + node.html);
+                debug(config.debugMode, 'Nothing happend, because already screenshoted: ' + node.html);
             }
+        }
+    }
+}
+
+async function markAllTabableItems(page: Page, url: string, config: Config): Promise<void> {
+    debug(config.debugMode, 'make screens for tabable items');
+    page.on('console', async (log) => {
+        debug(config.debugMode, log.text());
+    });
+    await page.exposeFunction('debug', debug);
+
+    let elementsVisbility = JSON.parse(
+        await page.evaluate(async () => {
+            const focusableElements = Array.from(
+                document.querySelectorAll(
+                    'a[href], area[href], button, input, textarea, select, details, iframe, [tabindex]:not([tabindex^="-"])',
+                ),
+            ).filter(
+                (el) =>
+                    !(el as HTMLElement).hasAttribute('disabled') &&
+                    (el as HTMLElement).offsetWidth > 0 &&
+                    (el as HTMLElement).offsetHeight > 0 &&
+                    window.getComputedStyle(el).visibility !== 'hidden',
+            );
+            let i = 1;
+            const visibleElements: ElementVisible[] = [];
+            for (const element of focusableElements) {
+                if (element.attributes['style']) {
+                    element.setAttribute('style', element.getAttribute('style') + ' border: 1px solid red');
+                } else {
+                    element.setAttribute('style', 'border: 1px solid red');
+                }
+                const tabNumberSpan = document.createElement('SPAN');
+                const tabNumberText = document.createTextNode(i.toString());
+                tabNumberSpan.appendChild(tabNumberText);
+                tabNumberSpan.setAttribute(
+                    'style',
+                    'font-size:16px; font-weight: bold; background-color:red; width:16px; line-height: 16px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px; float:right',
+                );
+                if (!element.id) {
+                    element.setAttribute('id', 'id' + i);
+                }
+                const rect = element.getBoundingClientRect();
+                const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                const elementVisible = !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+                visibleElements.push({ element: element.id, visible: elementVisible });
+                await window.debug(true, element.tagName + ' is visible: ' + elementVisible);
+                if (element.tagName === 'IFRAME') {
+                    element.before(tabNumberSpan);
+                    await window.debug(true, element.tagName + ' got number: ' + i);
+                } else {
+                    element.appendChild(tabNumberSpan);
+                    await window.debug(true, element.tagName + ' got number: ' + i);
+                }
+                i++;
+            }
+            return JSON.stringify(visibleElements);
+        }),
+    );
+    const imageId = uuidv4();
+    let i = 0;
+    const imageName = imageId + '_' + i + '.png';
+    await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
+    resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
+    i++;
+    while (elementsVisbility.filter((e) => !e.visible).length > 0) {
+        const newVisibleElements = JSON.parse(
+            await page.evaluate(async (visibleElements) => {
+                const elmtsVisble: ElementVisible[] = JSON.parse(visibleElements);
+                document.getElementById(elmtsVisble[0].element)?.scrollIntoView();
+                for (const ele of elmtsVisble) {
+                    console.log(ele);
+                    const elementById = document.getElementById(ele.element);
+                    if (elementById) {
+                        const rect = elementById.getBoundingClientRect();
+                        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                        elmtsVisble.filter((e) => e.element === ele.element)[0].visible = !(
+                            rect.bottom < 0 || rect.top - viewHeight >= 0
+                        );
+                    }
+                }
+                return JSON.stringify(elmtsVisble);
+            }, JSON.stringify(elementsVisbility.filter((e) => !e.visible))),
+        );
+        if (newVisibleElements.filter((e) => e.visible).length > elementsVisbility.filter((e) => e.visible).length) {
+            elementsVisbility = newVisibleElements;
+            const imageId = uuidv4();
+            const imageName = imageId + '_' + i + '.png';
+            await saveScreenshot(page, config.imagesPath, imageId + imageName, true, config.debugMode);
+            resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
+        } else {
+            break;
         }
     }
 }

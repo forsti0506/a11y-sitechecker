@@ -18,6 +18,7 @@ export interface Config {
     analyzeClicksWithoutNavigation?: boolean;
     threshold: number;
     timeout: number;
+    debugMode?: boolean;
 }
 
 interface LoginStep {

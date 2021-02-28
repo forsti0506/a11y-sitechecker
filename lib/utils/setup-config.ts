@@ -1,6 +1,6 @@
 import { Spec } from 'axe-core';
 import * as fs from 'fs';
-import { error, setDebugMode } from './helper-functions';
+import { error } from './helper-functions';
 import { Config } from '../models/config';
 import { OptionValues } from 'commander';
 
@@ -55,7 +55,7 @@ export function setupConfig(options: OptionValues): Config {
                 config.analyzeClicksWithoutNavigation = configFile.analyzeClicksWithoutNavigation;
             }
             if (configFile.debugMode) {
-                setDebugMode(configFile.debugMode);
+                config.debugMode = configFile.debugMode;
             }
             if (configFile.analyzeClicks) {
                 config.analyzeClicks = configFile.analyzeClicks;
@@ -73,9 +73,9 @@ export function setupConfig(options: OptionValues): Config {
 }
 
 export function prepareWorkspace(config: Config): void {
-    if (config.imagesPath && !fs.existsSync(config.imagesPath)) {
+    if (config.imagesPath && !fs.existsSync(config.imagesPath) && config.saveImages) {
         fs.mkdirSync(config.imagesPath);
-    } else if (config.imagesPath) {
+    } else if (config.imagesPath && config.saveImages) {
         fs.rmdirSync(config.imagesPath, { recursive: true });
         fs.mkdirSync(config.imagesPath);
     }
