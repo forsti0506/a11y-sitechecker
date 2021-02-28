@@ -1,3 +1,11 @@
+## [1.8.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.1...v1.8.2) (2021-02-28)
+
+
+### Bug Fixes
+
+* result with tabable items ([252c28e](https://github.com/forsti0506/a11y-sitechecker/commit/252c28e8a09fe732551682304f810edcaa531e0d))
+* type for tabaable images ([a71eb11](https://github.com/forsti0506/a11y-sitechecker/commit/a71eb1168e146b106270a1952eed6c56b704ae8d))
+
 ## [1.8.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.0...v1.8.1) (2021-02-28)
 
 
