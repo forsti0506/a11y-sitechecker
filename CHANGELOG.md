@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/forsti0506/a11y-sitechecker/compare/v1.9.0...v1.9.1) (2021-03-01)
+
+
+### Bug Fixes
+
+* imagename of iteration 2 ([291487e](https://github.com/forsti0506/a11y-sitechecker/commit/291487ef1bf289b483b2f8281ad9aaa8d8f09310))
+
 # [1.9.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.3...v1.9.0) (2021-03-01)
 
 
