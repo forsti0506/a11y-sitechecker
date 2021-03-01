@@ -444,9 +444,8 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
             elementsFromEvaluation.visibleElements.filter((e) => e.visible).length
         ) {
             elementsFromEvaluation.visibleElements = newVisibleElements;
-            const imageId = uuidv4();
             const imageName = imageId + '_' + i + '.png';
-            await saveScreenshot(page, config.imagesPath, imageId + imageName, true, config.debugMode);
+            await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
             resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
         } else {
             break;
