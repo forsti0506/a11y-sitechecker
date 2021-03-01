@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.3...v1.9.0) (2021-03-01)
+
+
+### Bug Fixes
+
+* saveImages in config setup ([d1d921f](https://github.com/forsti0506/a11y-sitechecker/commit/d1d921fe575fd09502db3a1c850d7a7c26a1ac40))
+
+
+### Features
+
+* highlithing if keypress missing ([6b6989c](https://github.com/forsti0506/a11y-sitechecker/commit/6b6989cf20a6f36bb28c199124b11f2a63a35855))
+
 ## [1.8.3](https://github.com/forsti0506/a11y-sitechecker/compare/v1.8.2...v1.8.3) (2021-02-28)
 
 
