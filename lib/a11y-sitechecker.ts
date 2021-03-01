@@ -33,7 +33,12 @@ const rootDomain = { value: '' };
 
 const resultsByUrl: ResultByUrl[] = [];
 
-interface ElementVisible {
+interface ElementsFromEvaluation {
+    visibleElements: VisibleElement[];
+    focusableNonStandardElements: string[];
+}
+
+interface VisibleElement {
     element: string;
     visible: boolean;
 }
@@ -317,7 +322,7 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
         error(e.message + '. Ignored because normally it means thtat Function already there');
     }
 
-    let elementsVisbility = JSON.parse(
+    const elementsFromEvaluation: ElementsFromEvaluation = JSON.parse(
         await page.evaluate(async () => {
             const focusableElements = Array.from(
                 document.querySelectorAll(
@@ -331,28 +336,37 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
                     window.getComputedStyle(el).visibility !== 'hidden',
             );
             let i = 1;
-            const visibleElements: ElementVisible[] = [];
+            const elmtsFromEval: ElementsFromEvaluation = { focusableNonStandardElements: [], visibleElements: [] };
             for (const element of focusableElements) {
                 if (element.attributes['style']) {
                     element.setAttribute('style', element.getAttribute('style') + ' border: 1px solid red');
                 } else {
                     element.setAttribute('style', 'border: 1px solid red');
                 }
+                if (!element.id) {
+                    element.setAttribute('id', 'id' + i);
+                }
                 const tabNumberSpan = document.createElement('SPAN');
                 const tabNumberText = document.createTextNode(i.toString());
                 tabNumberSpan.appendChild(tabNumberText);
                 tabNumberSpan.setAttribute(
                     'style',
-                    'font-size:16px; font-weight: bold; background-color:red; width:16px; line-height: 16px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px; float:right',
+                    'font-size:16px; font-weight: bold; background-color:red; width:24px; line-height: 16px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px; float:right',
                 );
-                if (!element.id) {
-                    element.setAttribute('id', 'id' + i);
-                }
+                tabNumberSpan.setAttribute('id', 'span_id' + i);
+
                 const rect = element.getBoundingClientRect();
                 const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-                const elementVisible = !(rect.bottom < 0 || rect.top - viewHeight >= 0);
-                visibleElements.push({ element: element.id, visible: elementVisible });
+                const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+                const elementVisible = !(
+                    rect.bottom < 0 ||
+                    rect.top - viewHeight >= 0 ||
+                    rect.left < 0 ||
+                    rect.right > viewWidth
+                );
+                elmtsFromEval.visibleElements.push({ element: element.id, visible: elementVisible });
                 await window.debug(true, element.tagName + ' is visible: ' + elementVisible);
+
                 if (element.tagName === 'IFRAME') {
                     element.before(tabNumberSpan);
                     await window.debug(true, element.tagName + ' got number: ' + i);
@@ -360,37 +374,76 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
                     element.appendChild(tabNumberSpan);
                     await window.debug(true, element.tagName + ' got number: ' + i);
                 }
+                const standardTags = ['A', 'AREA', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'DETAILS', 'IFRAME'];
+                if (!standardTags.includes(element.tagName.toUpperCase())) {
+                    elmtsFromEval.focusableNonStandardElements.push(element.id);
+                }
                 i++;
             }
-            return JSON.stringify(visibleElements);
+            return JSON.stringify(elmtsFromEval);
         }),
     );
+
+    const client = await page.target().createCDPSession();
+    const elementsWithOutKeypress: string[] = [];
+    for (const felement of elementsFromEvaluation.focusableNonStandardElements) {
+        const nodeObject = ((await client.send('Runtime.evaluate', {
+            expression: felement,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        })) as any).result;
+        const listenerObject = await client.send('DOMDebugger.getEventListeners', {
+            objectId: nodeObject.objectId,
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (!(listenerObject as any).keypress) {
+            elementsWithOutKeypress.push(felement);
+        }
+    }
+
+    await page.evaluate(async (elementsWithoutKeypress) => {
+        for (const element of elementsWithoutKeypress) {
+            window.debug(true, 'Element without keypress: ' + element);
+            const spanElement = document.getElementById('span_' + element);
+            if (spanElement) spanElement.innerHTML += 'E';
+        }
+    }, elementsWithOutKeypress);
+
     const imageId = uuidv4();
     let i = 0;
     const imageName = imageId + '_' + i + '.png';
-    await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
+    await saveScreenshot(page, config.imagesPath, imageName, config.saveImages, config.debugMode);
     resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
     i++;
-    while (elementsVisbility.filter((e) => !e.visible).length > 0) {
+    while (elementsFromEvaluation.visibleElements.filter((e) => !e.visible).length > 0) {
         const newVisibleElements = JSON.parse(
             await page.evaluate(async (visibleElements) => {
-                const elmtsVisble: ElementVisible[] = JSON.parse(visibleElements);
+                const elmtsVisble: VisibleElement[] = JSON.parse(visibleElements);
+                console.log(JSON.stringify(elmtsVisble));
                 document.getElementById(elmtsVisble[0].element)?.scrollIntoView();
+
                 for (const ele of elmtsVisble) {
                     const elementById = document.getElementById(ele.element);
                     if (elementById) {
                         const rect = elementById.getBoundingClientRect();
                         const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                        const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+
                         elmtsVisble.filter((e) => e.element === ele.element)[0].visible = !(
-                            rect.bottom < 0 || rect.top - viewHeight >= 0
+                            rect.bottom < 0 ||
+                            rect.top - viewHeight >= 0 ||
+                            rect.left < 0 ||
+                            rect.right > viewWidth
                         );
                     }
                 }
                 return JSON.stringify(elmtsVisble);
-            }, JSON.stringify(elementsVisbility.filter((e) => !e.visible))),
+            }, JSON.stringify(elementsFromEvaluation.visibleElements.filter((e) => !e.visible))),
         );
-        if (newVisibleElements.filter((e) => e.visible).length > elementsVisbility.filter((e) => e.visible).length) {
-            elementsVisbility = newVisibleElements;
+        if (
+            newVisibleElements.filter((e) => e.visible).length >
+            elementsFromEvaluation.visibleElements.filter((e) => e.visible).length
+        ) {
+            elementsFromEvaluation.visibleElements = newVisibleElements;
             const imageId = uuidv4();
             const imageName = imageId + '_' + i + '.png';
             await saveScreenshot(page, config.imagesPath, imageId + imageName, true, config.debugMode);
