@@ -395,7 +395,7 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
             objectId: nodeObject.objectId,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (!(listenerObject as any).keypress) {
+        if ((listenerObject as any).listeners.filter((f) => f.type === 'keypress').length <= 0) {
             elementsWithOutKeypress.push(felement);
         }
     }
@@ -413,42 +413,55 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
     const imageName = imageId + '_' + i + '.png';
     await saveScreenshot(page, config.imagesPath, imageName, config.saveImages, config.debugMode);
     resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
-    i++;
+    let alreadyBreaked = false;
     while (elementsFromEvaluation.visibleElements.filter((e) => !e.visible).length > 0) {
-        const newVisibleElements = JSON.parse(
-            await page.evaluate(async (visibleElements) => {
-                const elmtsVisble: VisibleElement[] = JSON.parse(visibleElements);
-                console.log(JSON.stringify(elmtsVisble));
-                document.getElementById(elmtsVisble[0].element)?.scrollIntoView();
-
-                for (const ele of elmtsVisble) {
-                    const elementById = document.getElementById(ele.element);
-                    if (elementById) {
-                        const rect = elementById.getBoundingClientRect();
-                        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-                        const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
-
-                        elmtsVisble.filter((e) => e.element === ele.element)[0].visible = !(
-                            rect.bottom < 0 ||
-                            rect.top - viewHeight >= 0 ||
-                            rect.left < 0 ||
-                            rect.right > viewWidth
-                        );
+        i++;
+        const newElements = JSON.parse(
+            await page.evaluate(
+                async (notVisibleElements, alreadyBreaked) => {
+                    const notVisibleElmts: VisibleElement[] = JSON.parse(notVisibleElements);
+                    if (alreadyBreaked) {
+                        document.getElementById(notVisibleElmts[notVisibleElmts.length - 1].element)?.scrollIntoView();
+                    } else {
+                        document.getElementById(notVisibleElmts[0].element)?.scrollIntoView();
                     }
-                }
-                return JSON.stringify(elmtsVisble);
-            }, JSON.stringify(elementsFromEvaluation.visibleElements.filter((e) => !e.visible))),
+
+                    for (const ele of notVisibleElmts) {
+                        const elementById = document.getElementById(ele.element);
+                        if (elementById) {
+                            const rect = elementById.getBoundingClientRect();
+                            const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                            const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+
+                            notVisibleElmts.filter((e) => e.element === ele.element)[0].visible = !(
+                                rect.bottom < 0 ||
+                                rect.top - viewHeight >= 0 ||
+                                rect.left < 0 ||
+                                rect.right > viewWidth
+                            );
+                        }
+                    }
+                    return JSON.stringify(notVisibleElmts);
+                },
+                JSON.stringify(elementsFromEvaluation.visibleElements.filter((e) => !e.visible)),
+                alreadyBreaked,
+            ),
         );
         if (
-            newVisibleElements.filter((e) => e.visible).length >
-            elementsFromEvaluation.visibleElements.filter((e) => e.visible).length
+            newElements.filter((e) => !e.visible).length <
+            elementsFromEvaluation.visibleElements.filter((e) => !e.visible).length
         ) {
-            elementsFromEvaluation.visibleElements = newVisibleElements;
+            elementsFromEvaluation.visibleElements = newElements;
             const imageName = imageId + '_' + i + '.png';
             await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
             resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
+            alreadyBreaked = false;
+        } else if (elementsFromEvaluation.visibleElements[0].visible) {
+            elementsFromEvaluation.visibleElements = newElements;
+            alreadyBreaked = false;
         } else {
-            break;
+            if (!alreadyBreaked) alreadyBreaked = true;
+            else break;
         }
     }
 }
