@@ -25,6 +25,7 @@ export function success(message?: unknown, ...optionalParams: unknown[]): void {
 }
 
 export async function waitForHTML(page: Page, timeout = 30000, debugMode = false): Promise<void> {
+    // initPendingRequest(page);
     const checkDurationMsecs = 1000;
     const maxChecks = timeout / checkDurationMsecs;
     let lastHTMLSize = 0;
@@ -52,6 +53,7 @@ export async function waitForHTML(page: Page, timeout = 30000, debugMode = false
         lastHTMLSize = currentHTMLSize;
         await page.waitForTimeout(checkDurationMsecs);
     }
+    // await waitForAllRequests();
 }
 
 export function getEscaped(link: string): string {

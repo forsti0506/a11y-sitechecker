@@ -339,21 +339,16 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
             const elmtsFromEval: ElementsFromEvaluation = { focusableNonStandardElements: [], visibleElements: [] };
             for (const element of focusableElements) {
                 if (element.attributes['style']) {
-                    element.setAttribute('style', element.getAttribute('style') + ' border: 1px solid red');
+                    element.setAttribute(
+                        'style',
+                        element.getAttribute('style') + '; outline-style: solid; outline-color: red',
+                    );
                 } else {
-                    element.setAttribute('style', 'border: 1px solid red');
+                    element.setAttribute('style', 'outline-style: solid; outline-color: red');
                 }
                 if (!element.id) {
                     element.setAttribute('id', 'id' + i);
                 }
-                const tabNumberSpan = document.createElement('SPAN');
-                const tabNumberText = document.createTextNode(i.toString());
-                tabNumberSpan.appendChild(tabNumberText);
-                tabNumberSpan.setAttribute(
-                    'style',
-                    'font-size:16px; font-weight: bold; background-color:red; width:24px; line-height: 16px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px; float:right',
-                );
-                tabNumberSpan.setAttribute('id', 'span_id' + i);
 
                 const rect = element.getBoundingClientRect();
                 const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -364,6 +359,24 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
                     rect.left < 0 ||
                     rect.right > viewWidth
                 );
+
+                const tabNumberSpan = document.createElement('SPAN');
+                const tabNumberText = document.createTextNode(i.toString());
+                tabNumberSpan.appendChild(tabNumberText);
+                if (element.tagName === 'A') {
+                    tabNumberSpan.setAttribute(
+                        'style',
+                        'font-size:16px; font-weight: bold; background-color:red; width:30px; line-height: 18px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px;',
+                    );
+                } else {
+                    tabNumberSpan.setAttribute(
+                        'style',
+                        'font-size:16px; font-weight: bold; background-color:red; width:30px; line-height: 18px; text-align: center; color:#fff; z-index: 1000; border-radius: 3px; left: 2px; float:right;',
+                    );
+                }
+
+                tabNumberSpan.setAttribute('id', 'span_id' + i);
+
                 elmtsFromEval.visibleElements.push({ element: element.id, visible: elementVisible });
                 await window.debug(true, element.tagName + ' is visible: ' + elementVisible);
 
@@ -410,58 +423,72 @@ async function markAllTabableItems(page: Page, url: string, config: Config): Pro
 
     const imageId = uuidv4();
     let i = 0;
-    const imageName = imageId + '_' + i + '.png';
-    await saveScreenshot(page, config.imagesPath, imageName, config.saveImages, config.debugMode);
-    resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
-    let alreadyBreaked = false;
     while (elementsFromEvaluation.visibleElements.filter((e) => !e.visible).length > 0) {
-        i++;
-        const newElements = JSON.parse(
-            await page.evaluate(
-                async (notVisibleElements, alreadyBreaked) => {
-                    const notVisibleElmts: VisibleElement[] = JSON.parse(notVisibleElements);
-                    if (alreadyBreaked) {
-                        document.getElementById(notVisibleElmts[notVisibleElmts.length - 1].element)?.scrollIntoView();
-                    } else {
-                        document.getElementById(notVisibleElmts[0].element)?.scrollIntoView();
-                    }
-
-                    for (const ele of notVisibleElmts) {
-                        const elementById = document.getElementById(ele.element);
-                        if (elementById) {
-                            const rect = elementById.getBoundingClientRect();
-                            const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-                            const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
-
-                            notVisibleElmts.filter((e) => e.element === ele.element)[0].visible = !(
-                                rect.bottom < 0 ||
-                                rect.top - viewHeight >= 0 ||
-                                rect.left < 0 ||
-                                rect.right > viewWidth
-                            );
+        elementsFromEvaluation.visibleElements = JSON.parse(
+            await page.evaluate(async (notVisibleElements) => {
+                const notVisibleElmts: VisibleElement[] = JSON.parse(notVisibleElements);
+                const elementsToSplice: number[] = [];
+                for (let j = 0; j < notVisibleElmts.length; j++) {
+                    const elementById = document.getElementById(notVisibleElmts[j].element);
+                    if (elementById) {
+                        elementById?.scrollIntoView();
+                        //needed to ensure it scrolled down
+                        await new Promise((resolve) => setTimeout(resolve, 2000));
+                        const rect = elementById.getBoundingClientRect();
+                        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                        const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+                        const currentElementVisible = !(
+                            rect.bottom < 0 ||
+                            rect.top - viewHeight >= 0 ||
+                            rect.left < 0 ||
+                            rect.right > viewWidth
+                        );
+                        await window.debug(
+                            true,
+                            elementById +
+                                ' is visible: ' +
+                                currentElementVisible +
+                                ' number ' +
+                                j +
+                                ' of ' +
+                                notVisibleElmts.length,
+                        );
+                        if (currentElementVisible) {
+                            break;
+                        } else {
+                            elementsToSplice.push(j);
                         }
                     }
-                    return JSON.stringify(notVisibleElmts);
-                },
-                JSON.stringify(elementsFromEvaluation.visibleElements.filter((e) => !e.visible)),
-                alreadyBreaked,
-            ),
+                }
+                for (const elmToSPlice of elementsToSplice) {
+                    notVisibleElmts.splice(elmToSPlice, 1);
+                }
+                for (let j = 0; j < notVisibleElmts.length; j++) {
+                    const elementById = document.getElementById(notVisibleElmts[j].element);
+                    if (elementById) {
+                        const rect = elementById.getBoundingClientRect();
+                        const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                        const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+                        const currentElementVisible = !(
+                            rect.bottom < 0 ||
+                            rect.top - viewHeight >= 0 ||
+                            rect.left < 0 ||
+                            rect.right > viewWidth
+                        );
+                        if (currentElementVisible) {
+                            notVisibleElmts.filter(
+                                (e) => e.element === notVisibleElmts[j].element,
+                            )[0].visible = currentElementVisible;
+                        }
+                    }
+                }
+                return JSON.stringify(notVisibleElmts);
+            }, JSON.stringify(elementsFromEvaluation.visibleElements)),
         );
-        if (
-            newElements.filter((e) => !e.visible).length <
-            elementsFromEvaluation.visibleElements.filter((e) => !e.visible).length
-        ) {
-            elementsFromEvaluation.visibleElements = newElements;
-            const imageName = imageId + '_' + i + '.png';
-            await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
-            resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
-            alreadyBreaked = false;
-        } else if (elementsFromEvaluation.visibleElements[0].visible) {
-            elementsFromEvaluation.visibleElements = newElements;
-            alreadyBreaked = false;
-        } else {
-            if (!alreadyBreaked) alreadyBreaked = true;
-            else break;
-        }
+        const imageName = imageId + '_' + i + '.png';
+        await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
+        elementsFromEvaluation.visibleElements = elementsFromEvaluation.visibleElements.filter((v) => !v.visible);
+        resultsByUrl.filter((u) => u.url === url)[0].tabableImages.push(imageName);
+        i++;
     }
 }
