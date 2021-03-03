@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.9.2...v1.10.0) (2021-03-03)
+
+
+### Features
+
+* new processing for tab order ([9e18ad7](https://github.com/forsti0506/a11y-sitechecker/commit/9e18ad786af22c833525b48bb6ee2efb1277d9ed))
+
 ## [1.9.2](https://github.com/forsti0506/a11y-sitechecker/compare/v1.9.1...v1.9.2) (2021-03-02)
 
 
