@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.11.0...v1.12.0) (2021-03-06)
+
+
+### Features
+
+* ignore files in parsing ([240f1a7](https://github.com/forsti0506/a11y-sitechecker/commit/240f1a7ac20fc6541737c69455718505491854bc))
+
 # [1.11.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.10.0...v1.11.0) (2021-03-04)
 
 
