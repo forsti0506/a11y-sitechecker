@@ -1,13 +1,14 @@
 import * as JSDOM from 'jsdom';
 import * as chalk from 'chalk';
 import { getUniqueSelector } from './UniqueSelector';
-import { isAbsoluteUrl, shoouldElementBeIgnored } from './helper-functions';
+import { debug, endsWithAny, isAbsoluteUrl, shoouldElementBeIgnored } from './helper-functions';
 import { Config } from '../models/config';
 
 export interface RootDomain {
     value: string;
 }
-const debug = console.debug;
+
+const urlEndingsToIgnore = ['jpeg', 'jpg', 'pdf', 'xml'];
 
 export function getLinks(
     html: string,
@@ -27,7 +28,7 @@ export function getLinks(
     if (!rootDomain.value) {
         const rootDomainURL = new URL(url);
         rootDomain.value = (rootDomainURL.hostname + rootDomainURL.pathname).replace('www.', '');
-        debug(chalk.green('RootDomain was set to: ' + rootDomain.value));
+        debug(config.debugMode, chalk.green('RootDomain was set to: ' + rootDomain.value));
     }
     dom.window.document.querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
         let link = element.href;
@@ -42,8 +43,11 @@ export function getLinks(
                     elementsToClick.set(url, [uniqueSelector]);
                 }
             } else {
-                debug(chalk.yellow('Element ignored, because of given array: ' + element));
+                debug(config.debugMode, chalk.yellow('Element ignored, because of given array: ' + element));
             }
+        }
+        if (endsWithAny(urlEndingsToIgnore, link)) {
+            debug(config.debugMode, 'Link ignored because it is part of the endings to exclude: ' + link);
         }
         if (isAbsoluteUrl(link) && link.includes(rootDomain.value)) {
             if (link.startsWith('//')) {
@@ -72,7 +76,7 @@ export function getLinks(
         }
     });
     if (config.analyzeClicks) {
-        debug(chalk.yellow('Searching all clickable Items'));
+        debug(config.debugMode, chalk.yellow('Searching all clickable Items'));
         dom.window.document
             .querySelectorAll(
                 config.clickableItemSelector
@@ -94,7 +98,10 @@ export function getLinks(
                         elementsToClick.set(url, [uniqueSelector]);
                     }
                 } else {
-                    debug(chalk.yellow('Element ignored, because of given array or disabled: ' + element));
+                    debug(
+                        config.debugMode,
+                        chalk.yellow('Element ignored, because of given array or disabled: ' + element),
+                    );
                 }
             });
     }

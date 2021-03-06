@@ -95,3 +95,9 @@ export function writeToJsonFile(data: string, path: string): void {
     }
     fs.writeFileSync(path + '/results.json', data);
 }
+
+export function endsWithAny(array: string[], toCheck: string): boolean {
+    return array.some((suffix) => {
+        return toCheck.endsWith(suffix);
+    });
+}
