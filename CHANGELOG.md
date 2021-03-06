@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.10.0...v1.11.0) (2021-03-04)
+
+
+### Features
+
+* improved scrolling and waiting ([0384d79](https://github.com/forsti0506/a11y-sitechecker/commit/0384d796d7e1cd2d3162e90a1ad309c058a2a582))
+
 # [1.10.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.9.2...v1.10.0) (2021-03-03)
 
 
