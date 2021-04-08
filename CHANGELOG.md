@@ -17,6 +17,28 @@
 ### Performance Improvements
 
 * first 2.0 version ([3c7fa23](https://github.com/forsti0506/a11y-sitechecker/commit/3c7fa23049f6f0862d6b30ee4c0a0357bb54e6d6))
+* first beta version \n\n BREAKING CHANGE:completly refactored ([7dd6c8b](https://github.com/forsti0506/a11y-sitechecker/commit/7dd6c8b205aab41d7f71dc9f12159ee74853cbfe))
+* first beta version; BREAKING CHANGE:completly refactored ([7a64f9e](https://github.com/forsti0506/a11y-sitechecker/commit/7a64f9e6d6910f83b5bc823f3ac2194ce43ae390))
+
+# [1.12.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.11.0...v1.12.0) (2021-04-08)
+
+
+### Bug Fixes
+
+* next build pipeline ([d0038c2](https://github.com/forsti0506/a11y-sitechecker/commit/d0038c2bb0056cbb22c7c7a3cda5c6b2340c425d))
+* next build pipeline ([89a6e11](https://github.com/forsti0506/a11y-sitechecker/commit/89a6e112980d4831ce9d3b6580cffdbe4c6e8516))
+* no unknown type ([3c2f4aa](https://github.com/forsti0506/a11y-sitechecker/commit/3c2f4aa71b2e1a74c447b9b1b11dff26d86fc14a))
+* remove Files from test ([b7b449d](https://github.com/forsti0506/a11y-sitechecker/commit/b7b449d55ff03388f31d6ea4f383bb5b098a5671))
+
+
+### Features
+
+* ignore files in parsing ([240f1a7](https://github.com/forsti0506/a11y-sitechecker/commit/240f1a7ac20fc6541737c69455718505491854bc))
+
+
+### Performance Improvements
+
+* first 2.0 version ([3c7fa23](https://github.com/forsti0506/a11y-sitechecker/commit/3c7fa23049f6f0862d6b30ee4c0a0357bb54e6d6))
 * first beta version; BREAKING CHANGE:completly refactored ([7a64f9e](https://github.com/forsti0506/a11y-sitechecker/commit/7a64f9e6d6910f83b5bc823f3ac2194ce43ae390))
 
 # [1.12.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.11.0...v1.12.0) (2021-04-08)
