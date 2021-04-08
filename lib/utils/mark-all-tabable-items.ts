@@ -2,7 +2,7 @@ import { Page } from 'puppeteer';
 import { Config } from '../models/config';
 import { debug, error, saveScreenshot } from './helper-functions';
 import { v4 as uuidv4 } from 'uuid';
-import { ElementsFromEvaluation, ElementVisibility } from '../models/small-ones';
+import { ElementsFromEvaluation, ElementVisibility, ListenerObject } from '../models/small-ones';
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 
 declare global {
@@ -120,8 +120,8 @@ export async function markAllTabableItems(
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (
-            (listenerObject as unknown).listeners.filter((f) => f.type === 'keypress').length <= 0 &&
-            (listenerObject as unknown).listeners.filter((f) => f.type === 'keydown').length <= 0
+            (listenerObject as ListenerObject).listeners.filter((f) => f.type === 'keypress').length <= 0 &&
+            (listenerObject as ListenerObject).listeners.filter((f) => f.type === 'keydown').length <= 0
         ) {
             await page.evaluate((felement) => {
                 document.getElementById(felement)?.parentElement?.setAttribute('id', 'testinger');

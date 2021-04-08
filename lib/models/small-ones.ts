@@ -7,3 +7,7 @@ export interface ElementVisibility {
     element: string;
     visible: boolean;
 }
+
+export interface ListenerObject {
+    listeners: Event[];
+}
