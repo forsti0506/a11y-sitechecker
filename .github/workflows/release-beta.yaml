@@ -44,6 +44,7 @@ jobs:
           git commit -am "Move package.json from dist after release [skip ci]"
       - name: Push changes
         if: github.ref == 'refs/heads/next'
-        uses: ad-m/github-push-action@next
+        uses: ad-m/github-push-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GIT_PERSONAL_TOKEN }}
+          branch: 'next'
