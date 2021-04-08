@@ -3,8 +3,9 @@
 A11y-sitecheker is a tool to check a whole site against accessibility criteria. It uses <a href="https://github.com/dequelabs/axe-core">axe-core</a> to check whole sites for accessibility issues.
 It is crawling the first given Domain and tries to find all links recursivly. In addition it is possible to click elements which have a tabindex >= 0 (links are ignored there).
 
+The results are saved as JSONs or to a Datebase. 
 ## Current state
-It is under development! Please don't use it in critical environments! 
+Version 2.0 is released in a few days. 
 
 ### Install
 
@@ -16,7 +17,7 @@ npm install a11y-sitechecker
 
 You can use it in your package.json or in your console like this
 ```properties
-a11y-sitechecker-dashboard https://www.test.at --config=config.json -T=1000
+a11y-sitechecker https://www.test.at --config=config.json -T=1000
 ```
 
 The available options on the commandline are:

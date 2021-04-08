@@ -1,6 +1,7 @@
 {
   "json": true,
   "imagesPath": "tests/images",
+  "resultsPath": "tests/results",
   "timeout": 15000,
   "axeConfig": {
     "locale": "de"
@@ -14,8 +15,20 @@
     ]
   },
   "debugMode": true,
+  "saveImages": true,
   "urlsToAnalyze": [
+    "http://www.forsti.eu",
     "http://www.orf.at"
   ],
-  "analyzeClicksWithoutNavigation": false
+  "analyzeClicksWithoutNavigation": false,
+  "viewports": [
+    {
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "width": 800,
+      "height": 400
+    }
+  ]
 }

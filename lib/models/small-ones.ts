@@ -1,9 +1,9 @@
 export interface ElementsFromEvaluation {
-    visibleElements: VisibleElement[];
+    elementsByVisibility: ElementVisibility[];
     focusableNonStandardElements: string[];
 }
 
-export interface VisibleElement {
+export interface ElementVisibility {
     element: string;
     visible: boolean;
 }

@@ -1,4 +1,5 @@
 import { LaunchOptions } from 'puppeteer';
+import { resultGroups } from 'axe-core';
 
 export interface Config {
     json: boolean;
@@ -18,7 +19,11 @@ export interface Config {
     analyzeClicksWithoutNavigation?: boolean;
     threshold: number;
     timeout: number;
-    debugMode?: boolean;
+    debugMode: boolean;
+    viewports: SitecheckerViewport[];
+    resultTypes: resultGroups[];
+    db?: Database;
+    idTags?: IdTag;
 }
 
 interface LoginStep {
@@ -30,3 +35,18 @@ interface Input {
     selector: string;
     value: string;
 }
+
+export interface SitecheckerViewport {
+    width: number;
+    height: number;
+}
+
+interface Database {
+    type: string;
+    url: string;
+    user: string;
+    password: string;
+}
+type IdTag = {
+    [axeId: string]: string[];
+};

@@ -1,7 +1,7 @@
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { Page } from 'puppeteer';
 import { Config } from '../models/config';
-import { debug, error, saveScreenshot } from './helper-functions';
+import { debug, saveScreenshot } from './helper-functions';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function makeScreenshotsWithErrorsBorderd(
@@ -17,7 +17,11 @@ export async function makeScreenshotsWithErrorsBorderd(
     try {
         await page.exposeFunction('debug', debug);
     } catch (e) {
-        error(e.message + '. Ignored because normally it means thtat Function already there');
+        debug(
+            config.debugMode,
+            e.message +
+                '. Ignored because normally it means that Function already there. (Adding debug to winwo in expose object)',
+        );
     }
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
@@ -25,22 +29,23 @@ export async function makeScreenshotsWithErrorsBorderd(
                 debug(config.debugMode, 'Adding border to: ' + JSON.stringify(node.target[0]));
                 await page.evaluate(async (elementSelector) => {
                     const dom: Element = document.querySelector(elementSelector);
-                    for (let i = 0; i <= 3; i++) {
-                        if (dom) {
+                    if (dom) {
+                        let elementVisible = false;
+                        let k = 0;
+
+                        while (!elementVisible && k < 10) {
+                            if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
                             const rect = dom.getBoundingClientRect();
                             const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
                             const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
-                            const elementVisible = !(
+                            elementVisible = !(
                                 rect.bottom < 0 ||
                                 rect.top - viewHeight >= 0 ||
                                 rect.left < 0 ||
                                 rect.right > viewWidth
                             );
-                            if (elementVisible) {
-                                break;
-                            }
-                            dom.scrollIntoView();
-                            await new Promise((resolve) => setTimeout(resolve, i * 2000));
+                            if (!elementVisible) dom.scrollIntoView();
+                            k++;
                         }
                     }
 

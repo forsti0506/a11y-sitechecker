@@ -1,6 +1,6 @@
 {
     "name": "a11y-sitechecker",
-    "version": "1.11.0",
+    "version": "2.0.0-beta27",
     "description": "",
     "repository": {
         "type": "git",
@@ -11,10 +11,12 @@
     "dependencies": {
         "@axe-core/puppeteer": "^4.1.1",
         "chalk": "^4.1.0",
-        "commander": "^7.1.0",
-        "jsdom": "^16.4.0",
+        "commander": "^7.2.0",
+        "jsdom": "^16.5.2",
+        "mongodb": "^3.6.6",
         "prettyjson": "^1.2.1",
         "puppeteer": "^5.5.0",
+        "rxjs": "^6.6.7",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -26,11 +28,11 @@
         "@semantic-release/npm": "^7.0.9",
         "@semantic-release/release-notes-generator": "^9.0.1",
         "@types/jasmine": "^3.6.4",
-        "@types/uuid": "^8.3.0",
         "@types/jsdom": "^16.2.5",
         "@types/node": "^14.14.20",
         "@types/prettyjson": "^0.0.29",
         "@types/puppeteer": "^5.4.2",
+        "@types/uuid": "^8.3.0",
         "@typescript-eslint/eslint-plugin": "^4.12.0",
         "@typescript-eslint/parser": "^4.12.0",
         "copyfiles": "^2.4.1",
@@ -47,8 +49,8 @@
         "lint-staged": "^10.5.3",
         "prettier": "^2.2.1",
         "semantic-release": "^17.3.1",
-        "typescript": "^4.1.3",
-        "ts-node": "^9.1.1"
+        "ts-node": "^9.1.1",
+        "typescript": "^4.2.4"
     },
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
