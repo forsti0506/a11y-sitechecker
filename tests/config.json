@@ -14,7 +14,7 @@
       "--disable-setuid-sandbox"
     ]
   },
-  "debugMode": true,
+  "debugMode": false,
   "saveImages": true,
   "urlsToAnalyze": [
     "http://www.forsti.eu",
