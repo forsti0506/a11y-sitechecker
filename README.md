@@ -15,7 +15,7 @@ npm install a11y-sitechecker
 
 ### Use it
 
-You can use it in your package.json or in your console like this
+You can use it in your package.json or in your console like the following: 
 ```properties
 a11y-sitechecker https://www.test.at --config=config.json -T=1000
 ```
