@@ -1,3 +1,11 @@
+## [2.0.1](https://github.com/forsti0506/a11y-sitechecker/compare/v2.0.0...v2.0.1) (2021-04-11)
+
+
+### Bug Fixes
+
+* package lock ([2a47520](https://github.com/forsti0506/a11y-sitechecker/commit/2a47520dc9b0761ae776f4c817d33aec4776f61c))
+* refactor readme.md File ([d93d241](https://github.com/forsti0506/a11y-sitechecker/commit/d93d24140ad72d38e676367d60ff21d5ac8a2e59))
+
 # [2.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v1.11.0...v2.0.0) (2021-04-08)
 
 
