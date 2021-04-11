@@ -16,9 +16,6 @@
   },
   "debugMode": true,
   "saveImages": true,
-  "urlsToAnalyze": [
-    "http://www.forsti.eu"
-  ],
   "analyzeClicksWithoutNavigation": false,
   "viewports": [
     {

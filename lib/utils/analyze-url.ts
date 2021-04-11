@@ -46,17 +46,16 @@ export async function analyzeUrl(
     let axeResults;
     try {
         const axe = await setupAxe(page, axeSpecs, config);
-        let urlResult;
         axeResults = await axe.analyze();
-        if (axeResults) {
-            urlResult = await createUrlResult(url, axeResults);
-        }
-        await markAllTabableItems(page, url, config, urlResult);
-        await page.reload();
-        await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-        return urlResult;
     } catch (e) {
-        error(error + '. Error Axe');
+        error(e + '. Error Axe');
     }
-    return null;
+    let urlResult;
+    if (axeResults) {
+        urlResult = await createUrlResult(url, axeResults);
+    }
+    await markAllTabableItems(page, url, config, urlResult);
+    await page.reload();
+    await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
+    return urlResult;
 }

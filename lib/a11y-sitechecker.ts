@@ -6,7 +6,6 @@ import { debug, error, log, writeToJsonFile } from './utils/helper-functions';
 import * as chalk from 'chalk';
 import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
-import * as prettyjson from 'prettyjson';
 import { prepareWorkspace } from './utils/setup-config';
 import { analyzeSite } from './utils/analyze-site';
 
@@ -73,16 +72,15 @@ async function checkSite(
     result.url = url;
 
     mergeResults(report, result);
+    if (result.violations.length > config.threshold) {
+        throw new Error(
+            'Threshold not met. There are ' + result.violations.length + 'errors. Threshold was: ' + config.threshold,
+        );
+    }
     if (config.json) {
         writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPath, vp);
     } else if (!onlyReturn) {
-        log(
-            prettyjson.render(report, {
-                keysColor: 'blue',
-                dashColor: 'black',
-                stringColor: 'black',
-            }),
-        );
+        log(JSON.stringify(report, null, 4));
     }
     return result;
 }

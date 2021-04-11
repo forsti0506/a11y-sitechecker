@@ -27,46 +27,53 @@ export async function makeScreenshotsWithErrorsBorderd(
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
                 debug(config.debugMode, 'Adding border to: ' + JSON.stringify(node.target[0]));
-                await page.evaluate(async (elementSelector) => {
-                    const dom: Element = document.querySelector(elementSelector);
-                    if (dom) {
-                        let elementVisible = false;
-                        let k = 0;
+                await page.evaluate(
+                    async (elementSelector, debugMode) => {
+                        const dom: Element = document.querySelector(elementSelector);
+                        if (dom) {
+                            let elementVisible = false;
+                            let k = 0;
 
-                        while (!elementVisible && k < 10) {
-                            if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
-                            const rect = dom.getBoundingClientRect();
-                            const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-                            const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
-                            elementVisible = !(
-                                rect.bottom < 0 ||
-                                rect.top - viewHeight >= 0 ||
-                                rect.left < 0 ||
-                                rect.right > viewWidth
-                            );
-                            if (!elementVisible) dom.scrollIntoView();
-                            k++;
+                            while (!elementVisible && k < 10) {
+                                if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
+                                const rect = dom.getBoundingClientRect();
+                                const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+                                const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
+                                elementVisible = !(
+                                    rect.bottom < 0 ||
+                                    rect.top - viewHeight >= 0 ||
+                                    rect.left < 0 ||
+                                    rect.right > viewWidth
+                                );
+                                if (!elementVisible) dom.scrollIntoView();
+                                k++;
+                            }
+                            if (dom.attributes.getNamedItem('style')) {
+                                dom.setAttribute(
+                                    'style',
+                                    dom.getAttribute('style') + ' outline-style: solid; outline-color: red',
+                                );
+                            } else {
+                                dom.setAttribute('style', 'outline-style: solid; outline-color: red');
+                            }
+                        } else {
+                            window.debug(debugMode, 'No element found with selector ' + elementSelector);
                         }
-                    }
-
-                    if (dom.attributes.getNamedItem('style')) {
-                        dom.setAttribute(
-                            'style',
-                            dom.getAttribute('style') + ' outline-style: solid; outline-color: red',
-                        );
-                    } else {
-                        dom.setAttribute('style', 'outline-style: solid; outline-color: red');
-                    }
-                }, node.target[0]);
+                    },
+                    node.target[0],
+                    config.debugMode,
+                );
                 const image = uuidv4() + '.png';
                 await saveScreenshot(page, config.imagesPath, image, config.saveImages);
                 node.image = image;
                 await page.evaluate((element) => {
                     const dom = document.querySelector(element);
-                    dom.setAttribute(
-                        'style',
-                        dom.getAttribute('style').replace('outline-style: solid; outline-color: red', ''),
-                    );
+                    if (dom) {
+                        dom.setAttribute(
+                            'style',
+                            dom.getAttribute('style').replace('outline-style: solid; outline-color: red', ''),
+                        );
+                    }
                 }, node.target[0]);
                 savedScreenshotHtmls.push(node.html);
             } else {

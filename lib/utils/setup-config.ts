@@ -13,7 +13,7 @@ export function setupConfig(options: OptionValues): Config {
         axeConfig: {},
         threshold: 0,
         imagesPath: 'images',
-        timeout: 30,
+        timeout: 30000,
         debugMode: false,
         viewports: [
             {

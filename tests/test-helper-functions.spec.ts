@@ -3,7 +3,7 @@ import { Config } from '../lib/models/config';
 import { setupConfig } from '../lib/utils/setup-config';
 import 'jasmine';
 
-export function cleanUpAfterTest(config: Config): void {
+export async function cleanUpAfterTest(config: Config): Promise<void> {
     if (config.imagesPath) {
         fs.rmdirSync(config.imagesPath, { recursive: true });
     }
@@ -12,8 +12,8 @@ export function cleanUpAfterTest(config: Config): void {
     }
 }
 
-export function initBeforeTest(): Config {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 100000;
+export async function initBeforeTest(): Promise<Config> {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 500000;
     const optionValues = {
         json: true,
         config: './tests/config.json',

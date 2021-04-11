@@ -14,18 +14,15 @@
         "commander": "^7.2.0",
         "jsdom": "^16.5.2",
         "mongodb": "^3.6.6",
-        "prettyjson": "^1.2.1",
         "puppeteer": "^5.5.0",
         "rxjs": "^6.6.7",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
-        "@commitlint/cli": "^11.0.0",
-        "@commitlint/config-conventional": "^11.0.0",
         "@semantic-release/changelog": "^5.0.1",
         "@semantic-release/git": "^9.0.0",
         "@semantic-release/github": "^7.2.0",
-        "@semantic-release/npm": "^7.0.9",
+        "@semantic-release/npm": "^7.1.1",
         "@semantic-release/release-notes-generator": "^9.0.1",
         "@types/jasmine": "^3.6.4",
         "@types/jsdom": "^16.2.5",
@@ -43,12 +40,9 @@
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-promise": "^4.2.1",
-        "husky": "^4.3.7",
-        "jasmine": "^3.6.4",
-        "jasmine-spec-reporter": "^6.0.0",
-        "lint-staged": "^10.5.3",
+        "jasmine": "^3.7.0",
         "prettier": "^2.2.1",
-        "semantic-release": "^17.3.1",
+        "semantic-release": "^17.4.2",
         "ts-node": "^9.1.1",
         "typescript": "^4.2.4"
     },
@@ -110,16 +104,6 @@
                     "assets": "release/*.tgz"
                 }
             ]
-        ]
-    },
-    "lint-staged": {
-        "**/*.{js,ts,tsx}": [
-            "eslint --cache --fix"
-        ]
-    },
-    "commitlint": {
-        "extends": [
-            "@commitlint/config-conventional"
         ]
     }
 }

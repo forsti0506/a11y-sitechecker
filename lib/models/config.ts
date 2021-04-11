@@ -4,10 +4,7 @@ import { resultGroups } from 'axe-core';
 export interface Config {
     json: boolean;
     resultsPath: string;
-    axeConfig?: {
-        locale?: string;
-        localePath?: string;
-    };
+    axeConfig?: AxeConfig;
     login?: LoginStep[];
     saveImages?: boolean;
     imagesPath?: string;
@@ -26,6 +23,10 @@ export interface Config {
     idTags?: IdTag;
 }
 
+interface AxeConfig {
+    locale?: string;
+    localePath?: string;
+}
 interface LoginStep {
     input: Input[];
     submit: string;
