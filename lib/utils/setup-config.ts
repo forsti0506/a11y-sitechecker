@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import { error } from './helper-functions';
 import { Config } from '../models/config';
 import { OptionValues } from 'commander';
+import { Page } from 'puppeteer';
+import { AxePuppeteer } from '@axe-core/puppeteer';
 
 export function setupConfig(options: OptionValues): Config {
     const config: Config = {
@@ -11,7 +13,15 @@ export function setupConfig(options: OptionValues): Config {
         axeConfig: {},
         threshold: 0,
         imagesPath: 'images',
-        timeout: 30,
+        timeout: 30000,
+        debugMode: false,
+        viewports: [
+            {
+                width: 1920,
+                height: 1080,
+            },
+        ],
+        resultTypes: ['violations', 'incomplete'],
     };
     config.json = options.json;
     if (!config.threshold) {
@@ -57,14 +67,26 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.analyzeClicksWithoutNavigation) {
                 config.analyzeClicksWithoutNavigation = configFile.analyzeClicksWithoutNavigation;
             }
-            if (configFile.debugMode) {
+            if (configFile.debugMode && typeof configFile.debugMode === 'boolean') {
                 config.debugMode = configFile.debugMode;
             }
-            if (configFile.analyzeClicks) {
+            if (configFile.analyzeClicks && typeof configFile.analyzeClicks === 'boolean') {
                 config.analyzeClicks = configFile.analyzeClicks;
             }
-            if (configFile.timeout) {
+            if (configFile.timeout && typeof configFile.timeout === 'number') {
                 config.timeout = configFile.timeout;
+            }
+            if (configFile.viewports) {
+                config.viewports = configFile.viewports;
+            }
+            if (configFile.resultTypes) {
+                config.resultTypes = configFile.resultTypes;
+            }
+            if (configFile.db) {
+                config.db = configFile.db;
+            }
+            if (configFile.idTags) {
+                config.idTags = configFile.idTags;
             }
         } catch (e) {
             error(e);
@@ -94,4 +116,14 @@ export function setupAxeConfig(config: Config): Spec {
         axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
     }
     return axeConfig;
+}
+
+export async function setupAxe(page: Page, axeSpecs: Spec, config: Config): Promise<AxePuppeteer> {
+    const axe = new AxePuppeteer(page);
+    axe.configure(axeSpecs);
+    axe.options({
+        runOnly: ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
+        resultTypes: config.resultTypes,
+    });
+    return axe;
 }

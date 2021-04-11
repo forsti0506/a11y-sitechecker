@@ -5,15 +5,18 @@ import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 
 describe('a11y-sitechecker-bin', function () {
     let config: Config;
-    beforeEach(function () {
-        config = initBeforeTest();
+    beforeAll(function () {
+        console.log('Starting BIN Test');
     });
-    afterEach(() => {
-        cleanUpAfterTest(config);
+    beforeEach(async function () {
+        config = await initBeforeTest();
+    });
+    afterEach(async () => {
+        await cleanUpAfterTest(config);
     });
 
-    it('should exit with code 0', async (done) => {
-        const url = 'forsti.eu';
+    it('should exit with code 0', (done) => {
+        const url = 'www.forsti.eu';
         const jobSpawn = job.spawn('node', [
             './dist/bin/a11y-sitechecker.js',
             url,
@@ -23,20 +26,45 @@ describe('a11y-sitechecker-bin', function () {
         jobSpawn.stderr.on('data', (data) => {
             console.error(`\n${data}`);
         });
+        jobSpawn.stdout.on('data', (data) => {
+            console.log(`\n${data}`);
+        });
         jobSpawn.on('exit', (code) => {
             expect(code).toBe(0);
             done();
         });
     });
 
-    it('should exit with code 2', async (done) => {
-        const url = 'forsti.eu';
+    it('should exit with code 2', (done) => {
+        const url = 'www.forsti.eu';
         const jobSpawn = job.spawn('node', ['./dist/bin/a11y-sitechecker.js', url, '--config=tests/config.json']);
         jobSpawn.stderr.on('data', (data) => {
             console.error(`\n${data}`);
         });
+        jobSpawn.stdout.on('data', (data) => {
+            console.log(`\n${data}`);
+        });
         jobSpawn.on('exit', (code) => {
             expect(code).toBe(2);
+            done();
+        });
+    });
+
+    it('should exit with error code 3', (done) => {
+        const url = 'httpss://forsti.eu';
+        const jobSpawn = job.spawn('node', [
+            './dist/bin/a11y-sitechecker.js',
+            url,
+            '--config=tests/config_without_urls.json',
+        ]);
+        jobSpawn.stderr.on('data', (data) => {
+            console.error(`\n${data}`);
+        });
+        jobSpawn.stdout.on('data', (data) => {
+            console.log(`\n${data}`);
+        });
+        jobSpawn.on('exit', (code) => {
+            expect(code).toBe(3);
             done();
         });
     });

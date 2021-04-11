@@ -1,6 +1,7 @@
 import { Page } from 'puppeteer';
 import * as chalk from 'chalk';
 import * as fs from 'fs';
+import { SitecheckerViewport } from '../models/config';
 
 export function isAbsoluteUrl(url: string): boolean {
     return /^(?:[a-z]+:)?\/\//i.test(url);
@@ -59,7 +60,7 @@ export async function waitForHTML(page: Page, timeout = 30000, debugMode = false
 export function getEscaped(link: string): string {
     return link.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
 }
-export function shoouldElementBeIgnored(element: Element, elementstoIgnore: string[] | undefined): boolean {
+export function shouldElementBeIgnored(element: Element, elementstoIgnore: string[] | undefined): boolean {
     if (!elementstoIgnore) return false;
     let shouldElementBeIgnored = false;
     for (let i = 0; i < element.attributes.length; i++) {
@@ -86,14 +87,14 @@ export async function saveScreenshot(
     }
 }
 
-export function writeToJsonFile(data: string, path: string): void {
+export function writeToJsonFile(data: string, path: string, vp: SitecheckerViewport): void {
     log(chalk.blue('#############################################################################################'));
-    log(chalk.blue(`Writing results to ${path}/results.json`));
+    log(chalk.blue(`Writing results to ${path}/results_${vp.width}_${vp.height}'.json`));
     log(chalk.blue('#############################################################################################'));
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path);
     }
-    fs.writeFileSync(path + '/results.json', data);
+    fs.writeFileSync(path + '/results_' + vp.width + '_' + vp.height + '.json', data);
 }
 
 export function endsWithAny(array: string[], toCheck: string): boolean {

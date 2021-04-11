@@ -10,7 +10,7 @@ describe('login', function () {
     let browser: Browser;
 
     beforeEach(async function () {
-        config = initBeforeTest();
+        config = await initBeforeTest();
         config.timeout = 15000;
         browser = await puppeteer.launch(config.launchOptions);
         const page = (await browser.pages())[0];
@@ -20,18 +20,20 @@ describe('login', function () {
         });
     });
     afterEach(async () => {
-        cleanUpAfterTest(config);
+        await cleanUpAfterTest(config);
         await browser.close();
     });
 
-    it('should escape if no login parameter', async (done) => {
-        executeLogin('https://forsti.eu', (await browser.pages())[0], config).then((retCode) =>
-            expect(retCode).toBe(0),
-        );
-        done();
+    it('should escape if no login parameter', (done) => {
+        browser.pages().then((pages) => {
+            executeLogin('http://www.forsti.eu', pages[0], config).then((retCode) => {
+                expect(retCode).toBe(0);
+                done();
+            });
+        });
     });
 
-    it('should escape if no login parameter', async (done) => {
+    it('should escape if no login parameter', (done) => {
         config.login = [
             {
                 submit: 'test',
@@ -44,13 +46,15 @@ describe('login', function () {
             },
         ];
 
-        await executeLogin('https://forsti.eu', (await browser.pages())[0], config).catch((err) => {
-            expect(err.message).toContain('waiting for selector `test` failed:');
-            done();
+        browser.pages().then((pages) => {
+            executeLogin('http://www.forsti.eu', pages[0], config).catch((err) => {
+                expect(err.message).toContain('waiting for selector `test` failed:');
+                done();
+            });
         });
     });
 
-    it('should not be able to login', async (done) => {
+    it('should not be able to login', (done) => {
         config.login = [
             {
                 submit: '#wp-submit',
@@ -66,10 +70,11 @@ describe('login', function () {
                 ],
             },
         ];
-
-        await executeLogin('https://forsti.eu/wp-admin', (await browser.pages())[0], config).then((r) => {
-            expect(r).toBe(1);
-            done();
+        browser.pages().then((pages) => {
+            executeLogin('http://www.forsti.eu/wp-admin', pages[0], config).then((r) => {
+                expect(r).toBe(1);
+                done();
+            });
         });
     });
 });

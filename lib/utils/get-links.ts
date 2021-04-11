@@ -1,14 +1,14 @@
 import * as JSDOM from 'jsdom';
 import * as chalk from 'chalk';
 import { getUniqueSelector } from './UniqueSelector';
-import { debug, endsWithAny, isAbsoluteUrl, shoouldElementBeIgnored } from './helper-functions';
-import { Config } from '../models/config';
+import { debug, endsWithAny, isAbsoluteUrl, shouldElementBeIgnored } from './helper-functions';
+import { Config, SitecheckerViewport } from '../models/config';
 
 export interface RootDomain {
     value: string;
 }
 
-const urlEndingsToIgnore = ['jpeg', 'jpg', 'pdf', 'xml'];
+const urlEndingsToIgnore = ['jpeg', 'jpg', 'pdf', 'xml', 'png'];
 
 export function getLinks(
     html: string,
@@ -18,11 +18,12 @@ export function getLinks(
     rootDomain: RootDomain,
     elementsToClick: Map<string, string[]>,
     notCheckedLinks: string[],
-    alreadyVisited: string[],
+    alreadyVisited: Map<string, SitecheckerViewport>,
 ): string[] {
     if (alreadyParsed.includes(url)) {
         return [];
     }
+    alreadyParsed.push(url);
     const dom = new JSDOM.JSDOM(html, { contentType: 'text/html' });
     const links: string[] = [];
     if (!rootDomain.value) {
@@ -33,8 +34,8 @@ export function getLinks(
     dom.window.document.querySelectorAll('a').forEach((element: HTMLAnchorElement) => {
         let link = element.href;
         if (link === '' && element.getAttributeNames().includes('ng-click')) {
-            const shouldElementBeIgnored = shoouldElementBeIgnored(element, config.ignoreElementAttributeValues);
-            if (!shouldElementBeIgnored) {
+            const sElementBeIgnored = shouldElementBeIgnored(element, config.ignoreElementAttributeValues);
+            if (!sElementBeIgnored) {
                 const uniqueSelector = getUniqueSelector(element, dom);
                 const elmsToClick = elementsToClick.get(url);
                 if (elementsToClick.has(url) && elmsToClick) {
@@ -48,31 +49,32 @@ export function getLinks(
         }
         if (endsWithAny(urlEndingsToIgnore, link)) {
             debug(config.debugMode, 'Link ignored because it is part of the endings to exclude: ' + link);
-        }
-        if (isAbsoluteUrl(link) && link.includes(rootDomain.value)) {
-            if (link.startsWith('//')) {
-                link = url.startsWith('https') ? 'https:' + link : 'http:' + link;
+        } else {
+            if (isAbsoluteUrl(link) && link.includes(rootDomain.value)) {
+                if (link.startsWith('//')) {
+                    link = url.startsWith('https') ? 'https:' + link : 'http:' + link;
+                }
+                if (link.endsWith('/')) {
+                    link = link.substring(0, link.length - 1);
+                }
+                if (!links.includes(link) && !alreadyVisited.get(link)) {
+                    links.push(link);
+                }
+            } else if (!isAbsoluteUrl(link) && !link.includes('#')) {
+                let absoluteUrl = new URL(link, url).href;
+                if (absoluteUrl.endsWith('/')) {
+                    absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
+                }
+                if (
+                    !links.includes(absoluteUrl) &&
+                    !alreadyVisited.get(absoluteUrl) &&
+                    absoluteUrl.includes(rootDomain.value)
+                ) {
+                    links.push(absoluteUrl);
+                }
+            } else if (!notCheckedLinks.includes(link)) {
+                notCheckedLinks.push(link);
             }
-            if (link.endsWith('/')) {
-                link = link.substring(0, link.length - 1);
-            }
-            if (!links.includes(link) && !alreadyVisited.includes(link)) {
-                links.push(link);
-            }
-        } else if (!isAbsoluteUrl(link) && !link.includes('#')) {
-            let absoluteUrl = new URL(link, url).href;
-            if (absoluteUrl.endsWith('/')) {
-                absoluteUrl = absoluteUrl.substring(0, absoluteUrl.length - 1);
-            }
-            if (
-                !links.includes(absoluteUrl) &&
-                !alreadyVisited.includes(absoluteUrl) &&
-                absoluteUrl.includes(rootDomain.value)
-            ) {
-                links.push(absoluteUrl);
-            }
-        } else if (!notCheckedLinks.includes(link)) {
-            notCheckedLinks.push(link);
         }
     });
     if (config.analyzeClicks) {
@@ -86,7 +88,7 @@ export function getLinks(
             .forEach((element: Element) => {
                 if (
                     !element.hasAttribute('disabled') &&
-                    !shoouldElementBeIgnored(element, config.ignoreElementAttributeValues)
+                    !shouldElementBeIgnored(element, config.ignoreElementAttributeValues)
                 ) {
                     const uniqueSelector = getUniqueSelector(element, dom);
                     const elmsToClick = elementsToClick.get(url);
@@ -105,6 +107,5 @@ export function getLinks(
                 }
             });
     }
-    alreadyParsed.push(url);
     return links;
 }

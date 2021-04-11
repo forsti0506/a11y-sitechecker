@@ -3,6 +3,7 @@ on:
   push:
     branches-ignore:
       - main
+      - next
 
 jobs:
   audit:
