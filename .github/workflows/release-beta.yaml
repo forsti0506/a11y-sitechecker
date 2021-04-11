@@ -1,11 +1,11 @@
-name: Release
+name: Release-beta
 on:
   push:
     branches:
       - next
 
 jobs:
-  audit:
+  release-beta:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +35,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GIT_PERSONAL_TOKEN }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Copy package json
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/next'
         working-directory: ./dist
         run: |
           git config --local user.email "martin@forsti.eu"
