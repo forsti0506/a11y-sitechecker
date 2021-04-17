@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/forsti0506/a11y-sitechecker/compare/v2.0.1...v2.0.2) (2021-04-11)
+
+
+### Bug Fixes
+
+* build piplelines ([7722315](https://github.com/forsti0506/a11y-sitechecker/commit/7722315d358a11cca0da056cdb995a9b3373beb4))
+
 ## [2.0.1](https://github.com/forsti0506/a11y-sitechecker/compare/v2.0.0...v2.0.1) (2021-04-11)
 
 
