@@ -40,6 +40,7 @@ jobs:
         run: |
           git config --local user.email "martin@forsti.eu"
           git config --local user.name "Martin Forstner"
+          git pull
           mv -v package.json ..
           git commit -am "Release script runned. Commit package.json [skip ci]" --allow-empty
       - name: Push changes
