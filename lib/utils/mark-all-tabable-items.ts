@@ -120,7 +120,7 @@ export async function markAllTabableItems(
                         } else {
                             element.setAttribute('style', 'outline-style: solid; outline-color: red');
                         }
-                    }
+                    };
                     const elementsFromEvaluationParsed: ElementsFromEvaluation = JSON.parse(
                         elementsFromEvaluationInput,
                     );
@@ -160,9 +160,11 @@ export async function markAllTabableItems(
                                 if (elementVisible) {
                                     await doIt(elementRect, tabbingNumber);
                                     if (!standardTags.includes(element.tagName.toUpperCase())) {
-                                        document.getElementById('span_id' + tabbingNumber)!.innerHTML =
-                                            document.getElementById('span_id' + tabbingNumber)?.innerHTML + 'C';
-                                        elementsFromEvaluationParsed.focusableNonStandardElements.push(element.id);
+                                        const spanElement = document.getElementById('span_id' + tabbingNumber);
+                                        if (spanElement) {
+                                            spanElement.innerHTML = spanElement.innerHTML + 'C';
+                                            elementsFromEvaluationParsed.focusableNonStandardElements.push(element.id);
+                                        }
                                     }
                                     tabbingNumber++;
                                 }
@@ -216,12 +218,13 @@ export async function markAllTabableItems(
                                         document.querySelectorAll('[style="outline-style: solid; outline-color: red"]'),
                                     );
                                     for (const oldElement of oldElementsWithBorder) {
-                                        oldElement.setAttribute(
-                                            'style',
-                                            oldElement
-                                                .getAttribute('style')!
-                                                .replace('outline-style: solid; outline-color: red', ''),
-                                        );
+                                        const oldElementStyle = oldElement.getAttribute('style');
+                                        if (oldElementStyle) {
+                                            oldElement.setAttribute(
+                                                'style',
+                                                oldElementStyle.replace('outline-style: solid; outline-color: red', ''),
+                                            );
+                                        }
                                     }
                                 }
                                 if (elementVisible) {
@@ -230,10 +233,11 @@ export async function markAllTabableItems(
                                     await doIt(elementRect, tabbingNumber);
                                     elementSelector.visible = true;
                                     if (!standardTags.includes(element.tagName.toUpperCase())) {
-                                        console.log(tabbingNumber);
-                                        document.getElementById('span_id' + tabbingNumber)!.innerHTML =
-                                            document.getElementById('span_id' + tabbingNumber)?.innerHTML + 'C';
-                                        // elementsFromEvaluationParsed.focusableNonStandardElements.push(element.id);
+                                        const spanElement = document.getElementById('span_id' + tabbingNumber);
+                                        if (spanElement) {
+                                            spanElement.innerHTML = spanElement.innerHTML + 'C';
+                                            elementsFromEvaluationParsed.focusableNonStandardElements.push(element.id);
+                                        }
                                     }
                                     tabbingNumber++;
                                 } else if (!elementVisible && !firstVisibleElement) {

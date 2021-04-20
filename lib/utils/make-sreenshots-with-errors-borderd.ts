@@ -102,12 +102,13 @@ export async function makeScreenshotsWithErrorsBorderd(
                         if (dom.tagName === 'A') {
                             dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red;', ''));
                         } else if (dom.tagName === 'HTML') {
-                            document.body.setAttribute(
-                                'style',
-                                document.body
-                                    .getAttribute('style')!
-                                    .replace('outline-style: solid; outline-color: red', ''),
-                            );
+                            const bodyStyle = document.body.getAttribute('style');
+                            if (bodyStyle) {
+                                document.body.setAttribute(
+                                    'style',
+                                    bodyStyle.replace('outline-style: solid; outline-color: red', ''),
+                                );
+                            }
                         } else {
                             dom.setAttribute(
                                 'style',
