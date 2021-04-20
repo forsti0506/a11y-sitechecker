@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.0.2...v2.1.0) (2021-04-20)
+
+
+### Features
+
+* new calculation for tabbing order added ([b64073f](https://github.com/forsti0506/a11y-sitechecker/commit/b64073fd7964ce556cc42d4ef3567a63552677b7))
+
 ## [2.0.2](https://github.com/forsti0506/a11y-sitechecker/compare/v2.0.1...v2.0.2) (2021-04-11)
 
 
