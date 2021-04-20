@@ -1,7 +1,7 @@
 # a11y-sitechecker
 
 [![npm version](https://badge.fury.io/js/a11y-sitechecker.svg)](https://badge.fury.io/js/a11y-sitechecker)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc8d2ac7f50c487db55ff311a8ac351e)](https://www.codacy.com/gh/forsti0506/a11y-sitechecker/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=forsti0506/a11y-sitechecker&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc8d2ac7f50c487db55ff311a8ac351e)](https://www.codacy.com/gh/forsti0506/a11y-sitechecker/dashboard?utm_source=github.com&utm_medium=referral&utm_content=forsti0506/a11y-sitechecker&utm_campaign=Badge_Grade)
 ![Commits since last release](https://img.shields.io/github/commits-since/forsti0506/a11y-sitechecker/latest?color=green&style=flat-square)
 ![Dependency status](https://img.shields.io/david/forsti0506/a11y-sitechecker?style=flat-square)
 ![Downloads per month](https://img.shields.io/npm/dm/a11y-sitechecker)
@@ -15,14 +15,14 @@ errors, shows the tab-order and other features.
 
 ## Features
 
-- Crawls Websites automatically for accessibility issues
-    * In addition clicking all Clickable Items (Alpha Status)
-- Analyze a Set of URLs agains accessibility criteria
-- Provide Images for
-    - Tab-Order (A C means you have to check if there are click and key interaction is possible!)
-    - Errors highlighted
-    - View of site in general
-- Results for different viewports
+-   Crawls Websites automatically for accessibility issues
+    -   In addition clicking all Clickable Items (Alpha Status)
+-   Analyze a Set of URLs agains accessibility criteria
+-   Provide Images for
+    -   Tab-Order (A C means you have to check if there are click and key interaction is possible!)
+    -   Errors highlighted
+    -   View of site in general
+-   Results for different viewports
 
 ### Install
 
@@ -59,7 +59,7 @@ export async function entry(
     axeSpecs: Spec,
     url: string,
     onlyReturn?: boolean,
-): Promise<A11ySitecheckerResult[]>
+): Promise<A11ySitecheckerResult[]>;
 ```
 
 ### Configuration File Options
@@ -101,9 +101,9 @@ Define if output should be to a json file. You can additionally add a path to st
 
 ```json
 {
-  "json": true,
-  "resultsPath": "to a folder, starting with the folder where the script is executed"
-} 
+    "json": true,
+    "resultsPath": "to a folder, starting with the folder where the script is executed"
+}
 ```
 
 ##### Axe-core Language
@@ -113,11 +113,11 @@ you can provide your own locale with a path!
 
 ```json
 {
-  "axeConfig": {
-    "locale": "de",
-    "localePath": "path to locale"
-  }
-} 
+    "axeConfig": {
+        "locale": "de",
+        "localePath": "path to locale"
+    }
+}
 ```
 
 ##### Login steps
@@ -128,22 +128,22 @@ repeat this steps if needed!
 
 ```json
 {
-  "login": [
-    {
-      "input": [
+    "login": [
         {
-          "selector": "#user_login",
-          "value": "user"
-        },
-        {
-          "selector": "#user_pass",
-          "value": "passwort"
+            "input": [
+                {
+                    "selector": "#user_login",
+                    "value": "user"
+                },
+                {
+                    "selector": "#user_pass",
+                    "value": "passwort"
+                }
+            ],
+            "submit": "#wp-submit"
         }
-      ],
-      "submit": "#wp-submit"
-    }
-  ]
-} 
+    ]
+}
 ```
 
 ##### Images
@@ -152,9 +152,9 @@ If you like to take Screenshots during the evaluation, define it here! If needed
 
 ```json
 {
-  "saveImages": "yes",
-  "imagesPath": "folder to save images"
-} 
+    "saveImages": "yes",
+    "imagesPath": "folder to save images"
+}
 ```
 
 ##### Launch Options
@@ -164,8 +164,8 @@ documentation <a href="https://github.com/puppeteer/puppeteer/blob/main/docs/api
 
 ```json
 {
-  "launchOptions": {}
-} 
+    "launchOptions": {}
+}
 ```
 
 ##### Ignoring Elements
@@ -175,10 +175,8 @@ the crawle should not do a logout!
 
 ```json
 {
-  "ignoreElementAttributeValues": [
-    "logout"
-  ]
-} 
+    "ignoreElementAttributeValues": ["logout"]
+}
 ```
 
 ##### Links to Analyze
@@ -189,10 +187,8 @@ it is only used to save the results!
 
 ```json
 {
-  "urlsToAnalyze": [
-    "www.test.at"
-  ]
-} 
+    "urlsToAnalyze": ["www.test.at"]
+}
 ```
 
 ##### Analyzing Clicks
@@ -202,9 +198,9 @@ by this selector : "button, select, details, [tabindex]:not([tabindex="-1"])" Yo
 
 ```json
 {
-  "analyzeClicks": true,
-  "clickableItemSelector": "button, details"
-} 
+    "analyzeClicks": true,
+    "clickableItemSelector": "button, details"
+}
 ```
 
 ##### Clicks without Navigation
@@ -213,8 +209,8 @@ It is possible to analyze button clicks which does not affect the url. If you li
 
 ```json
 {
-  "analyzeClicksWithoutNavigation": true
-} 
+    "analyzeClicksWithoutNavigation": true
+}
 ```
 
 ##### Deactive analyze of clicks
@@ -223,7 +219,7 @@ You can activate/deactive the analyze of clicks (alpha status). Standard is fals
 
 ```json
 {
-  "analyzeClicks": true
+    "analyzeClicks": true
 }
 ```
 
@@ -235,8 +231,8 @@ a threshold (same like in the command line). Standard: threshold 0, timeout 3000
 
 ```json
 {
-  "threshold": 100,
-  "timeout": 1000
+    "threshold": 100,
+    "timeout": 1000
 }
 ```
 
@@ -246,23 +242,23 @@ Activating the debugMode leads to more logs presented in the console output. By 
 
 ```json
 {
-  "debugMode": true
+    "debugMode": true
 }
 ```
 
 ##### Specifiying viewport
 
 Viewports are used for different devices. Sometimes there are different elements which can cause new or other
-accessibility problems! Standard viewport ist 1920*1080!
+accessibility problems! Standard viewport ist 1920\*1080!
 
 ```json
 {
-  "viewports": [
-    {
-      "width": 1920,
-      "height": 1080
-    }
-  ]
+    "viewports": [
+        {
+            "width": 1920,
+            "height": 1080
+        }
+    ]
 }
 ```
 
@@ -274,10 +270,7 @@ Standard is violations and incomplete!
 
 ```json
 {
-  "resultTypes": [
-    "violations",
-    "incomplete"
-  ]
+    "resultTypes": ["violations", "incomplete"]
 }
 ```
 
@@ -287,12 +280,12 @@ Specifiyng a database where the results are stored (up to know only mongodb are 
 
 ```json
 {
-  "db": {
-    "type": "mongodb",
-    "url": "cluster0.xyz",
-    "user": "hallo",
-    "password": "12345"
-  }
+    "db": {
+        "type": "mongodb",
+        "url": "cluster0.xyz",
+        "user": "hallo",
+        "password": "12345"
+    }
 }
 ```
 
@@ -302,13 +295,9 @@ ID-Tags are used to mark axe-core rules with own Tags (for example if someone wa
 
 ```json
 {
-  "idTags": {
-    "aria-required-attr": [
-      "XYZ"
-    ],
-    "meta-viewport": [
-      "XYZ"
-    ]
-  }
+    "idTags": {
+        "aria-required-attr": ["XYZ"],
+        "meta-viewport": ["XYZ"]
+    }
 }
 ```
