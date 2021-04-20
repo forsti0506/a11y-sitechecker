@@ -31,30 +31,60 @@ export async function makeScreenshotsWithErrorsBorderd(
                     async (elementSelector, debugMode) => {
                         const dom: Element = document.querySelector(elementSelector);
                         if (dom) {
+                            let currentDom = dom;
                             let elementVisible = false;
                             let k = 0;
+                            const tolerance = 0.01;
+                            const percentX = 90;
+                            const percentY = 90;
 
                             while (!elementVisible && k < 10) {
                                 if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
-                                const rect = dom.getBoundingClientRect();
-                                const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-                                const viewWidth = Math.max(document.documentElement.clientWidth, window.innerWidth);
-                                elementVisible = !(
-                                    rect.bottom < 0 ||
-                                    rect.top - viewHeight >= 0 ||
-                                    rect.left < 0 ||
-                                    rect.right > viewWidth
-                                );
+
+                                const elementRect = currentDom.getBoundingClientRect();
+                                const parentRects: DOMRect[] = [];
+
+                                while (currentDom.parentElement != null) {
+                                    parentRects.push(currentDom.parentElement.getBoundingClientRect());
+                                    currentDom = currentDom.parentElement;
+                                }
+
+                                elementVisible = parentRects.every(function (parentRect) {
+                                    const visiblePixelX =
+                                        Math.min(elementRect.right, parentRect.right) -
+                                        Math.max(elementRect.left, parentRect.left);
+                                    const visiblePixelY =
+                                        Math.min(elementRect.bottom, parentRect.bottom) -
+                                        Math.max(elementRect.top, parentRect.top);
+                                    const visiblePercentageX = (visiblePixelX / elementRect.width) * 100;
+                                    const visiblePercentageY = (visiblePixelY / elementRect.height) * 100;
+                                    return (
+                                        visiblePercentageX + tolerance > percentX &&
+                                        visiblePercentageY + tolerance > percentY
+                                    );
+                                });
+
                                 if (!elementVisible) dom.scrollIntoView();
                                 k++;
                             }
-                            if (dom.attributes.getNamedItem('style')) {
+                            if (dom.tagName === 'A') {
                                 dom.setAttribute(
                                     'style',
-                                    dom.getAttribute('style') + ' outline-style: solid; outline-color: red',
+                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                        ' border: 1px solid red;',
+                                );
+                            } else if (dom.tagName === 'HTML' || dom.tagName === 'VIEWPORT') {
+                                document.body.setAttribute(
+                                    'style',
+                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                        ' outline-style: solid; outline-color: red',
                                 );
                             } else {
-                                dom.setAttribute('style', 'outline-style: solid; outline-color: red');
+                                dom.setAttribute(
+                                    'style',
+                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                        ' outline-style: solid; outline-color: red',
+                                );
                             }
                         } else {
                             window.debug(debugMode, 'No element found with selector ' + elementSelector);
@@ -69,10 +99,21 @@ export async function makeScreenshotsWithErrorsBorderd(
                 await page.evaluate((element) => {
                     const dom = document.querySelector(element);
                     if (dom) {
-                        dom.setAttribute(
-                            'style',
-                            dom.getAttribute('style').replace('outline-style: solid; outline-color: red', ''),
-                        );
+                        if (dom.tagName === 'A') {
+                            dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red;', ''));
+                        } else if (dom.tagName === 'HTML') {
+                            document.body.setAttribute(
+                                'style',
+                                document.body
+                                    .getAttribute('style')!
+                                    .replace('outline-style: solid; outline-color: red', ''),
+                            );
+                        } else {
+                            dom.setAttribute(
+                                'style',
+                                dom.getAttribute('style').replace('outline-style: solid; outline-color: red', ''),
+                            );
+                        }
                     }
                 }, node.target[0]);
                 savedScreenshotHtmls.push(node.html);

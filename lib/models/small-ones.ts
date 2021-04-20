@@ -1,6 +1,7 @@
 export interface ElementsFromEvaluation {
     elementsByVisibility: ElementVisibility[];
     focusableNonStandardElements: string[];
+    currentIndex: number;
 }
 
 export interface ElementVisibility {

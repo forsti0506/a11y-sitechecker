@@ -19,7 +19,7 @@ errors, shows the tab-order and other features.
     * In addition clicking all Clickable Items (Alpha Status)
 - Analyze a Set of URLs agains accessibility criteria
 - Provide Images for
-    - Tab-Order
+    - Tab-Order (A C means you have to check if there are click and key interaction is possible!)
     - Errors highlighted
     - View of site in general
 - Results for different viewports

@@ -54,8 +54,9 @@ export async function analyzeUrl(
     if (axeResults) {
         urlResult = await createUrlResult(url, axeResults);
     }
-    await markAllTabableItems(page, url, config, urlResult);
-    await page.reload();
     await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
+    await page.reload();
+    await waitForHTML(page);
+    await markAllTabableItems(page, url, config, urlResult);
     return urlResult;
 }
