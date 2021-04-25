@@ -4,6 +4,7 @@ import { resultGroups } from 'axe-core';
 export interface Config {
     json: boolean;
     resultsPath: string;
+    resultsPathPerUrl: string;
     axeConfig?: AxeConfig;
     login?: LoginStep[];
     saveImages?: boolean;

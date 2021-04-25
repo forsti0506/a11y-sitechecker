@@ -73,7 +73,6 @@ export interface Config {
     axeConfig?: AxeConfig;
     login?: LoginStep[];
     saveImages?: boolean;
-    imagesPath?: string;
     launchOptions?: LaunchOptions;
     ignoreElementAttributeValues?: string[];
     urlsToAnalyze?: string[];
@@ -148,12 +147,11 @@ repeat this steps if needed!
 
 ##### Images
 
-If you like to take Screenshots during the evaluation, define it here! If needed you define a path for the images!
+If you like to take Screenshots during the evaluation, define it here! The images are saved in a folder images under the results path!
 
 ```json
 {
     "saveImages": "yes",
-    "imagesPath": "folder to save images"
 }
 ```
 

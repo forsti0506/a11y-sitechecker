@@ -120,16 +120,12 @@ commander
                             '_' +
                             sitecheckerResult.testEnvironment?.windowHeight,
                     );
-                    const dashboardPath = config.resultsPath + '/dashboard/';
-                    if (!fs.existsSync(dashboardPath)) {
-                        fs.mkdirSync(dashboardPath);
-                    }
 
-                    const fileToSave = dashboardPath + dateToSave + '.json';
+                    const fileToSave = config.resultsPathPerUrl + dateToSave + '.json';
                     let fileObject: AnalyzedSite[];
                     let id: string;
                     try {
-                        const data = fs.readFileSync(dashboardPath + 'files.json');
+                        const data = fs.readFileSync(config.resultsPath + 'files.json');
                         fileObject = JSON.parse(data.toString());
                         if (fileObject.filter((f) => f.url.includes(sitecheckerResult.url)).length > 0) {
                             id = fileObject.filter((f) => f.url.includes(sitecheckerResult.url))[0]._id;
@@ -170,10 +166,10 @@ commander
                     const siteResult = setupSiteresult(id, sitecheckerResult);
                     defineExtraTags(sitecheckerResult, config);
                     fs.writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
-                    fs.writeFileSync(dashboardPath + 'files.json', JSON.stringify(fileObject, null, 4));
+                    fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
 
                     const violationsPath =
-                        dashboardPath +
+                        config.resultsPathPerUrl +
                         getEscaped(id + sitecheckerResult.timestamp) +
                         '_' +
                         sitecheckerResult.testEnvironment?.windowWidth +
@@ -183,7 +179,7 @@ commander
                     await fs.promises.writeFile(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
 
                     const incompletesPath =
-                        dashboardPath +
+                        config.resultsPathPerUrl +
                         getEscaped(id + sitecheckerResult.timestamp) +
                         '_' +
                         sitecheckerResult.testEnvironment?.windowWidth +
@@ -193,7 +189,7 @@ commander
                     await fs.promises.writeFile(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
 
                     const passesPath =
-                        dashboardPath +
+                        config.resultsPathPerUrl +
                         getEscaped(id + sitecheckerResult.timestamp) +
                         '_' +
                         sitecheckerResult.testEnvironment?.windowWidth +
@@ -203,7 +199,7 @@ commander
                     await fs.promises.writeFile(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
 
                     const inapplicablesPath =
-                        dashboardPath +
+                        config.resultsPathPerUrl +
                         getEscaped(id + sitecheckerResult.timestamp) +
                         '_' +
                         sitecheckerResult.testEnvironment?.windowWidth +
@@ -216,7 +212,7 @@ commander
                     );
 
                     const filesJson: AnalyzedSite[] = JSON.parse(
-                        fs.readFileSync(dashboardPath + 'files.json').toString(),
+                        fs.readFileSync(config.resultsPath + 'files.json').toString(),
                     );
                     const relatedDates = filesJson.filter((f) => f._id === id)[0].filesByDate;
                     if (relatedDates.length > 1) {
@@ -232,7 +228,7 @@ commander
                                             '_' +
                                             resultFile.testEnvironment?.windowHeight +
                                             '_violations.json',
-                                        dashboardPath,
+                                        config.resultsPathPerUrl,
                                     );
                                     await getCountings(
                                         id,
@@ -242,7 +238,7 @@ commander
                                             '_' +
                                             resultFile.testEnvironment?.windowHeight +
                                             '_passes.json',
-                                        dashboardPath,
+                                        config.resultsPathPerUrl,
                                     );
                                     await getCountings(
                                         id,
@@ -252,7 +248,7 @@ commander
                                             '_' +
                                             resultFile.testEnvironment?.windowHeight +
                                             '_incompletes.json',
-                                        dashboardPath,
+                                        config.resultsPathPerUrl,
                                     );
                                     await getCountings(
                                         id,
@@ -262,7 +258,7 @@ commander
                                             '_' +
                                             resultFile.testEnvironment?.windowHeight +
                                             '_inapplicables.json',
-                                        dashboardPath,
+                                        config.resultsPathPerUrl,
                                     );
                                 }
                             }

@@ -16,7 +16,7 @@ export async function entry(
     onlyReturn?: boolean,
 ): Promise<A11ySitecheckerResult[]> {
     try {
-        prepareWorkspace(config);
+        prepareWorkspace(config, url);
         log(
             chalk.blue('#############################################################################################'),
         );
@@ -78,7 +78,7 @@ async function checkSite(
         );
     }
     if (config.json) {
-        writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPath, vp);
+        writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPathPerUrl, vp);
     } else if (!onlyReturn) {
         log(JSON.stringify(report, null, 4));
     }

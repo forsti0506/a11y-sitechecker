@@ -1,6 +1,6 @@
 import { Spec } from 'axe-core';
 import * as fs from 'fs';
-import { error } from './helper-functions';
+import { error, getEscaped } from './helper-functions';
 import { Config } from '../models/config';
 import { OptionValues } from 'commander';
 import { Page } from 'puppeteer';
@@ -10,6 +10,7 @@ export function setupConfig(options: OptionValues): Config {
     const config: Config = {
         json: true,
         resultsPath: 'results',
+        resultsPathPerUrl: '',
         axeConfig: {},
         threshold: 0,
         imagesPath: 'images',
@@ -34,7 +35,7 @@ export function setupConfig(options: OptionValues): Config {
                 config.json = configFile.json;
             }
             if (configFile.resultsPath && typeof configFile.resultsPath === 'string') {
-                config.resultsPath = configFile.resultsPath;
+                config.resultsPath = configFile.resultsPath + (configFile.resultsPath.endsWith('/') ? '' : '/');
             }
             if (configFile.axeConfig?.locale && typeof configFile.axeConfig.locale === 'string' && config.axeConfig) {
                 config.axeConfig.locale = configFile.axeConfig.locale;
@@ -51,9 +52,6 @@ export function setupConfig(options: OptionValues): Config {
             }
             if (configFile.launchOptions) {
                 config.launchOptions = configFile.launchOptions;
-            }
-            if (configFile.imagesPath) {
-                config.imagesPath = configFile.imagesPath;
             }
             if (configFile.saveImages) {
                 config.saveImages = configFile.saveImages;
@@ -97,12 +95,18 @@ export function setupConfig(options: OptionValues): Config {
     return config;
 }
 
-export function prepareWorkspace(config: Config): void {
+export function prepareWorkspace(config: Config, url: string): void {
+    const urlEscaped = getEscaped(url);
+    config.resultsPathPerUrl = config.resultsPath + urlEscaped + '/';
+    config.imagesPath = config.resultsPathPerUrl + 'images/';
     if (config.imagesPath && !fs.existsSync(config.imagesPath) && config.saveImages) {
-        fs.mkdirSync(config.imagesPath);
+        fs.mkdirSync(config.imagesPath, { recursive: true });
     } else if (config.imagesPath && config.saveImages) {
         fs.rmdirSync(config.imagesPath, { recursive: true });
-        fs.mkdirSync(config.imagesPath);
+        fs.mkdirSync(config.imagesPath, { recursive: true });
+    }
+    if (config.resultsPathPerUrl && !fs.existsSync(config.resultsPath)) {
+        fs.mkdirSync(config.resultsPathPerUrl, { recursive: true });
     }
 }
 

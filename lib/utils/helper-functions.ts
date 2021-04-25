@@ -79,8 +79,11 @@ export async function saveScreenshot(
 ): Promise<void> {
     if (saveImage) {
         try {
-            await page.screenshot({ path: path + '/' + fileName });
-            debug(debugMode, path + '/' + fileName + ' saved');
+            if (!path?.endsWith('/')) {
+                path = path + '/';
+            }
+            await page.screenshot({ path: path + fileName });
+            debug(debugMode, path + fileName + ' saved');
         } catch (error) {
             log(error + '. Image not saved. Analyze not stopped!');
         }
