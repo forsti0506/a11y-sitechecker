@@ -9,7 +9,7 @@ import { AxePuppeteer } from '@axe-core/puppeteer';
 export function setupConfig(options: OptionValues): Config {
     const config: Config = {
         json: true,
-        resultsPath: 'results',
+        resultsPath: 'results/',
         resultsPathPerUrl: '',
         axeConfig: {},
         threshold: 0,
