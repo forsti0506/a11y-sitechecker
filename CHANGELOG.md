@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.1.1...v2.2.0) (2021-04-25)
+
+
+### Features
+
+* new structure for saving files ([48dab66](https://github.com/forsti0506/a11y-sitechecker/commit/48dab66a10e444aea07a1b425008220a8f9eb6df))
+
 ## [2.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v2.1.0...v2.1.1) (2021-04-20)
 
 
