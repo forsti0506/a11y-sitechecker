@@ -1,3 +1,16 @@
+# [2.3.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.2.0...v2.3.0) (2021-05-17)
+
+
+### Bug Fixes
+
+* array in files ([0edd3e1](https://github.com/forsti0506/a11y-sitechecker/commit/0edd3e1825e1e58b043be9c2d4e98df471c4d088))
+* standard config path ([65707fd](https://github.com/forsti0506/a11y-sitechecker/commit/65707fd1f2921192a413e2324f8ba7a09e016d71))
+
+
+### Features
+
+* removed mongodb, new puppeteer version ([9709790](https://github.com/forsti0506/a11y-sitechecker/commit/9709790e4f5bb0a1213e4d6eeee2e2d647844cd9))
+
 # [2.2.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.1.1...v2.2.0) (2021-04-25)
 
 
