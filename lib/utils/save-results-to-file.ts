@@ -68,14 +68,13 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
             date: new Date(),
             files: [fileToSave],
         };
-        fileObject = [{ _id: id, url: url, filesByDate: [fileResult] }];
+        fileObject = new Array({ _id: id, url: url, filesByDate: [fileResult] });
     }
 
     const siteResult = setupSiteresult(id, sitecheckerResult);
-    fileObject = [];
     defineExtraTags(sitecheckerResult, config);
     fs.writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
-    fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify({fileObject}, null, 4));
+    fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
 
     const violationsPath =
         config.resultsPathPerUrl +

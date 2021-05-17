@@ -16,7 +16,7 @@ describe('a11y-sitechecker-bin', function () {
     });
 
     it('should exit with code 0', (done) => {
-        const url = 'www.forsti.eu';
+        const url = 'https://www.forsti.eu';
         const jobSpawn = job.spawn('node', [
             './dist/bin/a11y-sitechecker.js',
             url,
