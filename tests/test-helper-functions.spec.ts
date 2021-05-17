@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import { Config } from '../lib/models/config';
 import { setupConfig } from '../lib/utils/setup-config';
 import 'jasmine';

@@ -1,5 +1,5 @@
 import { Spec } from 'axe-core';
-import * as fs from 'fs';
+import fs from 'fs';
 import { error, getEscaped } from './helper-functions';
 import { Config } from '../models/config';
 import { OptionValues } from 'commander';
@@ -79,9 +79,6 @@ export function setupConfig(options: OptionValues): Config {
             }
             if (configFile.resultTypes) {
                 config.resultTypes = configFile.resultTypes;
-            }
-            if (configFile.db) {
-                config.db = configFile.db;
             }
             if (configFile.idTags) {
                 config.idTags = configFile.idTags;

@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
-import * as chalk from 'chalk';
-import * as fs from 'fs';
+import chalk from 'chalk';
+import fs from 'fs';
 import { SitecheckerViewport } from '../models/config';
 
 export function isAbsoluteUrl(url: string): boolean {

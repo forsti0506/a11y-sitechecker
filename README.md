@@ -9,7 +9,7 @@
 A11y-sitecheker is a tool to check a site against accessibility criteria. It
 uses <a href="https://github.com/dequelabs/axe-core">axe-core</a> with the option to combine results of multiple sites.
 On the one hand there is the option to let the tool crawl your whole site and on the other site you can provide urls
-which should be checked by the tool. The results are printed to the console, saved as JSONs or to a Datebase. The tool
+which should be checked by the tool. The results are printed to the console, saved as JSONs or returned. The tool
 can be called by javascript or directly by command line. Additionally there are Images created which indicates the
 errors, shows the tab-order and other features.
 
@@ -84,7 +84,6 @@ export interface Config {
     debugMode: boolean;
     viewports: SitecheckerViewport[];
     resultTypes: resultGroups[];
-    db?: Database;
     idTags?: IdTag;
 }
 ```
@@ -269,21 +268,6 @@ Standard is violations and incomplete!
 ```json
 {
     "resultTypes": ["violations", "incomplete"]
-}
-```
-
-##### Database
-
-Specifiyng a database where the results are stored (up to know only mongodb are supported!)
-
-```json
-{
-    "db": {
-        "type": "mongodb",
-        "url": "cluster0.xyz",
-        "user": "hallo",
-        "password": "12345"
-    }
 }
 ```
 

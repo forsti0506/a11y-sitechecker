@@ -1,31 +1,32 @@
 import { Spec } from 'axe-core';
 import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { Config, SitecheckerViewport } from './models/config';
 import { debug, error, log, writeToJsonFile } from './utils/helper-functions';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import { prepareWorkspace } from './utils/setup-config';
 import { analyzeSite } from './utils/analyze-site';
 
+
 export async function entry(
     config: Config,
     axeSpecs: Spec,
-    url: string,
+    urlOrName: string,
     onlyReturn?: boolean,
 ): Promise<A11ySitecheckerResult[]> {
     try {
-        prepareWorkspace(config, url);
+        prepareWorkspace(config, urlOrName);
         log(
             chalk.blue('#############################################################################################'),
         );
-        log(chalk.blue(`Start accessibility Test for ${url}`));
+        log(chalk.blue(`Start accessibility Test for ${urlOrName}`));
         log(
             chalk.blue('#############################################################################################'),
         );
         const promises: Promise<A11ySitecheckerResult>[] = [];
-        config.viewports.forEach((viewport) => promises.push(checkSite(config, axeSpecs, url, viewport, onlyReturn)));
+        config.viewports.forEach((viewport) => promises.push(checkSite(config, axeSpecs, urlOrName, viewport, onlyReturn)));
         return Promise.all(promises);
     } catch (err) {
         // Handle any errors

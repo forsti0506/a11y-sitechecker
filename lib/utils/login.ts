@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import { debug, error, log, saveScreenshot, waitForHTML } from './helper-functions';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { Config } from '../models/config';
 
 export async function executeLogin(url: string, page: Page, config: Config): Promise<number> {
@@ -44,7 +44,7 @@ export async function executeLogin(url: string, page: Page, config: Config): Pro
         await waitForHTML(page);
         await saveScreenshot(page, config.imagesPath, 'afterLogin.png', config.saveImages);
     } catch (e) {
-        // eslint-disable-next-line prettier/prettier
+        // eslint-disable-next-line
         log(chalk.red('No Navigation after Login. Please check if it\'s working as expected!'));
     }
     debug(config.debugMode, 'Finished Login Script: ' + url);

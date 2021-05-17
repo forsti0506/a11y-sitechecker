@@ -1,4 +1,4 @@
-import { Page, Request } from 'puppeteer';
+import { Page } from 'puppeteer';
 
 const promisees: Promise<Request>[] = [];
 const pendingRequests = new Set();

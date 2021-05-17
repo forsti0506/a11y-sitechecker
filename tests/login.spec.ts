@@ -1,6 +1,6 @@
 import 'jasmine';
 import { executeLogin } from '../lib/utils/login';
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { Config } from '../lib/models/config';
 import { Browser } from 'puppeteer';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';

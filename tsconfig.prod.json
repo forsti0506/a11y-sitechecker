@@ -23,7 +23,8 @@
     "types": [
       "node"
     ],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "include": [
     "./lib/**/*",

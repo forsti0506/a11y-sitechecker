@@ -26,13 +26,17 @@ export async function analyzeUrl(
     const analyzedSiteViewport = alreadyVisited.get(url);
     if (
         analyzedSiteViewport &&
-        analyzedSiteViewport.width === page.viewport().width &&
-        analyzedSiteViewport.height === page.viewport().height
+        analyzedSiteViewport.width === page.viewport()?.width &&
+        analyzedSiteViewport.height === page.viewport()?.height
     ) {
         debug(config.debugMode, 'Already visited: ' + url);
         return null;
     }
-    alreadyVisited.set(url, { width: page.viewport().width, height: page.viewport().height });
+    const viewport = page.viewport();
+    if(viewport) {
+        alreadyVisited.set(url, viewport);
+    }
+    
     log('Currently analyzing ' + url);
 
     if (config.saveImages) {

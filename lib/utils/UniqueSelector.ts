@@ -1,4 +1,4 @@
-import * as JSDOM from 'jsdom';
+import JSDOM from 'jsdom';
 
 export function getUniqueSelector(elSrc: Node, dom: JSDOM.JSDOM): string {
     let sSel;

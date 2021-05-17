@@ -18,7 +18,7 @@ export async function markAllEvents(page: Page): Promise<void> {
     for (const [i, element] of allElements.entries()) {
         const expression = 'document.getElementById("' + element + '")';
         const nodeObject = ((await client.send('Runtime.evaluate', {
-            // eslint-disable-next-line prettier/prettier
+            // eslint-disable-next-line
             expression: expression,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         })) as any).result;

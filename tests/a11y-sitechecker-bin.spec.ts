@@ -1,4 +1,4 @@
-import * as job from 'child_process';
+import job from 'child_process';
 import 'jasmine';
 import { Config } from '../lib/models/config';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';

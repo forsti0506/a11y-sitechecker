@@ -29,10 +29,11 @@ export async function analyzeSite(
             .pipe(
                 mergeMap(async (url) => {
                     const page = await browser.newPage();
-                    await page.setViewport({
-                        width: firstpage.viewport().width,
-                        height: firstpage.viewport().height,
-                    });
+                    const viewport = firstpage.viewport();
+                    if(viewport) {
+                        await page.setViewport(viewport);
+                    }
+
                     const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited);
                     await page.close();
                     return result;
@@ -70,10 +71,10 @@ export async function analyzeSite(
                 mergeMap(async ([i, link]) => {
                     log(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
                     const page = await browser.newPage();
-                    await page.setViewport({
-                        width: firstpage.viewport().width,
-                        height: firstpage.viewport().height,
-                    });
+                    const viewport = firstpage.viewport();
+                    if(viewport) {
+                        await page.setViewport(viewport);
+                    }
                     if (alreadyVisited.get(link)) {
                         return null;
                     }

@@ -20,7 +20,6 @@ export interface Config {
     debugMode: boolean;
     viewports: SitecheckerViewport[];
     resultTypes: resultGroups[];
-    db?: Database;
     idTags?: IdTag;
 }
 
@@ -43,12 +42,6 @@ export interface SitecheckerViewport {
     height: number;
 }
 
-interface Database {
-    type: string;
-    url: string;
-    user: string;
-    password: string;
-}
 type IdTag = {
     [axeId: string]: string[];
 };

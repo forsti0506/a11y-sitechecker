@@ -1,5 +1,5 @@
-import * as JSDOM from 'jsdom';
-import * as chalk from 'chalk';
+import JSDOM from 'jsdom';
+import chalk from 'chalk';
 import { getUniqueSelector } from './UniqueSelector';
 import { debug, endsWithAny, isAbsoluteUrl, shouldElementBeIgnored } from './helper-functions';
 import { Config, SitecheckerViewport } from '../models/config';

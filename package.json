@@ -1,6 +1,6 @@
 {
     "name": "a11y-sitechecker",
-    "version": "2.2.0",
+    "version": "2.3.3",
     "description": "",
     "repository": {
         "type": "git",
@@ -10,13 +10,16 @@
     "types": "./lib/a11y-sitechecker.d.ts",
     "dependencies": {
         "@axe-core/puppeteer": "^4.1.1",
-        "chalk": "^4.1.0",
+        "chalk": "^4.1.1",
         "commander": "^7.2.0",
         "jsdom": "^16.5.2",
         "mongodb": "^3.6.6",
-        "puppeteer": "^5.5.0",
+        "puppeteer": "^8.0.0",
         "rxjs": "^6.6.7",
         "uuid": "^8.3.2"
+    },
+    "peerDependencies": {
+        "mongoose": "^5.12.9"
     },
     "devDependencies": {
         "@semantic-release/changelog": "^5.0.1",
@@ -26,9 +29,10 @@
         "@semantic-release/release-notes-generator": "^9.0.1",
         "@types/jasmine": "^3.6.4",
         "@types/jsdom": "^16.2.5",
+        "@types/mongoose": "^5.10.5",
         "@types/node": "^14.14.20",
         "@types/prettyjson": "^0.0.29",
-        "@types/puppeteer": "^5.4.2",
+        "@types/puppeteer": "^5.4.3",
         "@types/uuid": "^8.3.0",
         "@typescript-eslint/eslint-plugin": "^4.12.0",
         "@typescript-eslint/parser": "^4.12.0",
@@ -48,8 +52,8 @@
     },
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
-        "build:prod": "tsc --project tsconfig.prod.json && copyfiles README.md dist",
-        "lint": "eslint . --ext .ts",
+        "build:prod": "npm run lint && tsc --project tsconfig.prod.json && copyfiles README.md dist",
+        "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
         "semantic-release": "semantic-release",
         "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json"
     },
