@@ -50,6 +50,7 @@ async function checkSite(
         height: vp.height,
     });
     await executeLogin(url, page, config);
+    const usedLocale = config.axeConfig?.locale ? config.axeConfig?.locale : (config.axeConfig?.localePath ? config.axeConfig?.localePath : 'en')
 
     const result: A11ySitecheckerResult = {
         testEngine: undefined,
@@ -64,6 +65,7 @@ async function checkSite(
         passes: [],
         analyzedUrls: [],
         tabableImages: [],
+        usedLocale: usedLocale
     };
 
     const alreadyVisited: Map<string, SitecheckerViewport> = new Map<string, SitecheckerViewport>();

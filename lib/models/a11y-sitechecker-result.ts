@@ -13,6 +13,7 @@ export interface A11ySitecheckerResult {
     violations: FullCheckerSingleResult[];
     analyzedUrls: string[];
     tabableImages: UrlWithTabableImages[];
+    usedLocale: string;
 }
 
 interface UrlWithTabableImages {
