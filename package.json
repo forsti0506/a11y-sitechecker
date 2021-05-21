@@ -10,6 +10,11 @@
     "types": "./lib/a11y-sitechecker.d.ts",
     "dependencies": {
         "@axe-core/puppeteer": "^4.1.1",
+        "@babel/core": "^7.14.3",
+        "@babel/preset-env": "^7.14.2",
+        "@babel/preset-typescript": "^7.13.0",
+        "@types/jest": "^26.0.23",
+        "babel-jest": "^26.6.3",
         "chalk": "^4.1.1",
         "commander": "^7.2.0",
         "jsdom": "^16.5.2",
@@ -27,7 +32,6 @@
         "@semantic-release/github": "^7.2.0",
         "@semantic-release/npm": "^7.1.1",
         "@semantic-release/release-notes-generator": "^9.0.1",
-        "@types/jasmine": "^3.6.4",
         "@types/jsdom": "^16.2.5",
         "@types/mongoose": "^5.10.5",
         "@types/node": "^14.14.20",
@@ -44,7 +48,7 @@
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^3.3.1",
         "eslint-plugin-promise": "^4.2.1",
-        "jasmine": "^3.7.0",
+        "jest": "^26.6.3",
         "prettier": "^2.2.1",
         "semantic-release": "^17.4.2",
         "ts-node": "^9.1.1",
@@ -55,7 +59,7 @@
         "build:prod": "npm run lint && tsc --project tsconfig.prod.json && copyfiles README.md dist",
         "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
         "semantic-release": "semantic-release",
-        "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json"
+        "test": "jest"
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"

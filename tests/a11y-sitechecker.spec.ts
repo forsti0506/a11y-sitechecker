@@ -1,7 +1,6 @@
-import 'jasmine';
 import { setupAxeConfig } from '../lib/utils/setup-config';
 import { entry } from '../dist';
-import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
+import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions';
 import { Config } from '../lib/models/config';
 
 describe('a11y-sitechecker', function () {

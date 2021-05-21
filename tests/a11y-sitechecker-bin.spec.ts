@@ -1,7 +1,7 @@
 import job from 'child_process';
-import 'jasmine';
+import 'jest';
 import { Config } from '../lib/models/config';
-import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
+import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions';
 
 describe('a11y-sitechecker-bin', function () {
     let config: Config;
