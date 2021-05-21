@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.3.0...v2.4.0) (2021-05-21)
+
+
+### Features
+
+* add locale to result ([c323310](https://github.com/forsti0506/a11y-sitechecker/commit/c32331005420a8bbc9533edf54ed2bb0072e7ff5))
+
 # [2.3.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.2.0...v2.3.0) (2021-05-17)
 
 
