@@ -1,6 +1,6 @@
 {
     "name": "a11y-sitechecker",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "description": "",
     "repository": {
         "type": "git",
@@ -59,7 +59,7 @@
         "semantic-release": "semantic-release",
         "test": "jest --detectOpenHandles --forceExit",
         "test:coverage": "jest --coverage --detectOpenHandles",
-        "test:local":"jest --watch"
+        "test:local": "jest --watch"
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"
