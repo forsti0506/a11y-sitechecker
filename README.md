@@ -24,6 +24,12 @@ errors, shows the tab-order and other features.
     -   View of site in general
 -   Results for different viewports
 
+## Test Coverage
+
+| Statements                  | Branches                | Functions                 | Lines             |
+| --------------------------- | ----------------------- | ------------------------- | ----------------- |
+| ![Statements](https://img.shields.io/badge/Coverage-17.06%25-red.svg) | ![Branches](https://img.shields.io/badge/Coverage-17.22%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-18.68%25-red.svg) | ![Lines](https://img.shields.io/badge/Coverage-17.62%25-red.svg) |
+
 ### Install
 
 ```properties

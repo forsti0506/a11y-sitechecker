@@ -27,4 +27,5 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
+  "coverageReporters": ["json-summary", "json", "text"]
 }
