@@ -1,3 +1,11 @@
+## [2.4.1](https://github.com/forsti0506/a11y-sitechecker/compare/v2.4.0...v2.4.1) (2021-05-22)
+
+
+### Bug Fixes
+
+* add Files for jest ([52c1ab2](https://github.com/forsti0506/a11y-sitechecker/commit/52c1ab21e041fe53974600d9caed9b47b344b091))
+* start testing with jest. First bugfixes ([d976786](https://github.com/forsti0506/a11y-sitechecker/commit/d9767864e5a08c2bddc735521d5cfa7cb1e27080))
+
 # [2.4.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.3.0...v2.4.0) (2021-05-21)
 
 
