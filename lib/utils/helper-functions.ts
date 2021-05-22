@@ -95,7 +95,7 @@ export function writeToJsonFile(data: string, path: string, vp: SitecheckerViewp
     log(chalk.blue(`Writing results to ${path}/results_${vp.width}_${vp.height}'.json`));
     log(chalk.blue('#############################################################################################'));
     if (!fs.existsSync(path)) {
-        fs.mkdirSync(path);
+        fs.mkdirSync(path, {recursive: true});
     }
     fs.writeFileSync(path + '/results_' + vp.width + '_' + vp.height + '.json', data);
 }

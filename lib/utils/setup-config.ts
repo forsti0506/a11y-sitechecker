@@ -23,9 +23,10 @@ export function setupConfig(options: OptionValues): Config {
             },
         ],
         resultTypes: ['violations', 'incomplete'],
+        runOnly:  ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental']
     };
     config.json = options.json;
-    if (!config.threshold) {
+    if (options.threshold) {
         config.threshold = parseInt(options.threshold);
     }
     if (options.config) {
@@ -80,8 +81,14 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.resultTypes) {
                 config.resultTypes = configFile.resultTypes;
             }
+            if (configFile.runOnly) {
+                config.runOnly = configFile.runOnly;
+            }
             if (configFile.idTags) {
                 config.idTags = configFile.idTags;
+            }
+            if (configFile.clickableItemSelector) {
+                config.clickableItemSelector = configFile.clickableItemSelector;
             }
         } catch (e) {
             error(e);
@@ -102,19 +109,23 @@ export function prepareWorkspace(config: Config, url: string): void {
         fs.rmdirSync(config.imagesPath, { recursive: true });
         fs.mkdirSync(config.imagesPath, { recursive: true });
     }
-    if (config.resultsPathPerUrl && !fs.existsSync(config.resultsPath)) {
+    if (config.resultsPathPerUrl && !fs.existsSync(config.resultsPathPerUrl)) {
         fs.mkdirSync(config.resultsPathPerUrl, { recursive: true });
     }
 }
 
 export function setupAxeConfig(config: Config): Spec {
     const axeConfig: Spec = {};
-    if (config.axeConfig?.locale) {
-        axeConfig.locale = JSON.parse(
-            fs.readFileSync('./node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
-        );
-    } else if (config.axeConfig?.localePath) {
-        axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
+    try {
+        if (config.axeConfig?.locale) {
+                axeConfig.locale = JSON.parse(
+                fs.readFileSync('./node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
+            );
+        } else if (config.axeConfig?.localePath) {
+            axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
+        }
+    } catch(e) {
+        error('Locale not found. Using Standard locale "en"')
     }
     return axeConfig;
 }
@@ -123,7 +134,7 @@ export async function setupAxe(page: Page, axeSpecs: Spec, config: Config): Prom
     const axe = new AxePuppeteer(page);
     axe.configure(axeSpecs);
     axe.options({
-        runOnly: ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
+        runOnly: config.runOnly,
         resultTypes: config.resultTypes,
     });
     return axe;

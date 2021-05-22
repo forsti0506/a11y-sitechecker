@@ -1,5 +1,5 @@
 import { LaunchOptions } from 'puppeteer';
-import { resultGroups } from 'axe-core';
+import { resultGroups, RunOnly, TagValue } from 'axe-core';
 
 export interface Config {
     json: boolean;
@@ -21,6 +21,7 @@ export interface Config {
     viewports: SitecheckerViewport[];
     resultTypes: resultGroups[];
     idTags?: IdTag;
+    runOnly: RunOnly | TagValue[] | string[];
 }
 
 interface AxeConfig {

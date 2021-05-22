@@ -29,6 +29,10 @@
   "include": [
     "./lib/**/*",
     "./bin/**/*",
-    "node_modules/@types/puppeteer/index.d.ts"
-  ]
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "lib/utils/test-helper-functions.ts"
+]
 }
