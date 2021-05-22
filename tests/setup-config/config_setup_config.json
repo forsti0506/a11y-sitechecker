@@ -1,0 +1,4 @@
+{
+    "runOnly":["wcag2aa"],
+    "resultTypes":["violations"]
+}

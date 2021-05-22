@@ -1,0 +1,45 @@
+{
+    "json": true,
+    "resultsPath": "test/results",
+    "axeConfig": {
+        "locale": "de",
+        "localePath": "path to locale"
+    },
+    "login": [
+        {
+            "input": [
+                {
+                    "selector": "#user_login",
+                    "value": "user"
+                },
+                {
+                    "selector": "#user_pass",
+                    "value": "passwort"
+                }
+            ],
+            "submit": "#wp-submit"
+        }
+    ],
+    
+    "saveImages": true,
+    "launchOptions": {},
+    "ignoreElementAttributeValues": ["logout"],
+    "urlsToAnalyze": ["www.test.at"],
+    "analyzeClicks": true,
+    "clickableItemSelector": "button, details",
+    "analyzeClicksWithoutNavigation": true,
+    "timeout": 1000,
+    "debugMode": true,
+    "viewports": [
+        {
+            "width": 1920,
+            "height": 1080
+        }
+    ],
+    "resultTypes": ["violations", "incomplete"],
+    "idTags": {
+        "aria-required-attr": ["XYZ"],
+        "meta-viewport": ["XYZ"]
+    },
+    "runOnly":["violations"]
+}
