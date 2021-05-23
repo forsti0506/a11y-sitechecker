@@ -1,3 +1,18 @@
+# [3.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.4.1...v3.0.0) (2021-05-23)
+
+
+### Bug Fixes
+
+* husky prepare script ([efe0f43](https://github.com/forsti0506/a11y-sitechecker/commit/efe0f439d0164ec813c7e026ad898357fc6ab312))
+
+
+* Name is now the major pattern ([8657ee5](https://github.com/forsti0506/a11y-sitechecker/commit/8657ee5cdd348b0c6dd1b2a97f6c8450c1aab7d6))
+
+
+### BREAKING CHANGES
+
+* Old patterns are not working anymore.
+
 ## [2.4.1](https://github.com/forsti0506/a11y-sitechecker/compare/v2.4.0...v2.4.1) (2021-05-22)
 
 
