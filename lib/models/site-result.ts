@@ -1,6 +1,7 @@
 import { RunOptions, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
 export interface SiteResult {
     id: string;
+    name: string;
     toolOptions: RunOptions | undefined;
     testEngine: TestEngine | undefined;
     testRunner: TestRunner | undefined;

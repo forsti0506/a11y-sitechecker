@@ -4,6 +4,7 @@ import { SiteResult } from '../models/site-result';
 export function setupSiteresult(id: string, sitecheckerResult: A11ySitecheckerResult): SiteResult {
     return {
         id: id,
+        name: sitecheckerResult.name,
         toolOptions: sitecheckerResult.toolOptions,
         testEngine: sitecheckerResult.testEngine,
         testRunner: sitecheckerResult.testRunner,

@@ -25,7 +25,7 @@ describe('login', () => {
 
     it('should escape if no login parameter', (done) => {
         browser.pages().then((pages) => {
-            executeLogin('http://www.forsti.eu', pages[0], config).then((retCode) => {
+            executeLogin(pages[0], config).then((retCode) => {
                 expect(retCode).toBe(0);
                 done();
             });
@@ -33,7 +33,9 @@ describe('login', () => {
     });
 
     it('should fail because of missing selector', (done) => {
-        config.login = [
+        config.login = {
+            url: 'http://www.forsti.eu',
+            steps: [
             {
                 submit: 'test',
                 input: [
@@ -43,10 +45,10 @@ describe('login', () => {
                     },
                 ],
             },
-        ];
+        ]};
 
         browser.pages().then((pages) => {
-            executeLogin('http://www.forsti.eu', pages[0], config).catch((err) => {
+            executeLogin(pages[0], config).catch((err) => {
                 expect(err.message).toContain('waiting for selector `test` failed:');
                 done();
             });
@@ -54,7 +56,8 @@ describe('login', () => {
     });
 
     it('should not be able to login', (done) => {
-        config.login = [
+        config.login = {url: "http://www.forsti.eu/wp-admin",
+        steps: [
             {
                 submit: '#wp-submit',
                 input: [
@@ -68,9 +71,9 @@ describe('login', () => {
                     },
                 ],
             },
-        ];
+        ]};
         browser.pages().then((pages) => {
-            executeLogin('http://www.forsti.eu/wp-admin', pages[0], config).then((r) => {
+            executeLogin(pages[0], config).then((r) => {
                 expect(r).toBe(1);
                 done();
             });

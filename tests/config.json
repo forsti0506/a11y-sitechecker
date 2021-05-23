@@ -1,4 +1,5 @@
 {
+  "name":"MyTestName",
   "json": true,
   "imagesPath": "tests/images",
   "resultsPath": "tests/results",

@@ -23,7 +23,10 @@ export function setupConfig(options: OptionValues): Config {
             },
         ],
         resultTypes: ['violations', 'incomplete'],
-        runOnly:  ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental']
+        runOnly:  ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
+        crawl: false,
+        name: '',
+        urlsToAnalyze: []
     };
     config.json = options.json;
     if (options.threshold) {
@@ -62,6 +65,8 @@ export function setupConfig(options: OptionValues): Config {
             }
             if (configFile.urlsToAnalyze) {
                 config.urlsToAnalyze = configFile.urlsToAnalyze;
+            } else {
+                throw new Error('It is absolutly necessary to provide 1 or more urls!')
             }
             if (configFile.analyzeClicksWithoutNavigation) {
                 config.analyzeClicksWithoutNavigation = configFile.analyzeClicksWithoutNavigation;
@@ -90,6 +95,18 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.clickableItemSelector) {
                 config.clickableItemSelector = configFile.clickableItemSelector;
             }
+            if (configFile.crawl) {
+                if(config.urlsToAnalyze?.length === 1 && configFile.crawl) {
+                    config.crawl = true;
+                } else {
+                    throw new Error('Crawling is only possible with one Url supplied!')
+                }
+            }
+            if (configFile.name) {
+                    config.name = configFile.name;
+            } else {
+                throw new Error('It is absolutly necessary to provide a name!')
+            }
         } catch (e) {
             error(e);
             throw e;
@@ -99,8 +116,8 @@ export function setupConfig(options: OptionValues): Config {
     return config;
 }
 
-export function prepareWorkspace(config: Config, url: string): void {
-    const urlEscaped = getEscaped(url);
+export function prepareWorkspace(config: Config): void {
+    const urlEscaped = getEscaped(config.name);
     config.resultsPathPerUrl = config.resultsPath + urlEscaped + '/';
     config.imagesPath = config.resultsPathPerUrl + 'images/';
     if (config.imagesPath && !fs.existsSync(config.imagesPath) && config.saveImages) {

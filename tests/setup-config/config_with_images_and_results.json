@@ -1,4 +1,6 @@
 {
+    "name":"Myname",
     "saveImages": true,
-    "resultsPath":"tests/results"
+    "resultsPath":"tests/results",
+    "urlsToAnalyze":[]
 }

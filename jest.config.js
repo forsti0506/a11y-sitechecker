@@ -23,7 +23,7 @@ module.exports = {
       "branches": 17,
       "functions": 17,
       "lines": 17,
-      "statements": -697
+      "statements": -750
     },
   },
   setupFilesAfterEnv: ['./jest.setup.js'],

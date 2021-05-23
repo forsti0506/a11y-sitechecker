@@ -3,9 +3,9 @@ import { debug, error, log, saveScreenshot, waitForHTML } from './helper-functio
 import chalk from 'chalk';
 import { Config } from '../models/config';
 
-export async function executeLogin(url: string, page: Page, config: Config): Promise<number> {
-    if (!config.login) {
-        debug(config.debugMode, 'No Login credentials specified');
+export async function executeLogin(page: Page, config: Config): Promise<number> {
+    if (!config.login || !config.login.url) {
+        debug(config.debugMode, 'No Login specified');
         return 0;
     }
     let failedLoads = 0;
@@ -14,8 +14,8 @@ export async function executeLogin(url: string, page: Page, config: Config): Pro
         failed = false;
         try {
             try {
-                debug(config.debugMode, 'Navigating to url: ' + url);
-                await page.goto(url, { waitUntil: 'networkidle2' });
+                debug(config.debugMode, 'Navigating to url: ' + config.login.url);
+                await page.goto(config.login.url, { waitUntil: 'networkidle2' });
                 await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: config.timeout });
             } catch (e) {
                 error(e);
@@ -29,7 +29,7 @@ export async function executeLogin(url: string, page: Page, config: Config): Pro
         }
     }
 
-    for (const step of config.login) {
+    for (const step of config.login?.steps) {
         for (const input of step.input) {
             await page.waitForSelector(input.selector, { timeout: config.timeout });
             debug(config.debugMode, 'Waited for selector ' + input.selector);
@@ -47,6 +47,6 @@ export async function executeLogin(url: string, page: Page, config: Config): Pro
         // eslint-disable-next-line
         log(chalk.red('No Navigation after Login. Please check if it\'s working as expected!'));
     }
-    debug(config.debugMode, 'Finished Login Script: ' + url);
+    debug(config.debugMode, 'Finished Login Script: ' + config.login.url);
     return 1;
 }

@@ -23,17 +23,15 @@ commander
     .parse(process.argv);
 
 (async (): Promise<void> => {
-    const url = commander.args[0];
-    if (url) {
         const config = setupConfig(commander.opts());
         const axeConfig = setupAxeConfig(config);
         let retCode = 0;
         try {
-            const results = await entry(config, axeConfig, url);
+            const results = await entry(config, axeConfig);
 
             for (const [i, sitecheckerResult] of results.entries()) {
 
-                await saveResultsToFile(config, sitecheckerResult, i, url);
+                await saveResultsToFile(config, sitecheckerResult, i);
 
                 if (sitecheckerResult.violations.length >= config.threshold) {
                     retCode = 2;
@@ -51,5 +49,5 @@ commander
             error(e);
         }
         process.exit(retCode);
-    }
+    
 })();

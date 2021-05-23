@@ -6,12 +6,12 @@ export interface Config {
     resultsPath: string;
     resultsPathPerUrl: string;
     axeConfig?: AxeConfig;
-    login?: LoginStep[];
+    login?: Login;
     saveImages?: boolean;
     imagesPath?: string;
     launchOptions?: LaunchOptions;
     ignoreElementAttributeValues?: string[];
-    urlsToAnalyze?: string[];
+    urlsToAnalyze: string[];
     clickableItemSelector?: string;
     analyzeClicks?: boolean;
     analyzeClicksWithoutNavigation?: boolean;
@@ -22,11 +22,17 @@ export interface Config {
     resultTypes: resultGroups[];
     idTags?: IdTag;
     runOnly: RunOnly | TagValue[] | string[];
+    crawl: boolean;
+    name: string;
 }
 
 interface AxeConfig {
     locale?: string;
     localePath?: string;
+}
+interface Login {
+    url?: string;
+    steps: LoginStep[];
 }
 interface LoginStep {
     input: Input[];

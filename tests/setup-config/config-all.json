@@ -1,11 +1,14 @@
 {
+    "name":"Myname",
     "json": true,
     "resultsPath": "test/results",
     "axeConfig": {
         "locale": "de",
         "localePath": "path to locale"
     },
-    "login": [
+    "login": {
+        "url": "test.at",
+        "steps": [
         {
             "input": [
                 {
@@ -19,8 +22,8 @@
             ],
             "submit": "#wp-submit"
         }
-    ],
-    
+    ]
+},
     "saveImages": true,
     "launchOptions": {},
     "ignoreElementAttributeValues": ["logout"],

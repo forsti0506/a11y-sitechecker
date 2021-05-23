@@ -48,7 +48,6 @@ export async function clickingElements(
                     await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 5000 });
                     await waitForHTML(page);
                     await analyzeSite(
-                        page.url(),
                         axeSpecs,
                         page,
                         config,
@@ -57,13 +56,13 @@ export async function clickingElements(
                         alreadyVisited,
                         alreadyParsed,
                         notCheckedLinks,
+                        page.url(),
                     );
                 } catch (e) {
                     log('seems like click was no navigation. Analyze and do it. ' + e);
                     await waitForHTML(page);
                     if (page.url() !== url && !alreadyVisited.get(url)) {
                         await analyzeSite(
-                            page.url(),
                             axeSpecs,
                             page,
                             config,
@@ -72,6 +71,7 @@ export async function clickingElements(
                             alreadyVisited,
                             alreadyParsed,
                             notCheckedLinks,
+                            page.url(),
                         );
                         await page.goto(url, { waitUntil: 'load' });
                         await waitForHTML(page);

@@ -28,7 +28,7 @@ errors, shows the tab-order and other features.
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/Coverage-17.06%25-red.svg) | ![Branches](https://img.shields.io/badge/Coverage-17.22%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-18.68%25-red.svg) | ![Lines](https://img.shields.io/badge/Coverage-17.62%25-red.svg) |
+| ![Statements](https://img.shields.io/badge/Coverage-17.2%25-red.svg) | ![Branches](https://img.shields.io/badge/Coverage-17.68%25-red.svg) | ![Functions](https://img.shields.io/badge/Coverage-18.68%25-red.svg) | ![Lines](https://img.shields.io/badge/Coverage-17.75%25-red.svg) |
 
 ### Install
 
@@ -43,7 +43,7 @@ npm install a11y-sitechecker | yarn add a11y-sitechecker
 You can use it in your package.json or in your console like the following:
 
 ```properties
-a11y-sitechecker https://www.test.at --config=config.json -T=1000
+a11y-sitechecker --config=config.json -T=1000
 ```
 
 The available options on the commandline are:
@@ -76,12 +76,14 @@ export async function entry(
 export interface Config {
     json: boolean;
     resultsPath: string;
+    resultsPathPerUrl: string;
     axeConfig?: AxeConfig;
-    login?: LoginStep[];
+    login?: Login;
     saveImages?: boolean;
+    imagesPath?: string;
     launchOptions?: LaunchOptions;
     ignoreElementAttributeValues?: string[];
-    urlsToAnalyze?: string[];
+    urlsToAnalyze: string[];
     clickableItemSelector?: string;
     analyzeClicks?: boolean;
     analyzeClicksWithoutNavigation?: boolean;
@@ -91,6 +93,10 @@ export interface Config {
     viewports: SitecheckerViewport[];
     resultTypes: resultGroups[];
     idTags?: IdTag;
+    runOnly: RunOnly | TagValue[] | string[];
+    crawl: boolean;
+    name: string;
+}
 }
 ```
 
@@ -98,6 +104,16 @@ export interface Config {
 
 Every configuration which is not inserted in the config file is by default false or undefined if not explicitly
 mentioned!
+
+##### Name
+
+The name is the major element to identify your run! You have to provide it
+
+```json
+{
+    "name": "MyName"
+}
+```
 
 ##### JSON Output
 
@@ -132,21 +148,24 @@ repeat this steps if needed!
 
 ```json
 {
-    "login": [
-        {
-            "input": [
-                {
-                    "selector": "#user_login",
-                    "value": "user"
-                },
-                {
-                    "selector": "#user_pass",
-                    "value": "passwort"
-                }
-            ],
-            "submit": "#wp-submit"
-        }
-    ]
+    "login": {
+        "url": "http://myloginurl.at", 
+        "steps": [
+            {
+                "input": [
+                    {
+                        "selector": "#user_login",
+                        "value": "user"
+                    },
+                    {
+                        "selector": "#user_pass",
+                        "value": "passwort"
+                    }
+                ],
+                "submit": "#wp-submit"
+            }
+        ]
+    }
 }
 ```
 
@@ -184,13 +203,12 @@ the crawle should not do a logout!
 
 ##### Links to Analyze
 
-You can define the links you like to analyze. Therefore only the links mentioned in this array are visited and no other
-operations are carried out! The url in the command line is used if you need to login before. If there are no login steps
-it is only used to save the results!
+You have to define the links you like to analyze. If you specify 1 link, you can use the crawl function, which crawls then the url. If you provide more then 1 url, you are not allowed to set crawl to true. It is by default false!
 
 ```json
 {
-    "urlsToAnalyze": ["www.test.at"]
+    "urlsToAnalyze": ["www.test.at"],
+    "crawl": true
 }
 ```
 

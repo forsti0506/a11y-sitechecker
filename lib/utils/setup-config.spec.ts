@@ -89,30 +89,27 @@ describe('setup-config', () => {
 
     test('prepare-workspace with no folder mentioned', async() => {
         const config = setupConfig({config: 'tests/setup-config/config_setup_config.json'});
-        const url = 'www.test.at'
-        prepareWorkspace(config, url);
-        expect(fs.existsSync('results/' + getEscaped(url))).toBe(true);
+        prepareWorkspace(config);
+        expect(fs.existsSync('results/' + getEscaped(config.name))).toBe(true);
         fs.rmdirSync('results', {recursive: true});
     });
 
     test('prepare-workspace with folder mentioned and save images true', async() => {
         const config = setupConfig({config: 'tests/setup-config/config_with_images_and_results.json'});
-        const url = 'www.test.at'
-        prepareWorkspace(config, url);
-        expect(fs.existsSync('tests/results/' + getEscaped(url))).toBe(true);
-        expect(fs.existsSync('tests/results/' + getEscaped(url)+ '/images')).toBe(true);
+        prepareWorkspace(config);
+        expect(fs.existsSync('tests/results/' + getEscaped(config.name))).toBe(true);
+        expect(fs.existsSync('tests/results/' + getEscaped(config.name)+ '/images')).toBe(true);
         fs.rmdirSync('tests/results', {recursive: true});
     });
 
     test('prepare-workspace with folder mentioned and save images true and image folder already here', async() => {
         const config = setupConfig({config: 'tests/setup-config/config_with_images_and_results.json'});
         if(config.imagesPath) {
-            const url = 'www.test.at'
-            fs.mkdirSync('tests/results/' + getEscaped(url) + '/images', { recursive: true });
-            expect(fs.existsSync('tests/results/' + getEscaped(url) + '/images')).toBe(true);
-            prepareWorkspace(config, url);
-            expect(fs.existsSync('tests/results/' + getEscaped(url))).toBe(true);
-            expect(fs.existsSync('tests/results/' + getEscaped(url) + '/images')).toBe(true);
+            fs.mkdirSync('tests/results/' + getEscaped(config.name) + '/images', { recursive: true });
+            expect(fs.existsSync('tests/results/' + getEscaped(config.name) + '/images')).toBe(true);
+            prepareWorkspace(config);
+            expect(fs.existsSync('tests/results/' + getEscaped(config.name))).toBe(true);
+            expect(fs.existsSync('tests/results/' + getEscaped(config.name) + '/images')).toBe(true);
             fs.rmdirSync('tests/results', {recursive: true});
         } else {
             fail();
@@ -142,7 +139,9 @@ describe('setup-config', () => {
             locale: "de",
             localePath: "path to locale"
         },
-        login: [
+        login: {
+            url: 'test.at',
+            steps: [
             {
                 input: [
                     {
@@ -156,7 +155,8 @@ describe('setup-config', () => {
                 ],
                 "submit": "#wp-submit"
             }
-        ],              
+        ],
+    },              
         saveImages: true,
         imagesPath: 'images',
         launchOptions: {},
@@ -180,7 +180,9 @@ describe('setup-config', () => {
         idTags: {
             "aria-required-attr": ["XYZ"],
             "meta-viewport": ["XYZ"]
-        }
+        },
+        crawl: false,
+        name: 'Myname'
     
 };
 });

@@ -5,7 +5,6 @@ export interface A11ySitecheckerResult {
     testEngine: TestEngine | undefined;
     testRunner: TestRunner | undefined;
     testEnvironment: TestEnvironment | undefined;
-    url: string;
     timestamp: string;
     passes: FullCheckerSingleResult[];
     incomplete: FullCheckerSingleResult[];
@@ -14,6 +13,7 @@ export interface A11ySitecheckerResult {
     analyzedUrls: string[];
     tabableImages: UrlWithTabableImages[];
     usedLocale: string;
+    name: string;
 }
 
 interface UrlWithTabableImages {

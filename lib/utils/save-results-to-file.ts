@@ -10,7 +10,7 @@ import { defineExtraTags } from '../utils/define-extratags';
 import { getCountings } from '../utils/get-countings';
 import { SiteResult } from '../models/site-result';
 
-export async function saveResultsToFile(config: Config, sitecheckerResult: A11ySitecheckerResult, i: number, url: string): Promise<void> {
+export async function saveResultsToFile(config: Config, sitecheckerResult: A11ySitecheckerResult, i: number): Promise<void> {
     log('#############################################################################################');
     log('Updating resultsFolder with file with Current Time Result');
     log('#############################################################################################');
@@ -37,23 +37,23 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
     try {
         const data = fs.readFileSync(config.resultsPath + 'files.json');
         fileObject = JSON.parse(data.toString());
-        if (fileObject.filter((f) => f.url.includes(sitecheckerResult.url)).length > 0) {
-            id = fileObject.filter((f) => f.url.includes(sitecheckerResult.url))[0]._id;
+        if (fileObject.filter((f) => f.url.includes(config.name)).length > 0) {
+            id = fileObject.filter((f) => f.url.includes(config.name))[0]._id;
             if (i === 0) {
-                const filesByDate = fileObject.filter((f) => f.url.includes(sitecheckerResult.url))[0].filesByDate;
+                const filesByDate = fileObject.filter((f) => f.url.includes(config.name))[0].filesByDate;
                 filesByDate.push({
                     date: new Date(),
                     files: [fileToSave],
                 });
             } else {
-                const filesByDate = fileObject.filter((f) => f.url.includes(sitecheckerResult.url))[0].filesByDate;
+                const filesByDate = fileObject.filter((f) => f.url.includes(config.name))[0].filesByDate;
                 filesByDate[filesByDate.length - 1].files.push(fileToSave);
             }
         } else {
             id = uuidv4();
             fileObject.push({
                 _id: id,
-                url: sitecheckerResult.url,
+                url: config.name,
                 filesByDate: [
                     {
                         date: new Date(),
@@ -68,7 +68,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
             date: new Date(),
             files: [fileToSave],
         };
-        fileObject = new Array({ _id: id, url: url, filesByDate: [fileResult] });
+        fileObject = new Array({ _id: id, url: config.name, filesByDate: [fileResult] });
     }
 
     const siteResult = setupSiteresult(id, sitecheckerResult);

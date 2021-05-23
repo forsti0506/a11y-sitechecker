@@ -13,20 +13,19 @@ import { analyzeSite } from './utils/analyze-site';
 export async function entry(
     config: Config,
     axeSpecs: Spec,
-    urlOrName: string,
     onlyReturn?: boolean,
 ): Promise<A11ySitecheckerResult[]> {
     try {
-        prepareWorkspace(config, urlOrName);
+        prepareWorkspace(config);
         log(
             chalk.blue('#############################################################################################'),
         );
-        log(chalk.blue(`Start accessibility Test for ${urlOrName}`));
+        log(chalk.blue(`Start accessibility Test for ${config.name}`));
         log(
             chalk.blue('#############################################################################################'),
         );
         const promises: Promise<A11ySitecheckerResult>[] = [];
-        config.viewports.forEach((viewport) => promises.push(checkSite(config, axeSpecs, urlOrName, viewport, onlyReturn)));
+        config.viewports.forEach((viewport) => promises.push(checkSite(config, axeSpecs, viewport, onlyReturn)));
         return Promise.all(promises);
     } catch (err) {
         // Handle any errors
@@ -39,7 +38,6 @@ export async function entry(
 async function checkSite(
     config: Config,
     axeSpecs: Spec,
-    url: string,
     vp: SitecheckerViewport,
     onlyReturn?: boolean,
 ): Promise<A11ySitecheckerResult> {
@@ -49,7 +47,7 @@ async function checkSite(
         width: vp.width,
         height: vp.height,
     });
-    await executeLogin(url, page, config);
+    await executeLogin( page, config);
     const usedLocale = config.axeConfig?.locale ? config.axeConfig?.locale : (config.axeConfig?.localePath ? config.axeConfig?.localePath : 'en')
 
     const result: A11ySitecheckerResult = {
@@ -58,21 +56,21 @@ async function checkSite(
         testRunner: undefined,
         timestamp: new Date().toISOString(),
         toolOptions: undefined,
-        url: '',
+        name: '',
         violations: [],
         inapplicable: [],
         incomplete: [],
         passes: [],
         analyzedUrls: [],
         tabableImages: [],
-        usedLocale: usedLocale
+        usedLocale: usedLocale,
     };
 
     const alreadyVisited: Map<string, SitecheckerViewport> = new Map<string, SitecheckerViewport>();
-    const report = await analyzeSite(url, axeSpecs, page, config, [], browser, alreadyVisited, [], []);
+    const report = await analyzeSite(axeSpecs, page, config, [], browser, alreadyVisited, [], []);
 
     await browser.close();
-    result.url = url;
+    result.name = config.name;
 
     mergeResults(report, result);
     if (result.violations.length > config.threshold) {

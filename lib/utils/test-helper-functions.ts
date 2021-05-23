@@ -16,7 +16,7 @@ export async function initBeforeTest(): Promise<Config> {
     const optionValues = {
         json: true,
         config: './tests/config.json',
-        debugMode: false
+        debugMode: false,
     };
     return setupConfig(optionValues);
 }

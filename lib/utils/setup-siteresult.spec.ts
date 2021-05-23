@@ -3,8 +3,9 @@ import { setupSiteresult } from "./setup-siteresult";
 
 describe('setup-siteresult', () => {
     test('Dummy test', () => {
-        const result = setupSiteresult('test', {analyzedUrls: [], inapplicable: [testViolation, testViolation], incomplete: [testViolation], passes: [testViolation], tabableImages: [], url: 'yes', testEngine: {name: 'test', version: '1.0'},
-         testEnvironment: {userAgent: 'Hello', windowHeight: 100, windowWidth: 100}, testRunner: {name: 'axe'}, toolOptions: {}, timestamp: '', usedLocale: 'de',violations: [testViolation]})
+        const result = setupSiteresult('test', {analyzedUrls: [], inapplicable: [testViolation, testViolation], 
+          incomplete: [testViolation], passes: [testViolation], tabableImages: [], testEngine: {name: 'test', version: '1.0'},
+         testEnvironment: {userAgent: 'Hello', windowHeight: 100, windowWidth: 100}, testRunner: {name: 'axe'}, toolOptions: {}, timestamp: '', usedLocale: 'de',violations: [testViolation], name: 'url'})
          expect(result).toStrictEqual(
             {
                    analyzedUrls: [],
@@ -28,6 +29,7 @@ describe('setup-siteresult', () => {
                    },
                    timestamp: "",
                    toolOptions: {},
+                   name: 'url'
                  }
          )
     })

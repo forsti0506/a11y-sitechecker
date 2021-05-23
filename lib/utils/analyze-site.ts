@@ -14,7 +14,6 @@ const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 const rootDomain = { value: '' };
 
 export async function analyzeSite(
-    url: string,
     axeSpecs: Spec,
     firstpage: Page,
     config: Config,
@@ -23,8 +22,9 @@ export async function analyzeSite(
     alreadyVisited: Map<string, SitecheckerViewport>,
     alreadyParsed: string[],
     notCheckedLinks: string[],
+    link?: string
 ): Promise<ResultByUrl[]> {
-    if (config.urlsToAnalyze) {
+    if (config.urlsToAnalyze.length > 1) {
         const test = from(config.urlsToAnalyze)
             .pipe(
                 mergeMap(async (url) => {
@@ -44,6 +44,13 @@ export async function analyzeSite(
         const result = await test;
         resultsByUrl.push(...result);
     } else {
+        let url;
+        if(!link) {
+            url = config.urlsToAnalyze[0];
+        } else {
+            url = link;
+        }
+        
         if (!url.startsWith('https://') && !url.startsWith('http://')) {
             url = 'https://' + url;
         }
@@ -105,7 +112,6 @@ export async function analyzeSite(
             log(config.debugMode, 'parsing ' + i + ' of ' + (links.length - 1));
             if (!alreadyParsed.includes(link)) {
                 await analyzeSite(
-                    link,
                     axeSpecs,
                     firstpage,
                     config,
@@ -114,6 +120,7 @@ export async function analyzeSite(
                     alreadyVisited,
                     alreadyParsed,
                     notCheckedLinks,
+                    link
                 );
                 log(config.debugMode, 'Finished analyze of Site: ' + link);
             }
