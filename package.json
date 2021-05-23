@@ -63,7 +63,7 @@
         "test:coverage": "jest --coverage --detectOpenHandles",
         "test:local": "jest --watch",
         "prepare": "husky install",
-        "badge-script":"istanbul-badges-readme && git add ."
+        "badge-script": "istanbul-badges-readme && git add ."
     },
     "bin": {
         "a11y-sitechecker": "./bin/a11y-sitechecker.js"
