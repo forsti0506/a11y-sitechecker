@@ -62,7 +62,7 @@
         "test": "jest --detectOpenHandles --forceExit",
         "test:coverage": "jest --coverage --detectOpenHandles",
         "test:local": "jest --watch",
-        "prepare": "husky install",
+        "prepare_husky": "husky install",
         "badge-script": "istanbul-badges-readme && git add ."
     },
     "bin": {
