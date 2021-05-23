@@ -38,7 +38,7 @@ export function setupConfig(options: OptionValues): Config {
             if(options.config) {
                 configFile = JSON.parse(fs.readFileSync(options.config).toString('utf-8'));
             } else {
-                configFile = JSON.parse(options.providedConfig);
+                configFile = options.providedConfig;
             }
             
             if (typeof configFile.json === 'boolean') {
