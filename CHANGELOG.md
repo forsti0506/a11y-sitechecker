@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v3.0.0...v3.1.0) (2021-05-23)
+
+
+### Features
+
+* providedCOnfig to setupConfig and fix analyze of 1 url without crawling! ([3d8eeea](https://github.com/forsti0506/a11y-sitechecker/commit/3d8eeea155e50637719b58a79d54f2cddc277cf5))
+
 # [3.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v2.4.1...v3.0.0) (2021-05-23)
 
 
