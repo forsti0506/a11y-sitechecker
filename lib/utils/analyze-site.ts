@@ -24,7 +24,7 @@ export async function analyzeSite(
     notCheckedLinks: string[],
     link?: string
 ): Promise<ResultByUrl[]> {
-    if (config.urlsToAnalyze.length > 1) {
+    if (config.crawl === false) {
         const test = from(config.urlsToAnalyze)
             .pipe(
                 mergeMap(async (url) => {

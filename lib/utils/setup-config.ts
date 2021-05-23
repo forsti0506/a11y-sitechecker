@@ -32,9 +32,15 @@ export function setupConfig(options: OptionValues): Config {
     if (options.threshold) {
         config.threshold = parseInt(options.threshold);
     }
-    if (options.config) {
+    if (options.config || options.providedConfig) {
         try {
-            const configFile = JSON.parse(fs.readFileSync(options.config).toString('utf-8'));
+            let configFile;
+            if(options.config) {
+                configFile = JSON.parse(fs.readFileSync(options.config).toString('utf-8'));
+            } else {
+                configFile = JSON.parse(options.providedConfig);
+            }
+            
             if (typeof configFile.json === 'boolean') {
                 config.json = configFile.json;
             }
