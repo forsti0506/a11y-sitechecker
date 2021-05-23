@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.0...v3.1.1) (2021-05-23)
+
+
+### Bug Fixes
+
+* fixing json parse of object ([b999f99](https://github.com/forsti0506/a11y-sitechecker/commit/b999f994146b638cfbc2da9a920c8b2d61458acd))
+
 # [3.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v3.0.0...v3.1.0) (2021-05-23)
 
 
