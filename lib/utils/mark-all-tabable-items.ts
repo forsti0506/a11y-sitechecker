@@ -21,7 +21,7 @@ export async function markAllTabableItems(
     try {
         await page.exposeFunction('debug', debug);
     } catch (e) {
-        error(e.message + '. Ignored because normally it means thtat Function already there');
+        error(e.message + '. Ignored because normally it means that Function is already there');
     }
     let runs = 0;
     let elementsFromEvaluation: ElementsFromEvaluation = {
@@ -49,7 +49,7 @@ export async function markAllTabableItems(
                             }
                         }
 
-                        await window.debug(debugMode, elementExtraAdjusting + ' px are extra adjustet');
+                        await window.debug(debugMode, elementExtraAdjusting + ' px are extra adjusted');
 
                         tabNumberSpan.setAttribute(
                             'style',
