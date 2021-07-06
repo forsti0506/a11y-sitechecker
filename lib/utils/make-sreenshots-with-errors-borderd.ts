@@ -20,7 +20,7 @@ export async function makeScreenshotsWithErrorsBorderd(
         debug(
             config.debugMode,
             e.message +
-                '. Ignored because normally it means that Function already there. (Adding debug to winwo in expose object)',
+                '. Ignored because normally it means that Function already there. (Adding debug to window in expose object)',
         );
     }
     for (const result of resultByUrl.violations) {
