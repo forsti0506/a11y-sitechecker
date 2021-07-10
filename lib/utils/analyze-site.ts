@@ -72,7 +72,7 @@ export async function analyzeSite(
             alreadyVisited,
         );
 
-        const results = from(links.entries())
+        const results = lastValueFrom(from(links.entries())
             .pipe(
                 mergeMap(async ([i, link]) => {
                     log(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
@@ -89,8 +89,7 @@ export async function analyzeSite(
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            )
-            .toPromise();
+            ));
         resultsByUrl.push(...(await results));
 
         if (config.analyzeClicks)
