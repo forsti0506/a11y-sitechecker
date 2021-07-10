@@ -12,7 +12,6 @@ export async function cleanUpAfterTest(config: Config): Promise<void> {
 }
 
 export async function initBeforeTest(): Promise<Config> {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 500000;
     const optionValues = {
         json: true,
         config: './tests/config.json',

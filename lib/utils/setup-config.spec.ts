@@ -1,11 +1,11 @@
-import 'jest';
-import fs from 'fs';
-import { prepareWorkspace, setupAxe, setupAxeConfig, setupConfig } from './setup-config';
-import puppeteer from 'puppeteer';
-
 import { AxePuppeteer } from '@axe-core/puppeteer';
-import { getEscaped } from './helper-functions';
+import fs from 'fs';
+import 'jest';
+import puppeteer from 'puppeteer';
 import { Config } from '../models/config';
+import { getEscaped } from './helper-functions';
+import { prepareWorkspace, setupAxe, setupAxeConfig, setupConfig } from './setup-config';
+
 jest.mock('@axe-core/puppeteer');
 
 describe('setup-config', () => {
