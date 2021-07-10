@@ -2,15 +2,15 @@
 
 // This file is the entry point if you using it throug the command line
 
-import pkg from '../package.json';
-import commander from 'commander';
+import { program } from 'commander';
 import { entry } from '../lib/a11y-sitechecker';
-import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
-import { saveResultsToFile } from '../lib/utils/save-results-to-file';
 import { error } from '../lib/utils/helper-functions';
+import { saveResultsToFile } from '../lib/utils/save-results-to-file';
+import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
+import pkg from '../package.json';
 
 
-commander
+program
     .version(pkg.version)
     .usage('[options] <paths>')
     .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console')
@@ -23,7 +23,7 @@ commander
     .parse(process.argv);
 
 (async (): Promise<void> => {
-        const config = setupConfig(commander.opts());
+        const config = setupConfig(program.opts());
         const axeConfig = setupAxeConfig(config);
         let retCode = 0;
         try {
