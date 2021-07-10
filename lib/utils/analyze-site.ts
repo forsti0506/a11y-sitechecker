@@ -1,13 +1,13 @@
 import { Spec } from 'axe-core';
 import { Browser, Page } from 'puppeteer';
-import { Config, SitecheckerViewport } from '../models/config';
-import { ResultByUrl } from '../models/a11y-sitechecker-result';
-import { log } from './helper-functions';
-import { getLinks } from './get-links';
-import { analyzeUrl } from './analyze-url';
-import { from } from 'rxjs';
+import { from, lastValueFrom } from 'rxjs';
 import { mergeMap, toArray } from 'rxjs/operators';
+import { ResultByUrl } from '../models/a11y-sitechecker-result';
+import { Config, SitecheckerViewport } from '../models/config';
+import { analyzeUrl } from './analyze-url';
 import { clickingElements } from './clicking-elements';
+import { getLinks } from './get-links';
+import { log } from './helper-functions';
 
 const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
@@ -25,7 +25,7 @@ export async function analyzeSite(
     link?: string
 ): Promise<ResultByUrl[]> {
     if (config.crawl === false) {
-        const test = from(config.urlsToAnalyze)
+        const resultsAsPromise = lastValueFrom(from(config.urlsToAnalyze)
             .pipe(
                 mergeMap(async (url) => {
                     const page = await browser.newPage();
@@ -39,9 +39,8 @@ export async function analyzeSite(
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            )
-            .toPromise();
-        const result = await test;
+            ));
+        const result = await resultsAsPromise;
         resultsByUrl.push(...result);
     } else {
         let url;
