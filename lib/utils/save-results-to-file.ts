@@ -1,14 +1,14 @@
-import { A11ySitecheckerResult } from '../models/a11y-sitechecker-result';
-import { Config } from '../models/config';
-import { getEscaped, log } from './helper-functions';
 import fs from 'fs';
-import { AnalyzedSite, FilesByDate } from '../models/analyzed-site';
-
 import { v4 as uuidv4 } from 'uuid';
-import { setupSiteresult } from '../utils/setup-siteresult';
+import { A11ySitecheckerResult } from '../models/a11y-sitechecker-result';
+import { AnalyzedSite, FilesByDate } from '../models/analyzed-site';
+import { Config } from '../models/config';
+import { SiteResult } from '../models/site-result';
 import { defineExtraTags } from '../utils/define-extratags';
 import { getCountings } from '../utils/get-countings';
-import { SiteResult } from '../models/site-result';
+import { setupSiteresult } from '../utils/setup-siteresult';
+import { getEscaped, log } from './helper-functions';
+
 
 export async function saveResultsToFile(config: Config, sitecheckerResult: A11ySitecheckerResult, i: number): Promise<void> {
     log('#############################################################################################');
@@ -84,7 +84,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
         '_' +
         sitecheckerResult.testEnvironment?.windowHeight +
         '_violations.json';
-    await fs.promises.writeFile(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
+    fs.writeFileSync(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
 
     const incompletesPath =
         config.resultsPathPerUrl +
@@ -94,7 +94,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
         '_' +
         sitecheckerResult.testEnvironment?.windowHeight +
         '_incompletes.json';
-    await fs.promises.writeFile(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
+    fs.writeFileSync(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
 
     const passesPath =
         config.resultsPathPerUrl +
@@ -104,7 +104,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
         '_' +
         sitecheckerResult.testEnvironment?.windowHeight +
         '_passes.json';
-    await fs.promises.writeFile(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
+    fs.writeFileSync(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
 
     const inapplicablesPath =
         config.resultsPathPerUrl +
@@ -114,7 +114,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
         '_' +
         sitecheckerResult.testEnvironment?.windowHeight +
         '_inapplicables.json';
-    await fs.promises.writeFile(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
+    fs.writeFileSync(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
 
     const filesJson: AnalyzedSite[] = JSON.parse(fs.readFileSync(config.resultsPath + 'files.json').toString());
     const relatedDates = filesJson.filter((f) => f._id === id)[0].filesByDate;
