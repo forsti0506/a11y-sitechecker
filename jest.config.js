@@ -20,12 +20,13 @@ module.exports = {
   "collectCoverage": true,
   "coverageThreshold": {
     "global": {
-      "branches": 10,
-      "functions": 10,
-      "lines": 10,
-      "statements": -750
+      "branches": 20,
+      "functions": 20,
+      "lines": 20,
+      "statements": -700
     },
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
-  "coverageReporters": ["json-summary", "json", "text"]
+  "coverageReporters": ["json-summary", "json", "text"],
+  "preset": "jest-puppeteer"
 }

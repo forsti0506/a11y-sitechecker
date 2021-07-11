@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// This file is the entry point if you using it throug the command line
+// This file is the entry point if you are using it through the command line
 
 import { program } from 'commander';
 import { entry } from '../lib/a11y-sitechecker';

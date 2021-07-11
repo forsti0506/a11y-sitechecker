@@ -1,13 +1,13 @@
 import { Spec } from 'axe-core';
-import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
-import puppeteer from 'puppeteer';
-import { Config, SitecheckerViewport } from './models/config';
-import { debug, error, log, writeToJsonFile } from './utils/helper-functions';
 import chalk from 'chalk';
+import puppeteer from 'puppeteer';
+import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
+import { Config, SitecheckerViewport } from './models/config';
+import { analyzeSite } from './utils/analyze-site';
+import { debug, error, log, writeToJsonFile } from './utils/helper-functions';
 import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import { prepareWorkspace } from './utils/setup-config';
-import { analyzeSite } from './utils/analyze-site';
 
 
 export async function entry(
@@ -75,7 +75,7 @@ async function checkSite(
     mergeResults(report, result);
     if (result.violations.length > config.threshold) {
         throw new Error(
-            'Threshold not met. There are ' + result.violations.length + 'errors. Threshold was: ' + config.threshold,
+            'Threshold not met. There are ' + result.violations.length + ' errors. Threshold was: ' + config.threshold,
         );
     }
     if (config.json) {

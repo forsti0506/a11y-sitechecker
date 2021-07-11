@@ -1,40 +1,31 @@
-import { executeLogin } from './login';
 import puppeteer from 'puppeteer';
 import { Config } from '../models/config';
-import { Browser } from 'puppeteer';
+import { executeLogin } from './login';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions';
 
 describe('login', () => {
-    let config: Config;
-    let browser: Browser;
 
+    let config: Config;
+    
     beforeEach(async () => {
         config = await initBeforeTest();
-        config.timeout = 15000;
-        browser = await puppeteer.launch(config.launchOptions);
-        const page = (await browser.pages())[0];
-        await page.setViewport({
-            width: 1920,
-            height: 1080,
-        });
+        config.timeout = 15000;        
     });
-    afterEach(async () => {
-        await cleanUpAfterTest(config);
-        await browser.close();
+    afterEach(() => {
+        return cleanUpAfterTest(config);
     });
 
-    it('should escape if no login parameter', (done) => {
-        browser.pages().then((pages) => {
-            executeLogin(pages[0], config).then((retCode) => {
-                expect(retCode).toBe(0);
-                done();
-            });
-        });
+    test('should escape if no login parameter', async () => {
+        expect.assertions(1);
+        const browser = await puppeteer.launch(config.launchOptions);
+        const pages = await browser.pages();
+        await expect(executeLogin(pages[0], config)).resolves.toBe(0);
     });
 
-    it('should fail because of missing selector', (done) => {
+    test('should fail because of missing selector', async () => {
+        expect.assertions(1);
         config.login = {
-            url: 'http://www.forsti.eu',
+            url: 'https://www.forsti.eu',
             steps: [
             {
                 submit: 'test',
@@ -46,16 +37,13 @@ describe('login', () => {
                 ],
             },
         ]};
-
-        browser.pages().then((pages) => {
-            executeLogin(pages[0], config).catch((err) => {
-                expect(err.message).toContain('waiting for selector `test` failed:');
-                done();
-            });
-        });
+        const browser = await puppeteer.launch(config.launchOptions);
+        const pages = await browser.pages();
+        await expect(executeLogin(pages[0], config)).rejects.toThrowError('waiting for selector `test` failed:')
     });
 
-    it('should not be able to login', (done) => {
+    test('should not be able to login', async () => {
+        expect.assertions(1);
         config.login = {url: "http://www.forsti.eu/wp-admin",
         steps: [
             {
@@ -72,11 +60,8 @@ describe('login', () => {
                 ],
             },
         ]};
-        browser.pages().then((pages) => {
-            executeLogin(pages[0], config).then((r) => {
-                expect(r).toBe(1);
-                done();
-            });
-        });
+        const browser = await puppeteer.launch(config.launchOptions);
+        const pages = await browser.pages();
+        await expect(executeLogin(pages[0], config)).resolves.toBe(1);
     });
 });

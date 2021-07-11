@@ -1,9 +1,7 @@
 import {
     A11ySitecheckerResult,
     FullCheckerSingleResult,
-    NodeResult,
-    ResultByUrl,
-    Result,
+    NodeResult, Result, ResultByUrl
 } from '../models/a11y-sitechecker-result';
 
 export function setResult(
@@ -54,7 +52,7 @@ export function setResult(
     return violations;
 }
 
-export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): A11ySitecheckerResult {
+export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): void {
     for (const resultByUrl of resultsByUrls) {
         result.analyzedUrls.push(resultByUrl.url);
         result.tabableImages.push({ url: resultByUrl.url, images: resultByUrl.tabableImages });
@@ -76,5 +74,4 @@ export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheck
     result.testRunner = resultsByUrls[0].testRunner;
     result.testEnvironment = resultsByUrls[0].testEnvironment;
     result.testEngine = resultsByUrls[0].testEngine;
-    return result;
 }
