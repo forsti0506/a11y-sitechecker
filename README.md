@@ -96,7 +96,7 @@ export interface Config {
     runOnly: RunOnly | TagValue[] | string[];
     crawl: boolean;
     name: string;
-}
+
 }
 ```
 
@@ -175,7 +175,7 @@ If you like to take Screenshots during the evaluation, define it here! The image
 
 ```json
 {
-    "saveImages": "yes",
+    "saveImages": true,
 }
 ```
 

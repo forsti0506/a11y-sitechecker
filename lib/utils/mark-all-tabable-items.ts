@@ -21,7 +21,9 @@ export async function markAllTabableItems(
     try {
         await page.exposeFunction('debug', debug);
     } catch (e) {
-        error(e.message + '. Ignored because normally it means thtat Function already there');
+        if(config.debugMode) {
+            error(e.message + '. Ignored because normally it means that function already exposed');
+        }
     }
     let runs = 0;
     let elementsFromEvaluation: ElementsFromEvaluation = {
@@ -260,7 +262,7 @@ export async function markAllTabableItems(
             ),
         );
         const imageName = imageId + '_' + runs + '.png';
-        await saveScreenshot(page, config.imagesPath, imageName, true, config.debugMode);
+        await saveScreenshot(page, config.imagesPath, imageName, config.saveImages, config.debugMode);
         urlResult.tabableImages.push(imageName);
         runs++;
         elementsFromEvaluation.elementsByVisibility = elementsFromEvaluation.elementsByVisibility.filter(

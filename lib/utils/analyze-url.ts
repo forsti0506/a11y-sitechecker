@@ -40,11 +40,7 @@ export async function analyzeUrl(
     log('Currently analyzing ' + url);
 
     if (config.saveImages) {
-        try {
-            await saveScreenshot(page, config.imagesPath, getEscaped(url) + '.png', config.saveImages);
-        } catch (e) {
-            error(error + '. Image not saved. Analyze not stopped!');
-        }
+        await saveScreenshot(page, config.imagesPath, getEscaped(url) + '.png', config.saveImages);
     }
 
     let axeResults;

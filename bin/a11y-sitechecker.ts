@@ -13,7 +13,7 @@ import pkg from '../package.json';
 program
     .version(pkg.version)
     .usage('[options] <paths>')
-    .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console')
+    .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console', false)
     .option('--config <string>', 'Provide a config.json')
     .option(
         '-T, --threshold <number>',
@@ -27,7 +27,7 @@ program
         const axeConfig = setupAxeConfig(config);
         let retCode = 0;
         try {
-            const results = await entry(config, axeConfig);
+            const results = await entry(config, axeConfig, !program.opts().json);
 
             for (const [i, sitecheckerResult] of results.entries()) {
 
