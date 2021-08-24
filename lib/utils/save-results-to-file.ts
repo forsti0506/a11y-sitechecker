@@ -131,7 +131,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
                             '_' +
                             resultFile.testEnvironment?.windowHeight +
                             '_violations.json',
-                        config.resultsPathPerUrl,
+                        config,
                     );
                     await getCountings(
                         id,
@@ -141,7 +141,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
                             '_' +
                             resultFile.testEnvironment?.windowHeight +
                             '_passes.json',
-                        config.resultsPathPerUrl,
+                        config,
                     );
                     await getCountings(
                         id,
@@ -151,7 +151,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
                             '_' +
                             resultFile.testEnvironment?.windowHeight +
                             '_incompletes.json',
-                        config.resultsPathPerUrl,
+                        config,
                     );
                     await getCountings(
                         id,
@@ -161,7 +161,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
                             '_' +
                             resultFile.testEnvironment?.windowHeight +
                             '_inapplicables.json',
-                        config.resultsPathPerUrl,
+                        config,
                     );
                 }
             }
