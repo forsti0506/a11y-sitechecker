@@ -3,9 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { A11ySitecheckerResult } from '../models/a11y-sitechecker-result';
 import { AnalyzedSite, FilesByDate } from '../models/analyzed-site';
 import { Config } from '../models/config';
-import { SiteResult } from '../models/site-result';
 import { defineExtraTags } from '../utils/define-extratags';
-import { getCountings } from '../utils/get-countings';
 import { setupSiteresult } from '../utils/setup-siteresult';
 import { getEscaped, log } from './helper-functions';
 
@@ -25,6 +23,8 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
             currentDate.getHours().toLocaleString().padStart(2, '0') +
             '_' +
             currentDate.getMinutes().toLocaleString().padStart(2, '0') +
+            '_' +
+            currentDate.getSeconds().toLocaleString().padStart(2, '0') +
             '_' +
             sitecheckerResult.testEnvironment?.windowWidth +
             '_' +
@@ -78,7 +78,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
 
     const violationsPath =
         config.resultsPathPerUrl +
-        getEscaped(id + sitecheckerResult.timestamp) +
+        getEscaped(id) +
         '_' +
         sitecheckerResult.testEnvironment?.windowWidth +
         '_' +
@@ -88,7 +88,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
 
     const incompletesPath =
         config.resultsPathPerUrl +
-        getEscaped(id + sitecheckerResult.timestamp) +
+        getEscaped(id) +
         '_' +
         sitecheckerResult.testEnvironment?.windowWidth +
         '_' +
@@ -98,7 +98,7 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
 
     const passesPath =
         config.resultsPathPerUrl +
-        getEscaped(id + sitecheckerResult.timestamp) +
+        getEscaped(id) +
         '_' +
         sitecheckerResult.testEnvironment?.windowWidth +
         '_' +
@@ -108,63 +108,11 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
 
     const inapplicablesPath =
         config.resultsPathPerUrl +
-        getEscaped(id + sitecheckerResult.timestamp) +
+        getEscaped(id) +
         '_' +
         sitecheckerResult.testEnvironment?.windowWidth +
         '_' +
         sitecheckerResult.testEnvironment?.windowHeight +
         '_inapplicables.json';
     fs.writeFileSync(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
-
-    const filesJson: AnalyzedSite[] = JSON.parse(fs.readFileSync(config.resultsPath + 'files.json').toString());
-    const relatedDates = filesJson.filter((f) => f._id === id)[0].filesByDate;
-    if (relatedDates.length > 1) {
-        for (const [i, file] of relatedDates.entries()) {
-            if (i < relatedDates.length - 1) {
-                for (const f of file.files) {
-                    const resultFile: SiteResult = JSON.parse(fs.readFileSync(f).toString());
-                    await getCountings(
-                        id,
-                        resultFile.timestamp,
-                        '_' +
-                            resultFile.testEnvironment?.windowWidth +
-                            '_' +
-                            resultFile.testEnvironment?.windowHeight +
-                            '_violations.json',
-                        config,
-                    );
-                    await getCountings(
-                        id,
-                        resultFile.timestamp,
-                        '_' +
-                            resultFile.testEnvironment?.windowWidth +
-                            '_' +
-                            resultFile.testEnvironment?.windowHeight +
-                            '_passes.json',
-                        config,
-                    );
-                    await getCountings(
-                        id,
-                        resultFile.timestamp,
-                        '_' +
-                            resultFile.testEnvironment?.windowWidth +
-                            '_' +
-                            resultFile.testEnvironment?.windowHeight +
-                            '_incompletes.json',
-                        config,
-                    );
-                    await getCountings(
-                        id,
-                        resultFile.timestamp,
-                        '_' +
-                            resultFile.testEnvironment?.windowWidth +
-                            '_' +
-                            resultFile.testEnvironment?.windowHeight +
-                            '_inapplicables.json',
-                        config,
-                    );
-                }
-            }
-        }
-    }
 }
