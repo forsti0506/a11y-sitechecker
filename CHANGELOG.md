@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.1...v3.1.2) (2021-08-24)
+
+
+### Bug Fixes
+
+* Readme fixes, json output for cmd fixed ([251b200](https://github.com/forsti0506/a11y-sitechecker/commit/251b2003e8bbc7ba7831889172a53c5546e3b412))
+
 ## [3.1.1](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.0...v3.1.1) (2021-05-23)
 
 
