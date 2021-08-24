@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.2...v3.1.3) (2021-08-24)
+
+
+### Bug Fixes
+
+* fix issue that inapplicables are not counted correctly ([7869ad7](https://github.com/forsti0506/a11y-sitechecker/commit/7869ad7ad7d40d3c0d08131049f206de4b8d005f))
+
 ## [3.1.2](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.1...v3.1.2) (2021-08-24)
 
 
