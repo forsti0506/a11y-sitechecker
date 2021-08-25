@@ -1,3 +1,15 @@
+# [4.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.0.0...v4.1.0) (2021-08-25)
+
+
+### Bug Fixes
+
+* add missing file ([88bea42](https://github.com/forsti0506/a11y-sitechecker/commit/88bea42f314befa2fd536dce1f7d64b41068bbde))
+
+
+### Features
+
+* add possibility to close cookie consents (or other popus); fix: some  bugfixes for scroll elements in view ([26dbef4](https://github.com/forsti0506/a11y-sitechecker/commit/26dbef434510d47fc9bf2662ebaacaa2a3d21b4f))
+
 # [4.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.3...v4.0.0) (2021-08-24)
 
 
