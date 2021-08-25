@@ -44,7 +44,7 @@ export async function makeScreenshotsWithErrorsBorderd(
                             const percentX = 90;
                             const percentY = 90;
 
-                            while (!elementVisible && k < 10) {
+                            while (!elementVisible && k < 10 && dom.getClientRects().length > 0) {
                                 if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
 
                                 const elementRect = currentDom.getBoundingClientRect();
@@ -74,25 +74,28 @@ export async function makeScreenshotsWithErrorsBorderd(
                                 }
                                 k++;
                             }
-                            if (dom.tagName === 'A') {
-                                dom.setAttribute(
-                                    'style',
-                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
-                                        ' border: 1px solid red;',
-                                );
-                            } else if (dom.tagName === 'HTML' || dom.tagName === 'VIEWPORT') {
-                                document.body.setAttribute(
-                                    'style',
-                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
-                                        ' outline-style: solid; outline-color: red',
-                                );
-                            } else {
-                                dom.setAttribute(
-                                    'style',
-                                    (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
-                                        ' outline-style: solid; outline-color: red',
-                                );
+                            if(elementVisible) {
+                                if (dom.tagName === 'A') {
+                                    dom.setAttribute(
+                                        'style',
+                                        (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                            ' border: 5px dotted violet;',
+                                    );
+                                } else if (dom.tagName === 'HTML' || dom.tagName === 'VIEWPORT') {
+                                    document.body.setAttribute(
+                                        'style',
+                                        (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                            ' outline: 5px dotted violet',
+                                    );
+                                } else {
+                                    dom.setAttribute(
+                                        'style',
+                                        (dom.getAttribute('style') ? dom.getAttribute('style') : '') +
+                                            ' outline: 5px dotted violet',
+                                    );
+                                }
                             }
+
                         } else {
                             window.debug(debugMode, 'No element found with selector ' + elementSelector);
                         }
@@ -114,19 +117,19 @@ export async function makeScreenshotsWithErrorsBorderd(
                     const dom = document.querySelector(element);
                     if (dom) {
                         if (dom.tagName === 'A') {
-                            dom.setAttribute('style', dom.getAttribute('style').replace('border: 1px solid red;', ''));
+                            dom.setAttribute('style', dom.getAttribute('style')?.replace('border: 5px dotted violet;', ''));
                         } else if (dom.tagName === 'HTML') {
                             const bodyStyle = document.body.getAttribute('style');
                             if (bodyStyle) {
                                 document.body.setAttribute(
                                     'style',
-                                    bodyStyle.replace('outline-style: solid; outline-color: red', ''),
+                                    bodyStyle.replace('outline: 5px dotted violet', ''),
                                 );
                             }
                         } else {
                             dom.setAttribute(
                                 'style',
-                                dom.getAttribute('style').replace('outline-style: solid; outline-color: red', ''),
+                                dom.getAttribute('style')?.replace('outline: 5px dotted violet', ''),
                             );
                         }
                     }

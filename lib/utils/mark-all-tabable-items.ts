@@ -51,7 +51,7 @@ export async function markAllTabableItems(
                             }
                         }
 
-                        await window.debug(debugMode, elementExtraAdjusting + ' px are extra adjustet');
+                        window.debug(debugMode, elementExtraAdjusting + ' px are extra adjustet');
 
                         tabNumberSpan.setAttribute(
                             'style',
@@ -117,10 +117,10 @@ export async function markAllTabableItems(
                         if (element.getAttribute('style')) {
                             element.setAttribute(
                                 'style',
-                                element.getAttribute('style') + '; outline-style: solid; outline-color: red',
+                                element.getAttribute('style') + '; outline: 5px dotted violet',
                             );
                         } else {
-                            element.setAttribute('style', 'outline-style: solid; outline-color: red');
+                            element.setAttribute('style', 'outline: 5px dotted violet');
                         }
                     };
                     const elementsFromEvaluationParsed: ElementsFromEvaluation = JSON.parse(
@@ -152,7 +152,7 @@ export async function markAllTabableItems(
                             if ((!elementVisible && firstVisibleElement) || alreadyOneNotVisible) {
                                 elementsFromEvaluationParsed.elementsByVisibility.push({
                                     element: element.id,
-                                    visible: elementVisible,
+                                    visible: false,
                                 });
                                 alreadyOneNotVisible = true;
                             } else {
@@ -178,8 +178,6 @@ export async function markAllTabableItems(
                                 if (elementVisible && !firstVisibleElement) {
                                     firstVisibleElement = true;
                                 }
-
-
                                 window.debug(
                                     debugMode,
                                     element.tagName + ' is visible: ' + elementVisible + ' and got number ' + i,
@@ -193,10 +191,10 @@ export async function markAllTabableItems(
                         let firstVisibleElement = false;
                         let i = 0;
                         let tabbingNumber = elementsFromEvaluationParsed.currentIndex;
-                        console.log('yessinger: ' + tabbingNumber)
                         for (const elementSelector of elementsFromEvaluationParsed.elementsByVisibility) {
                             const element = document.getElementById(elementSelector.element);
                             if (element) {
+                                console.log(JSON.stringify(element.classList))
                                 let elementVisible = await isElementVisible(element);
                                 let k = 0;
 
@@ -217,14 +215,14 @@ export async function markAllTabableItems(
                                         oldElement.remove();
                                     }
                                     const oldElementsWithBorder = Array.from(
-                                        document.querySelectorAll('[style="outline-style: solid; outline-color: red"]'),
+                                        document.querySelectorAll('[style*="outline: 5px dotted violet"]'),
                                     );
                                     for (const oldElement of oldElementsWithBorder) {
                                         const oldElementStyle = oldElement.getAttribute('style');
                                         if (oldElementStyle) {
                                             oldElement.setAttribute(
                                                 'style',
-                                                oldElementStyle.replace('outline-style: solid; outline-color: red', ''),
+                                                oldElementStyle.replace('outline: 5px dotted violet', ''),
                                             );
                                         }
                                     }
@@ -247,12 +245,16 @@ export async function markAllTabableItems(
                                 } else if (!elementVisible && firstVisibleElement) {
                                     break;
                                 }
+                            } else {
+                                console.debug('Not defined Element removed with number: '+ i);
+                                elementsToRemove.push(i);
                             }
                             i++;
+                            
                         }
                         elementsFromEvaluationParsed.currentIndex = tabbingNumber;
-                        for (const elmToSPlice of elementsToRemove) {
-                            elementsFromEvaluationParsed.elementsByVisibility.splice(elmToSPlice, 1);
+                        for (const elmToSplice of elementsToRemove) {
+                            elementsFromEvaluationParsed.elementsByVisibility.splice(elmToSplice, 1);
                         }
                     }
                     return JSON.stringify(elementsFromEvaluationParsed);
