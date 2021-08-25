@@ -7,6 +7,7 @@ import { Page } from 'puppeteer';
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-borderd';
 import { createUrlResult } from './create-url-result';
+import { acceptCookieConsent } from './accept-cookies';
 
 const savedScreenshotHtmls: string[] = [];
 
@@ -19,6 +20,9 @@ export async function analyzeUrl(
 ): Promise<ResultByUrl | null> {
     if ((await page.url()) !== url) {
         await page.goto(url, { waitUntil: 'load' });
+        if(config.cookieText && config.cookieSelector) {
+            await acceptCookieConsent(page, config);
+        }
         await waitForHTML(page, config.timeout, config.debugMode);
     } else {
         debug(config.debugMode, 'URL already open.' + url);

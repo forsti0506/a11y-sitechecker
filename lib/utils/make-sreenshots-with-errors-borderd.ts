@@ -4,12 +4,18 @@ import { Config } from '../models/config';
 import { debug, saveScreenshot } from './helper-functions';
 import { v4 as uuidv4 } from 'uuid';
 
+const uniqueNamePerUrl: Map<string, {id: string, count:number}> = new Map();
+
 export async function makeScreenshotsWithErrorsBorderd(
     resultByUrl: ResultByUrl,
     page: Page,
     config: Config,
     savedScreenshotHtmls: string[],
 ): Promise<void> {
+    if(!uniqueNamePerUrl.get(resultByUrl.url)) {
+        uniqueNamePerUrl.set(resultByUrl.url, {id: uuidv4(), count: 0});
+    }
+    const currentMapObject = uniqueNamePerUrl.get(resultByUrl.url)!;
     debug(config.debugMode, 'make screenshots with border');
     page.on('console', (log) => {
         debug(config.debugMode, log.text());
@@ -20,19 +26,19 @@ export async function makeScreenshotsWithErrorsBorderd(
         debug(
             config.debugMode,
             e.message +
-                '. Ignored because normally it means that Function already there. (Adding debug to winwo in expose object)',
+                '. Ignored because normally it means that the function is already exposed. (Adding debug to window in expose object)',
         );
     }
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
-                debug(config.debugMode, 'Adding border to: ' + JSON.stringify(node.target[0]));
-                await page.evaluate(
+                debug(config.debugMode, '(Count:' + currentMapObject.count + ')Adding border to: ' + JSON.stringify(node.target[0]));
+                const isVisible = await page.evaluate(
                     async (elementSelector, debugMode) => {
                         const dom: Element = document.querySelector(elementSelector);
+                        let elementVisible = false;
                         if (dom) {
                             let currentDom = dom;
-                            let elementVisible = false;
                             let k = 0;
                             const tolerance = 0.01;
                             const percentX = 90;
@@ -43,10 +49,9 @@ export async function makeScreenshotsWithErrorsBorderd(
 
                                 const elementRect = currentDom.getBoundingClientRect();
                                 const parentRects: DOMRect[] = [];
-
                                 while (currentDom.parentElement != null) {
                                     parentRects.push(currentDom.parentElement.getBoundingClientRect());
-                                    currentDom = currentDom.parentElement;
+                                    currentDom = currentDom.parentElement;          
                                 }
 
                                 elementVisible = parentRects.every(function (parentRect) {
@@ -61,10 +66,12 @@ export async function makeScreenshotsWithErrorsBorderd(
                                     return (
                                         visiblePercentageX + tolerance > percentX &&
                                         visiblePercentageY + tolerance > percentY
-                                    );
+                                    ) && elementRect.top < window.innerHeight && elementRect.bottom >= 0;
                                 });
-
-                                if (!elementVisible) dom.scrollIntoView();
+                                if (!elementVisible) {
+                                    dom.scrollIntoView();
+                                    currentDom = dom;                                
+                                }
                                 k++;
                             }
                             if (dom.tagName === 'A') {
@@ -89,13 +96,20 @@ export async function makeScreenshotsWithErrorsBorderd(
                         } else {
                             window.debug(debugMode, 'No element found with selector ' + elementSelector);
                         }
+                        return elementVisible;
                     },
                     node.target[0],
                     config.debugMode,
                 );
-                const image = uuidv4() + '.png';
-                await saveScreenshot(page, config.imagesPath, image, config.saveImages);
-                node.image = image;
+                if(isVisible) {
+                    const image =  currentMapObject.id + '_' + currentMapObject.count + '.png';
+                    await saveScreenshot(page, config.imagesPath, image, config.saveImages);
+                    node.image = image;
+                    currentMapObject.count++;
+                } else {
+                    debug(config.debugMode, JSON.stringify(node.target[0]) + ' is not visible anytime');
+                }
+
                 await page.evaluate((element) => {
                     const dom = document.querySelector(element);
                     if (dom) {

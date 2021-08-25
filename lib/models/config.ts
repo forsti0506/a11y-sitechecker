@@ -24,6 +24,8 @@ export interface Config {
     runOnly: RunOnly | TagValue[] | string[];
     crawl: boolean;
     name: string;
+    cookieText?: string;
+    cookieSelector?: string;
 }
 
 interface AxeConfig {

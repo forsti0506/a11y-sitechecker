@@ -68,8 +68,8 @@ export async function markAllTabableItems(
                     };
                     const isElementVisible = async (element): Promise<boolean> => {
                         const tolerance = 0.01;
-                        const percentX = 70;
-                        const percentY = 70;
+                        const percentX = 90;
+                        const percentY = 90;
                         let currentDom = element;
 
                         const elementRect = currentDom.getBoundingClientRect();
@@ -169,19 +169,20 @@ export async function markAllTabableItems(
                                         }
                                     }
                                     tabbingNumber++;
+                                    elementsFromEvaluationParsed.elementsByVisibility.push({
+                                        element: element.id,
+                                        visible: elementVisible,
+                                    });
                                 }
 
                                 if (elementVisible && !firstVisibleElement) {
                                     firstVisibleElement = true;
                                 }
 
-                                elementsFromEvaluationParsed.elementsByVisibility.push({
-                                    element: element.id,
-                                    visible: elementVisible,
-                                });
-                                await window.debug(
+
+                                window.debug(
                                     debugMode,
-                                    element.tagName + ' is visible: ' + elementVisible + 'and got number' + i,
+                                    element.tagName + ' is visible: ' + elementVisible + ' and got number ' + i,
                                 );
                             }
                             i++;
@@ -192,6 +193,7 @@ export async function markAllTabableItems(
                         let firstVisibleElement = false;
                         let i = 0;
                         let tabbingNumber = elementsFromEvaluationParsed.currentIndex;
+                        console.log('yessinger: ' + tabbingNumber)
                         for (const elementSelector of elementsFromEvaluationParsed.elementsByVisibility) {
                             const element = document.getElementById(elementSelector.element);
                             if (element) {
@@ -205,13 +207,11 @@ export async function markAllTabableItems(
 
                                     if (!elementVisible) element.scrollIntoView();
                                     k++;
-                                    console.log('step: ' + k);
                                 }
-                                console.log('elementSelector' + elementSelector + 'visibility' + elementVisible);
+                                console.log('elementSelector: ' + JSON.stringify(elementSelector) + ', visibility ' + elementVisible);
 
                                 if (elementVisible && !firstVisibleElement) {
                                     firstVisibleElement = true;
-                                    console.log('i am here elementnumer:' + tabbingNumber);
                                     const oldElementsToRemove = Array.from(document.querySelectorAll('[id^=span_id]'));
                                     for (const oldElement of oldElementsToRemove) {
                                         oldElement.remove();

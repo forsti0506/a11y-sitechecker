@@ -75,44 +75,15 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
     defineExtraTags(sitecheckerResult, config);
     fs.writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
     fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
+    const basePath = config.resultsPathPerUrl + getEscaped(id) + '_' + sitecheckerResult.testEnvironment?.windowWidth + '_' + sitecheckerResult.testEnvironment?.windowHeight;
 
-    const violationsPath =
-        config.resultsPathPerUrl +
-        getEscaped(id) +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowWidth +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowHeight +
-        '_violations.json';
+    const violationsPath = basePath + '_violations.json';
+    const incompletesPath = basePath + '_incompletes.json';
+    const passesPath = basePath + '_passes.json';
+    const inapplicablesPath = basePath + '_inapplicables.json';
+
     fs.writeFileSync(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
-
-    const incompletesPath =
-        config.resultsPathPerUrl +
-        getEscaped(id) +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowWidth +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowHeight +
-        '_incompletes.json';
     fs.writeFileSync(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
-
-    const passesPath =
-        config.resultsPathPerUrl +
-        getEscaped(id) +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowWidth +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowHeight +
-        '_passes.json';
     fs.writeFileSync(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
-
-    const inapplicablesPath =
-        config.resultsPathPerUrl +
-        getEscaped(id) +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowWidth +
-        '_' +
-        sitecheckerResult.testEnvironment?.windowHeight +
-        '_inapplicables.json';
     fs.writeFileSync(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
 }

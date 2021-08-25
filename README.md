@@ -96,7 +96,8 @@ export interface Config {
     runOnly: RunOnly | TagValue[] | string[];
     crawl: boolean;
     name: string;
-
+    cookieSelector?: string; // provide a selector for clicking cookie consent button (example: "[id*=cookie] a, [class*=cookie] a, [id*=cookie] button, [class*=cookie] button, [id*=didomi] button")
+    cookieText?: string; //provides a text for cookie consent text (example: "^(Alle akzeptieren|Akzeptieren|Verstanden|Zustimmen|Okay|OK|Alle Cookies akzeptieren)$")
 }
 ```
 

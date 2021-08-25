@@ -101,6 +101,12 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.clickableItemSelector) {
                 config.clickableItemSelector = configFile.clickableItemSelector;
             }
+            if (configFile.cookieSelector) {
+                config.cookieSelector = configFile.cookieSelector;
+            }
+            if (configFile.cookieText) {
+                config.cookieText = configFile.cookieText;
+            }
             if (configFile.crawl) {
                 if(config.urlsToAnalyze?.length === 1 && configFile.crawl) {
                     config.crawl = true;
