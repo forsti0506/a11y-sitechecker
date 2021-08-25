@@ -1,3 +1,13 @@
+# [4.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.3...v4.0.0) (2021-08-24)
+
+
+* Removed counting function. Countings are now available in the Common Result only. The results are overriden if saved as File ([30db6e6](https://github.com/forsti0506/a11y-sitechecker/commit/30db6e6c02aa2fea449c5021992edaffbb2ab8af))
+
+
+### BREAKING CHANGES
+
+* Countings are only available in common json file
+
 ## [3.1.3](https://github.com/forsti0506/a11y-sitechecker/compare/v3.1.2...v3.1.3) (2021-08-24)
 
 
