@@ -33,7 +33,7 @@ export async function makeScreenshotsWithErrorsBorderd(
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
                 const isVisible = await page.evaluate(
-                    async (elementSelector, debugMode) => {
+                    async (elementSelector, debugMode, currentMapObjectCount) => {
                         const dom: Element = document.querySelector(elementSelector);
                         let elementVisible = false;
                         if (dom) {
@@ -97,7 +97,7 @@ export async function makeScreenshotsWithErrorsBorderd(
                                     window.scrollBy(0, -adjustScrollingBehindFixed);
                                 }
 
-                                window.debug(config.debugMode, '(Count:' + currentMapObject.count + ')Adding border to: ' + JSON.stringify(node.target[0]));
+                                window.debug(debugMode, '(Count:' + currentMapObjectCount + '). Adding border to: ' + JSON.stringify(elementSelector));
 
                                 if (dom.tagName === 'A') {
                                     dom.setAttribute(
@@ -126,7 +126,7 @@ export async function makeScreenshotsWithErrorsBorderd(
                         return elementVisible;
                     },
                     node.target[0],
-                    config.debugMode,
+                    config.debugMode, currentMapObject.count
                 );
                 if(isVisible) {
                     const image =  currentMapObject.id + '_' + currentMapObject.count + '.png';
