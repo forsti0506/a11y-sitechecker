@@ -44,16 +44,16 @@ export async function makeScreenshotsWithErrorsBorderd(
                             const percentX = 90;
                             const percentY = 90;
 
+                            const elementRect = currentDom.getBoundingClientRect();
+
                             while (!elementVisible && k < 10 && dom.getClientRects().length > 0) {
                                 if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
 
-                                const elementRect = currentDom.getBoundingClientRect();
                                 const parentRects: DOMRect[] = [];
                                 while (currentDom.parentElement != null) {
                                     parentRects.push(currentDom.parentElement.getBoundingClientRect());
                                     currentDom = currentDom.parentElement;          
                                 }
-
                                 elementVisible = parentRects.every(function (parentRect) {
                                     const visiblePixelX =
                                         Math.min(elementRect.right, parentRect.right) -
@@ -75,6 +75,29 @@ export async function makeScreenshotsWithErrorsBorderd(
                                 k++;
                             }
                             if(elementVisible) {
+
+                                let adjustScrollingBehindFixed = 0;
+                                const elementIntersected = Array.from(document.body.getElementsByTagName("*")).filter(
+                                    x => getComputedStyle(x, null).getPropertyValue("position") === "fixed"
+                                ).some(fixedElem => {
+                                    const fixedElementClientRect = fixedElem.getBoundingClientRect();
+                                    const isIntersected = !(
+                                        elementRect.top > fixedElementClientRect.bottom ||
+                                        elementRect.right < fixedElementClientRect.left ||
+                                        elementRect.bottom < fixedElementClientRect.top ||
+                                        elementRect.left > fixedElementClientRect.right
+                                      );
+                                    if ( isIntersected && fixedElementClientRect.height + elementRect.height > adjustScrollingBehindFixed + elementRect.height) {
+                                        adjustScrollingBehindFixed = fixedElementClientRect.height + elementRect.height
+                                      }
+                                      return isIntersected;
+                                });
+
+                                console.log('element (' + dom.tagName + ') is intersected by fixed: ' + elementIntersected + ' height: ' + adjustScrollingBehindFixed);
+                                if(elementIntersected) {
+                                    window.scrollBy(0, -adjustScrollingBehindFixed);
+                                }
+
                                 if (dom.tagName === 'A') {
                                     dom.setAttribute(
                                         'style',
