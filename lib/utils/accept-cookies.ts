@@ -31,7 +31,7 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
             await saveScreenshot(
                 page,
                 config.imagesPath,
-                'consent_scren_' + count + '.png',
+                'consent_screen_' + count + '.png',
                 config.saveImages,
                 config.debugMode
             );
