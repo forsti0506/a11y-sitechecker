@@ -32,7 +32,6 @@ export async function makeScreenshotsWithErrorsBorderd(
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
-                debug(config.debugMode, '(Count:' + currentMapObject.count + ')Adding border to: ' + JSON.stringify(node.target[0]));
                 const isVisible = await page.evaluate(
                     async (elementSelector, debugMode) => {
                         const dom: Element = document.querySelector(elementSelector);
@@ -97,6 +96,8 @@ export async function makeScreenshotsWithErrorsBorderd(
                                 if(elementIntersected) {
                                     window.scrollBy(0, -adjustScrollingBehindFixed);
                                 }
+
+                                window.debug(config.debugMode, '(Count:' + currentMapObject.count + ')Adding border to: ' + JSON.stringify(node.target[0]));
 
                                 if (dom.tagName === 'A') {
                                     dom.setAttribute(
