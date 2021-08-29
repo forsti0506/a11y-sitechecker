@@ -17,7 +17,7 @@ export async function executeLogin(page: Page, config: Config): Promise<number> 
                 debug(config.debugMode, 'Navigating to url: ' + config.login.url);
                 await page.goto(config.login.url, { waitUntil: 'networkidle2' });
                 await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: config.timeout });
-            } catch (e) {
+            } catch (e: any) {
                 error(e);
             }
             await waitForHTML(page);

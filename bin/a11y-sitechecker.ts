@@ -37,7 +37,7 @@ program
                     retCode = 2;
                 }
             }
-        } catch (e) {
+        } catch (e: any) {
             if (e.message.includes('Threshold not met')) {
                 retCode = 2;
             } else if (e.message.includes('ERR_NAME_NOT_RESOLVED')) {

@@ -1,10 +1,25 @@
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { Page } from 'puppeteer';
 import { Config } from '../models/config';
-import { debug, saveScreenshot } from './helper-functions';
+import { debug, error, saveScreenshot } from './helper-functions';
 import { v4 as uuidv4 } from 'uuid';
+import { exposeDepsJs } from './expose-deep-js';
+import { isElementVisible, elementIntersected, highestZIndex } from './is-element-visible';
+import { acceptCookieConsent } from './accept-cookies';
 
 const uniqueNamePerUrl: Map<string, {id: string, count:number}> = new Map();
+
+declare global {
+    interface Window {
+        debug(debugMode: boolean, message: string, ...optionalParams: unknown[]): void;
+        isElementVisible (
+            dom: string | null
+        ): boolean;
+        highestZIndex () : number;
+        elementIntersected(elementRect: DOMRect): boolean;
+        adjustScrollingBehindFixed: number;
+    }
+}
 
 export async function makeScreenshotsWithErrorsBorderd(
     resultByUrl: ResultByUrl,
@@ -17,18 +32,21 @@ export async function makeScreenshotsWithErrorsBorderd(
     }
     const currentMapObject = uniqueNamePerUrl.get(resultByUrl.url)!;
     debug(config.debugMode, 'make screenshots with border');
-    page.on('console', (log) => {
-        debug(config.debugMode, log.text());
-    });
     try {
         await page.exposeFunction('debug', debug);
-    } catch (e) {
-        debug(
-            config.debugMode,
-            e.message +
-                '. Ignored because normally it means that the function is already exposed. (Adding debug to window in expose object)',
-        );
+    } catch (e: any) {
+        if (config.debugMode) {
+            error(
+                e.message +
+                    '. Ignored because normally it means that function already exposed'
+            );
+        }
     }
+
+    await page.evaluate(exposeDepsJs({ isElementVisible }));
+    await page.evaluate(exposeDepsJs({ highestZIndex }));
+    await page.evaluate(exposeDepsJs({ elementIntersected }));
+
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
@@ -36,65 +54,42 @@ export async function makeScreenshotsWithErrorsBorderd(
                     async (elementSelector, debugMode, currentMapObjectCount) => {
                         const dom: Element = document.querySelector(elementSelector);
                         let elementVisible = false;
+                        const errorId = document.querySelectorAll('.errorbordered');
                         if (dom) {
-                            let currentDom = dom;
+                            if (!dom.id) {
+                                dom.setAttribute('id', 'error_id' + errorId.length + 1);
+                                dom.classList.add('errorbordered');
+                            }
                             let k = 0;
-                            const tolerance = 0.01;
-                            const percentX = 90;
-                            const percentY = 90;
-
-                            const elementRect = currentDom.getBoundingClientRect();
-
                             while (!elementVisible && k < 10 && dom.getClientRects().length > 0) {
+                                if(k === 0) {
+                                    dom.scrollIntoView({
+                                    behavior: 'auto',
+                                    block: 'center',
+                                    inline: 'center'
+                                    });
+                                }
                                 if (k > 0) await new Promise((resolve) => setTimeout(resolve, 200));
 
-                                const parentRects: DOMRect[] = [];
-                                while (currentDom.parentElement != null) {
-                                    parentRects.push(currentDom.parentElement.getBoundingClientRect());
-                                    currentDom = currentDom.parentElement;          
-                                }
-                                elementVisible = parentRects.every(function (parentRect) {
-                                    const visiblePixelX =
-                                        Math.min(elementRect.right, parentRect.right) -
-                                        Math.max(elementRect.left, parentRect.left);
-                                    const visiblePixelY =
-                                        Math.min(elementRect.bottom, parentRect.bottom) -
-                                        Math.max(elementRect.top, parentRect.top);
-                                    const visiblePercentageX = (visiblePixelX / elementRect.width) * 100;
-                                    const visiblePercentageY = (visiblePixelY / elementRect.height) * 100;
-                                    return (
-                                        visiblePercentageX + tolerance > percentX &&
-                                        visiblePercentageY + tolerance > percentY
-                                    ) && elementRect.top < window.innerHeight && elementRect.bottom >= 0;
-                                });
+                                elementVisible = window.isElementVisible(dom.id)
                                 if (!elementVisible) {
-                                    dom.scrollIntoView();
-                                    currentDom = dom;                                
+                                    window.debug(debugMode, 'Element not visible. Try to scroll into view');
+                                    dom.scrollIntoView({
+                                        behavior: 'auto',
+                                        block: 'center',
+                                        inline: 'center'
+                                    });                              
                                 }
                                 k++;
                             }
                             if(elementVisible) {
+                                const elementRect = dom.getBoundingClientRect();
+                                const elementIntersected = window.elementIntersected(elementRect)
+                                    
 
-                                let adjustScrollingBehindFixed = 0;
-                                const elementIntersected = Array.from(document.body.getElementsByTagName("*")).filter(
-                                    x => getComputedStyle(x, null).getPropertyValue("position") === "fixed"
-                                ).some(fixedElem => {
-                                    const fixedElementClientRect = fixedElem.getBoundingClientRect();
-                                    const isIntersected = !(
-                                        elementRect.top > fixedElementClientRect.bottom ||
-                                        elementRect.right < fixedElementClientRect.left ||
-                                        elementRect.bottom < fixedElementClientRect.top ||
-                                        elementRect.left > fixedElementClientRect.right
-                                      );
-                                    if ( isIntersected && fixedElementClientRect.height + elementRect.height > adjustScrollingBehindFixed + elementRect.height) {
-                                        adjustScrollingBehindFixed = fixedElementClientRect.height + elementRect.height
-                                      }
-                                      return isIntersected;
-                                });
-
-                                console.log('element (' + dom.tagName + ') is intersected by fixed: ' + elementIntersected + ' height: ' + adjustScrollingBehindFixed);
+                                console.log('element (' + dom.tagName + ') is intersected by fixed: ' + elementIntersected + ' height: ' + window.adjustScrollingBehindFixed);
                                 if(elementIntersected) {
-                                    window.scrollBy(0, -adjustScrollingBehindFixed);
+                                    window.scrollBy(0, - window.adjustScrollingBehindFixed);
                                 }
 
                                 window.debug(debugMode, '(Count:' + currentMapObjectCount + '). Adding border to: ' + JSON.stringify(elementSelector));
@@ -135,6 +130,8 @@ export async function makeScreenshotsWithErrorsBorderd(
                     currentMapObject.count++;
                 } else {
                     debug(config.debugMode, JSON.stringify(node.target[0]) + ' is not visible anytime');
+                    //check if maybe new consent area is here
+                    await acceptCookieConsent(page, config);
                 }
 
                 await page.evaluate((element) => {

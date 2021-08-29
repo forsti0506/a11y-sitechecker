@@ -1,0 +1,10 @@
+{
+    "name": "Test",
+    "urlsToAnalyze": [
+        "https://www.kurier.at"
+    ],
+    "saveImages": true,
+    "cookieSelector":"button",
+    "cookieText":"^(Alle akzeptieren|Akzeptieren|Verstanden|Zustimmen|Okay|OK|Alle Cookies akzeptieren|Einverstanden)$",
+    "debugMode": true
+}

@@ -27,7 +27,7 @@ export async function entry(
         const promises: Promise<A11ySitecheckerResult>[] = [];
         config.viewports.forEach((viewport) => promises.push(checkSite(config, axeSpecs, viewport, onlyReturn)));
         return Promise.all(promises);
-    } catch (err) {
+    } catch (err: any) {
         // Handle any errors
         error(err.message);
         debug(config.debugMode, err.stackTrace);

@@ -10,14 +10,12 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
     const frames = page.frames();
     let cookieId;
     for(const frame of frames) {
+        debug(config.debugMode, 'Check frame ' + (frame.name() || frame.url()) + ' for consent button')
         cookieId = await frame.evaluate((cookieSelector, cookieText, count) => {
-            console.log(JSON.stringify(document.body.classList))
                 const elements = document.querySelectorAll(cookieSelector);
-                console.log('lengthinger' + elements.length)
                 const cookieElements = Array.from(elements).filter(d => RegExp(cookieText, 'i').test(d.textContent.trim()))
                 console.log(JSON.stringify(cookieElements.length))
                 if (cookieElements && cookieElements.length > 0) {
-                    console.log('okaaay')
                     const element: HTMLElement = cookieElements[0];
                     if (!element.id) {
                         element.setAttribute('id', 'consent_screen_' + count);
@@ -42,7 +40,7 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
             count++;
             break;
         } else {
-            debug(config.debugMode, 'Nothing found');
+            debug(config.debugMode, 'No cookie element found. Iframe Name or Url: ' + (frame.name() || frame.url()));
         }
     }
     

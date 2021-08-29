@@ -1,14 +1,15 @@
 export interface ElementsFromEvaluation {
-    elementsByVisibility: ElementVisibility[];
+    elementsByVisibility: string[];
     focusableNonStandardElements: string[];
     currentIndex: number;
-}
-
-export interface ElementVisibility {
-    element: string;
-    visible: boolean;
+    spanElements: SpanElement[];
 }
 
 export interface ListenerObject {
     listeners: Event[];
+}
+export interface SpanElement {
+    elementId: string; 
+    spanId: string;
+    visible: boolean;
 }

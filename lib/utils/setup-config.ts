@@ -119,10 +119,12 @@ export function setupConfig(options: OptionValues): Config {
             } else {
                 throw new Error('It is absolutly necessary to provide a name!')
             }
-        } catch (e) {
+        } catch (e: any) {
             error(e);
             throw e;
         }
+    } else {
+        throw new Error('It is absolutly necessary to provide a config!')
     }
 
     return config;
