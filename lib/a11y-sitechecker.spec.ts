@@ -32,7 +32,7 @@ describe('a11y-sitechecker', () => {
         const violation = mockDeep<FullCheckerSingleResult>();
         jest.spyOn(setupConfigMock, 'prepareWorkspace').mockImplementation(() => void 0);
         jest.spyOn(analyzeSite, 'analyzeSite').mockImplementation(() => new Promise((resolve) => resolve(mockedResults as ResultByUrl[])));
-        jest.spyOn(mergeResults, 'mergeResults').mockImplementation((result, report) => { // @ts-ignore
+        jest.spyOn(mergeResults, 'mergeResults').mockImplementation((result, report) => {
             report.violations = [violation]});
         const mockConfig = mock<Config>();
         mockConfig.name = 'Testinger';
