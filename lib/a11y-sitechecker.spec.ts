@@ -5,7 +5,6 @@ import * as analyzeSite from './utils/analyze-site';
 import * as helpers from './utils/helper-functions';
 import * as mergeResults from './utils/result-functions';
 import * as setupConfigMock from './utils/setup-config';
-import { setupAxeConfig, setupConfig } from './utils/setup-config';
 
 describe('a11y-sitechecker', () => {
     test('Error on empty config', async () => {
