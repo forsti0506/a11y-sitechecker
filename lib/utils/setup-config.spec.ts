@@ -16,7 +16,7 @@ describe('setup-config', () => {
       });
 
     test('setup-axe with standard runners and result types', async () => {
-        const config = setupConfig({});
+        const config = setupConfig({providedConfig: {name: 'Testinger', urlsToAnalyze: ['www.test.at']}});
         const browser = await puppeteer.launch(config.launchOptions);
         const page = (await browser.pages())[0];
         await setupAxe(page, {}, config)

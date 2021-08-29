@@ -87,7 +87,7 @@ describe('a11y-sitechecker', () => {
     
         return entry(mockConfig as Config, {}).then(e => {
             expect(e.length).toBe(10);
-        }).catch(e => expect(e.message).toContain('config.viewports.forEach is not'));
+        }).catch(e => expect(e.message).toContain('Cannot read property'));
     }); 
 
     test('Error on empty config testinger', () => {
