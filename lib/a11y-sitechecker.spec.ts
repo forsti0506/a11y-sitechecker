@@ -88,24 +88,5 @@ describe('a11y-sitechecker', () => {
         return entry(mockConfig as Config, {}).then(e => {
             expect(e.length).toBe(10);
         }).catch(e => expect(e.message).toContain('Cannot read property'));
-    }); 
-
-    test('Error on empty config testinger', () => {
-        const mockConfig = setupConfig({providedConfig: JSON.parse(`
-            
-            {
-                "name": "Test",
-                "urlsToAnalyze": [
-                    "https://www.kurier.at"
-                ],
-                "saveImages": true,
-                "cookieSelector":"button",
-                "cookieText":"^(Alle akzeptieren|Akzeptieren|Verstanden|Zustimmen|Okay|OK|Alle Cookies akzeptieren|Einverstanden)$",
-                "debugMode": true
-            }
-    `
-        )});
-        return entry(mockConfig, setupAxeConfig(mockConfig));
-    });
-    
+    });     
 });
