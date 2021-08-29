@@ -54,13 +54,14 @@ export async function analyzeUrl(
     } catch (e) {
         error(e + '. Error Axe');
     }
-    let urlResult;
+    let urlResult: ResultByUrl;
     if (axeResults) {
         urlResult = await createUrlResult(url, axeResults);
+        await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
+        await page.reload();
+        await waitForHTML(page);
+        await markAllTabableItems(page, url, config, urlResult);
+        return urlResult;
     }
-    await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-    await page.reload();
-    await waitForHTML(page);
-    await markAllTabableItems(page, url, config, urlResult);
-    return urlResult;
+    return null;
 }

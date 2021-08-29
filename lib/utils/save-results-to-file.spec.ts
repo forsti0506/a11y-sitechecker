@@ -1,7 +1,6 @@
 import { TestEnvironment } from 'axe-core';
 import fs from 'fs';
 import 'jest';
-import { mock, mockDeep } from 'jest-mock-extended';
 // users.test.js
 import { A11ySitecheckerResult } from '../models/a11y-sitechecker-result';
 import { Config } from '../models/config';
@@ -28,13 +27,13 @@ describe('save-results-to-file', () => {
             if(file === 'test/results/files.json') 
                 return Buffer.from('[{"_id": "12345", "filesByDate": []}]')
             return fs.readFileSync(file)});
-        const config = mock<Config>();
+        const config: Partial<Config> = {};
         config.resultsPath = "test/results/";
         config.resultsPathPerUrl = "test/results/test.at/"
-        const sitecheckerResult = mockDeep<A11ySitecheckerResult>();
+        const sitecheckerResult: Partial<A11ySitecheckerResult> = {};
         sitecheckerResult.testEnvironment = {windowHeight: 100, windowWidth: 100} as TestEnvironment;
 
-        await saveResultsToFile(config, sitecheckerResult, 0);
+        await saveResultsToFile(config as Config, sitecheckerResult as A11ySitecheckerResult, 0);
         expect(writeFileMock).toHaveBeenNthCalledWith(1, expect.stringContaining('100_100.json'), expect.anything());
         expect(writeFileMock).toHaveBeenCalledTimes(6);
     });

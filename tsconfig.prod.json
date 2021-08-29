@@ -1,10 +1,9 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "noImplicitAny": false,
     "sourceMap": false,
     "removeComments": true,
-    "preserveConstEnums": true,
     "declaration": true,
     "target": "es2017",
     "strict": true,
@@ -12,19 +11,9 @@
       "es2017",
       "dom"
     ],
-    "outDir": "./dist",
-    "noUnusedLocals": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": false,
-    "pretty": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowUnreachableCode": false,
     "types": [
       "node"
-    ],
-    "resolveJsonModule": true,
-    "esModuleInterop": true
+    ]
   },
   "include": [
     "./lib/**/*",
@@ -34,5 +23,5 @@
     "node_modules",
     "**/*.spec.ts",
     "lib/utils/test-helper-functions.ts"
-]
+  ]
 }

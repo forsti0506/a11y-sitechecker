@@ -5,6 +5,8 @@
 //     if (dom) {
 //         let currentDom = dom;
 
+import { Point } from "puppeteer";
+
 //         const tolerance = 0.01;
 //         const percentX = 90;
 //         const percentY = 90;
@@ -49,7 +51,7 @@ export function isElementVisible(elementstring: string | null): boolean {
         elem.getBoundingClientRect().width === 0) {
         return false;
     }
-    const elementPoints = {
+    const elementPoints: {[key: string]: Point} = {
         'center': {
             x: elem.getBoundingClientRect().left + elem.offsetWidth / 2,
             y: elem.getBoundingClientRect().top + elem.offsetHeight / 2
@@ -73,7 +75,7 @@ export function isElementVisible(elementstring: string | null): boolean {
     }
 
     for(const index in elementPoints) {
-        const point = elementPoints[index];
+        const point: Point = elementPoints[index];
         if (point.x < 0) return false;
         if (point.x > (document.documentElement.clientWidth || window.innerWidth)) return false;
         if (point.y < 0) return false;
