@@ -1,3 +1,20 @@
+# [4.2.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.1.0...v4.2.0) (2021-08-29)
+
+
+### Bug Fixes
+
+* better debugging message order ([654ca7f](https://github.com/forsti0506/a11y-sitechecker/commit/654ca7f0a44488f2ed0ee75cac6b40d339c50b26))
+* grammar check of consent file ([41bbf0c](https://github.com/forsti0506/a11y-sitechecker/commit/41bbf0ccf8a5794ebaeb036c19e2e1dd26eb70bf))
+* no ts-ignore ([929fc89](https://github.com/forsti0506/a11y-sitechecker/commit/929fc89a47009ec68d572b84c60f09ee76802a6b))
+* tests fixed ([0e838a3](https://github.com/forsti0506/a11y-sitechecker/commit/0e838a32f0b5ff02f8a93dbf2f4ce08e058bbb3f))
+* update tsconfig.json and fix jest mocks ([466e41b](https://github.com/forsti0506/a11y-sitechecker/commit/466e41b260d987c169aea881aa95bbcde14f60a2))
+
+
+### Features
+
+* new Logic for tabbing images, videos instead screenshots (later on both by config) ([a9edf61](https://github.com/forsti0506/a11y-sitechecker/commit/a9edf6113ce4c6910adca53beaca8f8055a5d04f))
+* Scroll down if fixed elements (like header) ([36cf881](https://github.com/forsti0506/a11y-sitechecker/commit/36cf8817292552caea25fd0fb4d560c1c4d3bf42))
+
 # [4.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.0.0...v4.1.0) (2021-08-25)
 
 
