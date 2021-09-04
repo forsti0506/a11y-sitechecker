@@ -70,26 +70,6 @@ export function shouldElementBeIgnored(element: Element, elementstoIgnore: strin
     return shouldElementBeIgnored;
 }
 
-export async function saveScreenshot(
-    page: Page,
-    path: string | undefined,
-    fileName: string | undefined,
-    saveImage: boolean | undefined,
-    debugMode = false,
-): Promise<void> {
-    if (saveImage) {
-        try {
-            if (!path?.endsWith('/')) {
-                path = path + '/';
-            }
-            await page.screenshot({ path: path + fileName });
-            debug(debugMode, path + fileName + ' saved');
-        } catch (error) {
-            log(error + '. Image not saved. Analyze not stopped!');
-        }
-    }
-}
-
 export function writeToJsonFile(data: string, path: string, vp: SitecheckerViewport): void {
     log(chalk.blue('#############################################################################################'));
     log(chalk.blue(`Writing results to ${path}/results_${vp.width}_${vp.height}'.json`));

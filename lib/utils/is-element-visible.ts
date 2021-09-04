@@ -41,8 +41,11 @@ import { Point } from "puppeteer";
 // };
 
 export function isElementVisible(elementstring: string | null): boolean {
-    const elem = elementstring ? document.getElementById(elementstring) : null;
-    if (!(elem instanceof Element)) return false;
+    let elem = elementstring ? document.getElementById(elementstring) : null;
+    if (!(elem instanceof Element)) {
+        elem = elementstring ? document.querySelector(elementstring): null;
+        if(!elem) return false;
+    }
     const style = getComputedStyle(elem);
     if (style.display === 'none') return false;
     if (style.visibility !== 'visible') return false;

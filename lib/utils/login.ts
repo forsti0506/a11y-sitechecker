@@ -1,7 +1,8 @@
 import { Page } from 'puppeteer';
-import { debug, error, log, saveScreenshot, waitForHTML } from './helper-functions';
+import { debug, error, log, waitForHTML } from './helper-functions';
 import chalk from 'chalk';
 import { Config } from '../models/config';
+import { saveScreenshot } from './helper-saving-screenshots';
 
 export async function executeLogin(page: Page, config: Config): Promise<number> {
     if (!config.login || !config.login.url) {

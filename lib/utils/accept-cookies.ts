@@ -1,6 +1,7 @@
 import { Page } from 'puppeteer';
 import { Config } from '../models/config';
-import { debug, saveScreenshot } from './helper-functions';
+import { debug } from './helper-functions';
+import { saveScreenshot } from './helper-saving-screenshots';
 
 let count = 0;
 

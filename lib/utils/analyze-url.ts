@@ -1,6 +1,6 @@
 import { Spec } from 'axe-core';
 import { Config, SitecheckerViewport } from '../models/config';
-import { debug, error, getEscaped, log, saveScreenshot, waitForHTML } from './helper-functions';
+import { debug, error, getEscaped, log, waitForHTML } from './helper-functions';
 import { markAllTabableItems } from './mark-all-tabable-items';
 import { setupAxe } from './setup-config';
 import { Page } from 'puppeteer';
@@ -8,6 +8,7 @@ import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-borderd';
 import { createUrlResult } from './create-url-result';
 import { acceptCookieConsent } from './accept-cookies';
+import { saveScreenshot } from './helper-saving-screenshots';
 
 const savedScreenshotHtmls: string[] = [];
 
