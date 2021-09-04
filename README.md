@@ -28,7 +28,7 @@ errors, shows the tab-order and other features.
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-34.32%25-red.svg) | ![Branches](https://img.shields.io/badge/branches-23.48%25-red.svg) | ![Functions](https://img.shields.io/badge/functions-24.72%25-red.svg) | ![Lines](https://img.shields.io/badge/lines-35.71%25-red.svg) |
+| ![Statements](https://img.shields.io/badge/statements-34.23%25-red.svg) | ![Branches](https://img.shields.io/badge/branches-23.82%25-red.svg) | ![Functions](https://img.shields.io/badge/functions-23.91%25-red.svg) | ![Lines](https://img.shields.io/badge/lines-35.64%25-red.svg) |
 
 ### Install
 

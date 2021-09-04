@@ -29,10 +29,12 @@ export async function makeScreenshotsWithErrorsBorderd(
     config: Config,
     savedScreenshotHtmls: string[]
 ): Promise<void> {
-    if (!uniqueNamePerUrl.get(resultByUrl.url)) {
+    let currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
+    if (!currentMapObject) {
         uniqueNamePerUrl.set(resultByUrl.url, { id: uuidv4(), count: 0 });
+        currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
     }
-    const currentMapObject = uniqueNamePerUrl.get(resultByUrl.url)!;
+    
     debug(config.debugMode, 'make screenshots with border');
     try {
         await page.exposeFunction('debug', debug);
@@ -51,7 +53,7 @@ export async function makeScreenshotsWithErrorsBorderd(
 
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
-            if (!savedScreenshotHtmls.includes(node.html)) {
+            if (!savedScreenshotHtmls.includes(node.html) && currentMapObject) {
                 const image = currentMapObject.id + '_' + currentMapObject.count + '.png';
                 const screenshotResult = await saveScreenshotSingleDomElement(
                     page,
