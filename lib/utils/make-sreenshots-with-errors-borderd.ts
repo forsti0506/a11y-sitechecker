@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { exposeDepsJs } from './expose-deep-js';
 import { isElementVisible, elementIntersected, highestZIndex } from './is-element-visible';
 import { acceptCookieConsent } from './accept-cookies';
+import { screenshotSingleDomElement } from './screenshot-single-dom-element';
 
 const uniqueNamePerUrl: Map<string, {id: string, count:number}> = new Map();
 
@@ -50,6 +51,13 @@ export async function makeScreenshotsWithErrorsBorderd(
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
             if (!savedScreenshotHtmls.includes(node.html)) {
+
+                if(config.saveImages && config.imagesPath) {
+                    await screenshotSingleDomElement(config.imagesPath + 'test.png' , node.target[0], page, 10);
+                    debugger;
+                }
+                
+
                 const isVisible = await page.evaluate(
                     async (elementSelector, debugMode, currentMapObjectCount) => {
                         const dom: Element = document.querySelector(elementSelector);
