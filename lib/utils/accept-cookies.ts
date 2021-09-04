@@ -10,16 +10,13 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
     const frames = page.frames();
     let cookieId;
     for (const frame of frames) {
-        debug(
-            config.debugMode,
-            'Check frame ' + (frame.name() || frame.url()) + ' for consent button'
-        );
+        debug(config.debugMode, 'Check frame ' + (frame.name() || frame.url()) + ' for consent button');
         if (config.cookieSelector && config.cookieText) {
             cookieId = await frame.evaluate(
                 (cookieSelector, cookieText, count) => {
                     const elements = document.querySelectorAll(cookieSelector);
                     const cookieElements = Array.from(elements).filter((d) =>
-                        RegExp(cookieText, 'i').test(d.textContent.trim())
+                        RegExp(cookieText, 'i').test(d.textContent.trim()),
                     );
                     console.log(JSON.stringify(cookieElements.length));
                     if (cookieElements && cookieElements.length > 0) {
@@ -34,7 +31,7 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
                 },
                 config.cookieSelector,
                 config.cookieText,
-                count
+                count,
             );
         }
 
@@ -44,7 +41,7 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
                 config.imagesPath,
                 'consent_screen_' + count + '.png',
                 config.saveImages,
-                config.debugMode
+                config.debugMode,
             );
             await frame.evaluate((cookieId) => {
                 const element = document.getElementById(cookieId);
@@ -53,11 +50,7 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
             count++;
             break;
         } else {
-            debug(
-                config.debugMode,
-                'No cookie element found. Iframe Name or Url: ' +
-                    (frame.name() || frame.url())
-            );
+            debug(config.debugMode, 'No cookie element found. Iframe Name or Url: ' + (frame.name() || frame.url()));
         }
     }
 }

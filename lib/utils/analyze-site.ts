@@ -22,15 +22,15 @@ export async function analyzeSite(
     alreadyVisited: Map<string, SitecheckerViewport>,
     alreadyParsed: string[],
     notCheckedLinks: string[],
-    link?: string
+    link?: string,
 ): Promise<ResultByUrl[]> {
     if (config.crawl === false) {
-        const resultsAsPromise = lastValueFrom(from(config.urlsToAnalyze)
-            .pipe(
+        const resultsAsPromise = lastValueFrom(
+            from(config.urlsToAnalyze).pipe(
                 mergeMap(async (url) => {
                     const page = await browser.newPage();
                     const viewport = firstpage.viewport();
-                    if(viewport) {
+                    if (viewport) {
                         await page.setViewport(viewport);
                     }
 
@@ -39,17 +39,18 @@ export async function analyzeSite(
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            ));
+            ),
+        );
         const result = await resultsAsPromise;
         resultsByUrl.push(...result);
     } else {
         let url;
-        if(!link) {
+        if (!link) {
             url = config.urlsToAnalyze[0];
         } else {
             url = link;
         }
-        
+
         if (!url.startsWith('https://') && !url.startsWith('http://')) {
             url = 'https://' + url;
         }
@@ -72,13 +73,13 @@ export async function analyzeSite(
             alreadyVisited,
         );
 
-        const results = lastValueFrom(from(links.entries())
-            .pipe(
+        const results = lastValueFrom(
+            from(links.entries()).pipe(
                 mergeMap(async ([i, link]) => {
                     log(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
                     const page = await browser.newPage();
                     const viewport = firstpage.viewport();
-                    if(viewport) {
+                    if (viewport) {
                         await page.setViewport(viewport);
                     }
                     if (alreadyVisited.get(link)) {
@@ -89,7 +90,8 @@ export async function analyzeSite(
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            ));
+            ),
+        );
         resultsByUrl.push(...(await results));
 
         if (config.analyzeClicks)
@@ -118,7 +120,7 @@ export async function analyzeSite(
                     alreadyVisited,
                     alreadyParsed,
                     notCheckedLinks,
-                    link
+                    link,
                 );
                 log(config.debugMode, 'Finished analyze of Site: ' + link);
             }

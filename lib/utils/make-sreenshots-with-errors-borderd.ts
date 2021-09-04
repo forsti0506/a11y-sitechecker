@@ -4,11 +4,7 @@ import { Config } from '../models/config';
 import { debug, error } from './helper-functions';
 import { v4 as uuidv4 } from 'uuid';
 import { exposeDepsJs } from './expose-deep-js';
-import {
-    isElementVisible,
-    elementIntersected,
-    highestZIndex
-} from './is-element-visible';
+import { isElementVisible, elementIntersected, highestZIndex } from './is-element-visible';
 import { saveScreenshotSingleDomElement } from './helper-saving-screenshots';
 
 const uniqueNamePerUrl: Map<string, { id: string; count: number }> = new Map();
@@ -27,23 +23,20 @@ export async function makeScreenshotsWithErrorsBorderd(
     resultByUrl: ResultByUrl,
     page: Page,
     config: Config,
-    savedScreenshotHtmls: string[]
+    savedScreenshotHtmls: string[],
 ): Promise<void> {
     let currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
     if (!currentMapObject) {
         uniqueNamePerUrl.set(resultByUrl.url, { id: uuidv4(), count: 0 });
         currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
     }
-    
+
     debug(config.debugMode, 'make screenshots with border');
     try {
         await page.exposeFunction('debug', debug);
     } catch (e: any) {
         if (config.debugMode) {
-            error(
-                e.message +
-                    '. Ignored because normally it means that function already exposed'
-            );
+            error(e.message + '. Ignored because normally it means that function already exposed');
         }
     }
 
@@ -62,7 +55,7 @@ export async function makeScreenshotsWithErrorsBorderd(
                     config.saveImages,
                     node.target[0],
                     10,
-                    config.debugMode
+                    config.debugMode,
                 );
 
                 if (typeof screenshotResult === 'boolean' && screenshotResult === true) {
@@ -75,10 +68,7 @@ export async function makeScreenshotsWithErrorsBorderd(
 
                 savedScreenshotHtmls.push(node.html);
             } else {
-                debug(
-                    config.debugMode,
-                    'Nothing happend, because already screenshoted: ' + node.html
-                );
+                debug(config.debugMode, 'Nothing happend, because already screenshoted: ' + node.html);
             }
         }
     }

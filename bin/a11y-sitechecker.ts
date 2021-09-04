@@ -9,7 +9,6 @@ import { saveResultsToFile } from '../lib/utils/save-results-to-file';
 import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
 import pkg from '../package.json';
 
-
 program
     .version(pkg.version)
     .usage('[options] <paths>')
@@ -23,31 +22,29 @@ program
     .parse(process.argv);
 
 (async (): Promise<void> => {
-        const config = setupConfig(program.opts());
-        const axeConfig = setupAxeConfig(config);
-        let retCode = 0;
-        try {
-            const results = await entry(config, axeConfig, !program.opts().json);
+    const config = setupConfig(program.opts());
+    const axeConfig = setupAxeConfig(config);
+    let retCode = 0;
+    try {
+        const results = await entry(config, axeConfig, !program.opts().json);
 
-            for (const [i, sitecheckerResult] of results.entries()) {
+        for (const [i, sitecheckerResult] of results.entries()) {
+            await saveResultsToFile(config, sitecheckerResult, i);
 
-                await saveResultsToFile(config, sitecheckerResult, i);
-
-                if (sitecheckerResult.violations.length >= config.threshold) {
-                    retCode = 2;
-                }
-            }
-        } catch (e: any) {
-            if (e.message.includes('Threshold not met')) {
+            if (sitecheckerResult.violations.length >= config.threshold) {
                 retCode = 2;
-            } else if (e.message.includes('ERR_NAME_NOT_RESOLVED')) {
-                retCode = 3;
-            } else {
-                retCode = 1;
             }
-
-            error(e);
         }
-        process.exit(retCode);
-    
+    } catch (e: any) {
+        if (e.message.includes('Threshold not met')) {
+            retCode = 2;
+        } else if (e.message.includes('ERR_NAME_NOT_RESOLVED')) {
+            retCode = 3;
+        } else {
+            retCode = 1;
+        }
+
+        error(e);
+    }
+    process.exit(retCode);
 })();

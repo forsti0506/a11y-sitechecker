@@ -3,7 +3,6 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
-    "removeComments": true,
     "preserveConstEnums": true,
     "declaration": true,
     "target": "es2017",
@@ -20,6 +19,7 @@
     "pretty": true,
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
     "types": [
       "node"
     ],

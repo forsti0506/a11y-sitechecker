@@ -55,7 +55,7 @@
     "scripts": {
         "build": "tsc && copyfiles README.md dist",
         "build:prod": "npm run lint && tsc --project tsconfig.prod.json && copyfiles README.md dist",
-        "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
+        "lint": "tsc --noEmit && eslint . --ext js,ts --quiet --fix",
         "semantic-release": "semantic-release",
         "test": "jest --detectOpenHandles --forceExit",
         "test:coverage": "jest --coverage --detectOpenHandles",

@@ -21,7 +21,7 @@ export async function analyzeUrl(
 ): Promise<ResultByUrl | null> {
     if ((await page.url()) !== url) {
         await page.goto(url, { waitUntil: 'load' });
-        if(config.cookieText && config.cookieSelector) {
+        if (config.cookieText && config.cookieSelector) {
             await acceptCookieConsent(page, config);
         }
         await waitForHTML(page, config.timeout, config.debugMode);
@@ -38,10 +38,10 @@ export async function analyzeUrl(
         return null;
     }
     const viewport = page.viewport();
-    if(viewport) {
+    if (viewport) {
         alreadyVisited.set(url, viewport);
     }
-    
+
     log('Currently analyzing ' + url);
 
     if (config.saveImages) {

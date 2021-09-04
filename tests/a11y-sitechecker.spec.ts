@@ -34,7 +34,7 @@ xdescribe('a11y-sitechecker', () => {
         config.resultTypes = ['violations', 'inapplicable', 'incomplete', 'passes'];
         if (config.axeConfig) config.axeConfig.locale = 'de';
         const axeConfig = setupAxeConfig(config);
-       return entry(config, axeConfig, 'forsti.eu', true).then((e) => {
+        return entry(config, axeConfig, 'forsti.eu', true).then((e) => {
             expect(e.length).toBe(2);
             expect(e[0].testEnvironment?.windowHeight).toEqual(1080);
             expect(e[1].testEnvironment?.windowHeight).toEqual(400);
