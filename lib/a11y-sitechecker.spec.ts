@@ -44,7 +44,7 @@ describe('a11y-sitechecker', () => {
 
         return entry(mockConfig as Config, {})
             .then((e) => expect(e.length).toBe(10))
-            .catch((e) => expect(e.message).toContain('Threshold not met'));
+            .catch((e) => expect(e.message).toContain('Threshold (0) not met'));
     });
     test('Threshold met', () => {
         const mockedResults: Partial<ResultByUrl>[] = [];
