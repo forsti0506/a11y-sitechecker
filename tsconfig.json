@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "target": "es2017",
+    "target": "es2021",
     "strict": true,
     "lib": [
-      "es2017",
+      "es2021",
       "dom"
     ],
     "outDir": "./dist",
@@ -20,6 +19,8 @@
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
     "types": [
       "node"
     ],
