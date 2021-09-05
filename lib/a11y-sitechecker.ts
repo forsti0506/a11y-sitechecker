@@ -74,7 +74,7 @@ async function checkSite(
     mergeResults(report, result);
     if (result.violations.length > config.threshold) {
         throw new Error(
-            'Threshold not met. There are ' + result.violations.length + ' errors. Threshold was: ' + config.threshold,
+            'Threshold (' + config.threshold + ') not met. There are ' + result.violations.length + ' errors.',
         );
     }
     if (config.json) {

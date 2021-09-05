@@ -21,7 +21,7 @@ export async function executeLogin(page: Page, config: Config): Promise<number> 
             } catch (e: any) {
                 error(e);
             }
-            await waitForHTML(page);
+            await waitForHTML(page, config.timeout, config.debugMode);
             await saveScreenshot(page, config.imagesPath, 'loginSite.png', config.saveImages);
         } catch (e) {
             failedLoads++;

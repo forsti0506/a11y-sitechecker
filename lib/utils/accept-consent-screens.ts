@@ -1,12 +1,13 @@
 import { Page } from 'puppeteer';
 import { Config } from '../models/config';
-import { debug } from './helper-functions';
+import { debug, waitForHTML } from './helper-functions';
 import { saveScreenshot } from './helper-saving-screenshots';
 
 let count = 0;
 
 export async function acceptCookieConsent(page: Page, config: Config): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, 2000)); //wait for frames to be loaded; ToDo: consider alternatives
+    // await new Promise((resolve) => setTimeout(resolve, 2000)); //wait for frames to be loaded; ToDo: consider alternatives
+    await waitForHTML(page, config.timeout, config.debugMode);
     const frames = page.frames();
     let cookieId;
     for (const frame of frames) {
@@ -18,7 +19,6 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
                     const cookieElements = Array.from(elements).filter((d) =>
                         RegExp(cookieText, 'i').test(d.textContent.trim()),
                     );
-                    console.log(JSON.stringify(cookieElements.length));
                     if (cookieElements && cookieElements.length > 0) {
                         const element: HTMLElement = cookieElements[0];
                         if (!element.id) {

@@ -23,7 +23,7 @@ export async function makeScreenshotsWithErrorsBorderd(
     resultByUrl: ResultByUrl,
     page: Page,
     config: Config,
-    savedScreenshotHtmls: string[],
+    savedScreenshotHtmls: Map<string, string | null>,
 ): Promise<void> {
     let currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
     if (!currentMapObject) {
@@ -46,7 +46,8 @@ export async function makeScreenshotsWithErrorsBorderd(
 
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {
-            if (!savedScreenshotHtmls.includes(node.html) && currentMapObject) {
+            const alreadyScreenshotedImage = savedScreenshotHtmls.get(node.html);
+            if (alreadyScreenshotedImage === undefined && currentMapObject) {
                 const image = currentMapObject.id + '_' + currentMapObject.count + '.png';
                 const screenshotResult = await saveScreenshotSingleDomElement(
                     page,
@@ -60,15 +61,24 @@ export async function makeScreenshotsWithErrorsBorderd(
 
                 if (typeof screenshotResult === 'boolean' && screenshotResult === true) {
                     node.image = image;
+                    savedScreenshotHtmls.set(node.html, image);
                     currentMapObject.count++;
                 } else if (typeof screenshotResult === 'string') {
                     node.image = screenshotResult;
+                    savedScreenshotHtmls.set(node.html, screenshotResult);
                     currentMapObject.count++;
+                } else {
+                    savedScreenshotHtmls.set(node.html, null);
                 }
-
-                savedScreenshotHtmls.push(node.html);
-            } else {
-                debug(config.debugMode, 'Nothing happend, because already screenshoted: ' + node.html);
+            } else if (alreadyScreenshotedImage !== null) {
+                debug(
+                    config.debugMode,
+                    'There was already a screenshot. Updated node ' +
+                        node.html +
+                        ' with old image_id:' +
+                        alreadyScreenshotedImage,
+                );
+                node.image = alreadyScreenshotedImage;
             }
         }
     }

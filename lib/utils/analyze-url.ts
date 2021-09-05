@@ -7,10 +7,10 @@ import { Page } from 'puppeteer';
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-borderd';
 import { createUrlResult } from './create-url-result';
-import { acceptCookieConsent } from './accept-cookies';
+import { acceptCookieConsent } from './accept-consent-screens';
 import { saveScreenshot } from './helper-saving-screenshots';
 
-const savedScreenshotHtmls: string[] = [];
+const savedScreenshotHtmls: Map<string, string> = new Map();
 
 export async function analyzeUrl(
     page: Page,

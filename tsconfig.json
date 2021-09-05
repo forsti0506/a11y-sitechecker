@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module":"commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
     "preserveConstEnums": true,
