@@ -23,3 +23,5 @@ export async function initBeforeTest(): Promise<Config> {
     };
     return setupConfig(optionValues);
 }
+
+test.skip('Workaround', () => void 0);
