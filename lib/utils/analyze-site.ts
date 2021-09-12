@@ -13,6 +13,8 @@ const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
 const rootDomain = { value: '' };
 
+const savedScreenshotHtmls: Map<string, string> = new Map();
+
 export async function analyzeSite(
     axeSpecs: Spec,
     firstpage: Page,
@@ -34,7 +36,7 @@ export async function analyzeSite(
                         await page.setViewport(viewport);
                     }
 
-                    const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited);
+                    const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
                     await page.close();
                     return result;
                 }, 4),
@@ -59,7 +61,7 @@ export async function analyzeSite(
         }
         log('Start analyze of ' + url);
 
-        resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited));
+        resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls));
 
         const html = await firstpage.content();
         const links = getLinks(
@@ -85,7 +87,7 @@ export async function analyzeSite(
                     if (alreadyVisited.get(link)) {
                         return null;
                     }
-                    const result = await analyzeUrl(page, link, axeSpecs, config, alreadyVisited);
+                    const result = await analyzeUrl(page, link, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
                     await page.close();
                     return result;
                 }, 4),
@@ -126,6 +128,7 @@ export async function analyzeSite(
             }
         }
     }
+    savedScreenshotHtmls.clear();
     return resultsByUrl.filter(notEmpty);
 }
 

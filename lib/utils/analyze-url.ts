@@ -10,14 +10,13 @@ import { createUrlResult } from './create-url-result';
 import { acceptCookieConsent } from './accept-consent-screens';
 import { saveScreenshot } from './helper-saving-screenshots';
 
-const savedScreenshotHtmls: Map<string, string> = new Map();
-
 export async function analyzeUrl(
     page: Page,
     url: string,
     axeSpecs: Spec,
     config: Config,
     alreadyVisited: Map<string, SitecheckerViewport>,
+    savedScreenshotHtmls: Map<string, string>,
 ): Promise<ResultByUrl | null> {
     if ((await page.url()) !== url) {
         await page.goto(url, { waitUntil: 'load' });

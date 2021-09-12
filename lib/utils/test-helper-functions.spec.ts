@@ -16,6 +16,10 @@ export async function initBeforeTest(): Promise<Config> {
         json: true,
         config: './tests/config.json',
         debugMode: false,
+        launchOptions: {
+            devtools: true,
+            headless: false,
+        },
     };
     return setupConfig(optionValues);
 }

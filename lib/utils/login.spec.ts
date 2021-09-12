@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import { Config } from '../models/config';
 import { executeLogin } from './login';
-import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions';
+import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 
 describe('login', () => {
     let config: Config;

@@ -58,7 +58,7 @@ export async function waitForHTML(page: Page, timeout = 30000, debugMode = false
 }
 
 export function getEscaped(link: string): string {
-    return link.replace(/[`~ !@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
+    return link.replace(/[`~ !@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_').replace('\n', '');
 }
 export function shouldElementBeIgnored(element: Element, elementstoIgnore: string[] | undefined): boolean {
     if (!elementstoIgnore) return false;

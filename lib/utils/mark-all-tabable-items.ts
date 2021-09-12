@@ -85,7 +85,6 @@ export async function markAllTabableItems(
             async (focusableElement, i, debugMode) => {
                 const element = document.querySelector(focusableElement);
                 if (!element) return;
-
                 const elementVisible = window.isElementVisible(focusableElement);
                 window.debug(debugMode, JSON.stringify(element.getBoundingClientRect()));
                 if (!elementVisible) {
