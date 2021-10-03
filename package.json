@@ -57,6 +57,7 @@
         "lint": "tsc --noEmit && eslint . --ext js,ts --quiet --fix",
         "semantic-release": "semantic-release",
         "test": "jest --detectOpenHandles --forceExit",
+        "test:withIts": "jest --detectOpenHandles --forceExit --config=jest-it.config.js",
         "test:coverage": "jest --coverage --detectOpenHandles",
         "test:local": "jest --watch",
         "prepare_husky": "husky install",
