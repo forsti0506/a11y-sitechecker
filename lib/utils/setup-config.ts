@@ -119,6 +119,10 @@ export function setupConfig(options: OptionValues): Config {
             } else {
                 throw new Error('It is absolutly necessary to provide a name!');
             }
+
+            if (configFile.threshold) {
+                config.threshold = configFile.threshold;
+            }
         } catch (e: any) {
             error(e);
             throw e;

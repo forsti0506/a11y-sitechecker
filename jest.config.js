@@ -1,6 +1,8 @@
 module.exports = {
   "roots": [
     "<rootDir>/lib",
+    "<rootDir>/bin",
+    "<rootDir>/tests",
   ],
   "testMatch": [
     "**/?(*.)+(spec|test).+(ts|tsx|js)"
@@ -14,6 +16,7 @@ module.exports = {
   ],
   "collectCoverageFrom" : [
     "lib/**/*.ts",
+    "bin/**/*.ts",
     "!lib/utils/test-helper-functions.ts"
   ],
   "errorOnDeprecated": true,

@@ -9,19 +9,19 @@ import { saveResultsToFile } from '../lib/utils/save-results-to-file';
 import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
 import pkg from '../package.json';
 
-program
-    .version(pkg.version)
-    .usage('[options] <paths>')
-    .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console', false)
-    .option('--config <string>', 'Provide a config.json')
-    .option(
-        '-T, --threshold <number>',
-        'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
-        '0',
-    )
-    .parse(process.argv);
+export const defaultFunction = async (): Promise<void> => {
+    program
+        .version(pkg.version)
+        .usage('[options] <paths>')
+        .option('-j, --json', 'Output results as JSON. Otherwise output is displayed on the console', false)
+        .option('--config <string>', 'Provide a config.json')
+        .option(
+            '-T, --threshold <number>',
+            'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
+            '0',
+        )
+        .parse(process.argv);
 
-(async (): Promise<void> => {
     const config = setupConfig(program.opts());
     const axeConfig = setupAxeConfig(config);
     let retCode = 0;
@@ -30,7 +30,6 @@ program
 
         for (const [i, sitecheckerResult] of results.entries()) {
             await saveResultsToFile(config, sitecheckerResult, i);
-
             if (sitecheckerResult.violations.length >= config.threshold) {
                 retCode = 2;
             }
@@ -47,4 +46,6 @@ program
         error(e);
     }
     process.exit(retCode);
-})();
+};
+
+(async () => await defaultFunction())();
