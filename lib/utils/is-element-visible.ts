@@ -1,44 +1,4 @@
-// old method
-//export function isElementVisible (elementstring: string | null): boolean {
-//     let elementVisible = false;
-//     const dom = elementstring ? document.getElementById(elementstring) : null;
-//     if (dom) {
-//         let currentDom = dom;
-
 import { Point } from 'puppeteer';
-
-//         const tolerance = 0.01;
-//         const percentX = 90;
-//         const percentY = 90;
-
-//         const elementRect = currentDom.getBoundingClientRect();
-
-//         const parentRects: DOMRect[] = [];
-//         while (currentDom.parentElement != null && currentDom.parentElement.tagName.toUpperCase() !== 'HTML') {
-//             parentRects.push(
-//                 currentDom.parentElement.getBoundingClientRect()
-//             );
-//             currentDom = currentDom.parentElement;
-//         }
-//         elementVisible = parentRects.every(function (parentRect) {
-//             const visiblePixelX =
-//                 Math.min(elementRect.right, parentRect.right) -
-//                 Math.max(elementRect.left, parentRect.left);
-//             const visiblePixelY =
-//                 Math.min(elementRect.bottom, parentRect.bottom) -
-//                 Math.max(elementRect.top, parentRect.top);
-//             const visiblePercentageX =
-//                 (visiblePixelX / elementRect.width) * 100;
-//             const visiblePercentageY =
-//                 (visiblePixelY / elementRect.height) * 100;
-//                 return ( visiblePercentageX + tolerance > percentX &&
-//                 visiblePercentageY + tolerance > percentY &&
-//                 elementRect.top < window.innerHeight &&
-//                 elementRect.bottom >= 0);
-//         });
-//     }
-//     return elementVisible;
-// };
 
 export function isElementVisible(elementstring: string | null): boolean {
     let elem = elementstring ? document.getElementById(elementstring) : null;

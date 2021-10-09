@@ -1,4 +1,6 @@
+import { debug } from './helper-functions';
 import { Config } from '../models/config';
+import { exposeDepsJs } from './expose-deep-js';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 
 describe('get-links', () => {
@@ -12,7 +14,7 @@ describe('get-links', () => {
         return cleanUpAfterTest(config);
     });
 
-    test('dummy test', async () => {
-        expect(true).toBe(true);
+    test('expose debug function', async () => {
+        expect(exposeDepsJs({ debug })).toContain('window["debug"] = function debug(debugMode');
     });
 });
