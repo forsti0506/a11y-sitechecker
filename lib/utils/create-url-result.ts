@@ -3,7 +3,7 @@ import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { AxeResults } from 'axe-core';
 
 export async function createUrlResult(url: string, axeResults: AxeResults): Promise<ResultByUrl> {
-    success('Finished analyze of url: ' + url + '. Pushed ' + axeResults.violations.length + ' violations');
+    success('Finished analyze of url: ' + url + '. Pushed ' + axeResults.violations?.length + ' violations');
     return {
         url: url,
         violations: axeResults.violations,
