@@ -1,15 +1,14 @@
 import { Spec } from 'axe-core';
 import { Config, SitecheckerViewport } from '../models/config';
-import { debug, error, getEscaped, log, saveScreenshot, waitForHTML } from './helper-functions';
+import { debug, error, getEscaped, log, waitForHTML } from './helper-functions';
 import { markAllTabableItems } from './mark-all-tabable-items';
 import { setupAxe } from './setup-config';
 import { Page } from 'puppeteer';
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-borderd';
 import { createUrlResult } from './create-url-result';
-import { acceptCookieConsent } from './accept-cookies';
-
-const savedScreenshotHtmls: string[] = [];
+import { acceptCookieConsent } from './accept-consent-screens';
+import { saveScreenshot } from './helper-saving-screenshots';
 
 export async function analyzeUrl(
     page: Page,
@@ -17,10 +16,11 @@ export async function analyzeUrl(
     axeSpecs: Spec,
     config: Config,
     alreadyVisited: Map<string, SitecheckerViewport>,
+    savedScreenshotHtmls: Map<string, string>,
 ): Promise<ResultByUrl | null> {
     if ((await page.url()) !== url) {
         await page.goto(url, { waitUntil: 'load' });
-        if(config.cookieText && config.cookieSelector) {
+        if (config.cookieText && config.cookieSelector) {
             await acceptCookieConsent(page, config);
         }
         await waitForHTML(page, config.timeout, config.debugMode);
@@ -37,10 +37,10 @@ export async function analyzeUrl(
         return null;
     }
     const viewport = page.viewport();
-    if(viewport) {
+    if (viewport) {
         alreadyVisited.set(url, viewport);
     }
-    
+
     log('Currently analyzing ' + url);
 
     if (config.saveImages) {

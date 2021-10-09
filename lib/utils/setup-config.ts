@@ -23,10 +23,10 @@ export function setupConfig(options: OptionValues): Config {
             },
         ],
         resultTypes: ['violations', 'incomplete'],
-        runOnly:  ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
+        runOnly: ['wcag2aa', 'wcag2a', 'wcag21a', 'wcag21aa', 'best-practice', 'ACT', 'experimental'],
         crawl: false,
         name: '',
-        urlsToAnalyze: []
+        urlsToAnalyze: [],
     };
     config.json = options.json;
     if (options.threshold) {
@@ -35,12 +35,12 @@ export function setupConfig(options: OptionValues): Config {
     if (options.config || options.providedConfig) {
         try {
             let configFile;
-            if(options.config) {
+            if (options.config) {
                 configFile = JSON.parse(fs.readFileSync(options.config).toString('utf-8'));
             } else {
                 configFile = options.providedConfig;
             }
-            
+
             if (typeof configFile.json === 'boolean') {
                 config.json = configFile.json;
             }
@@ -72,7 +72,7 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.urlsToAnalyze) {
                 config.urlsToAnalyze = configFile.urlsToAnalyze;
             } else {
-                throw new Error('It is absolutly necessary to provide 1 or more urls!')
+                throw new Error('It is absolutly necessary to provide 1 or more urls!');
             }
             if (configFile.analyzeClicksWithoutNavigation) {
                 config.analyzeClicksWithoutNavigation = configFile.analyzeClicksWithoutNavigation;
@@ -108,23 +108,27 @@ export function setupConfig(options: OptionValues): Config {
                 config.cookieText = configFile.cookieText;
             }
             if (configFile.crawl) {
-                if(config.urlsToAnalyze?.length === 1 && configFile.crawl) {
+                if (config.urlsToAnalyze?.length === 1 && configFile.crawl) {
                     config.crawl = true;
                 } else {
-                    throw new Error('Crawling is only possible with one Url supplied!')
+                    throw new Error('Crawling is only possible with one Url supplied!');
                 }
             }
             if (configFile.name) {
-                    config.name = configFile.name;
+                config.name = configFile.name;
             } else {
-                throw new Error('It is absolutly necessary to provide a name!')
+                throw new Error('It is absolutly necessary to provide a name!');
+            }
+
+            if (configFile.threshold) {
+                config.threshold = configFile.threshold;
             }
         } catch (e: any) {
             error(e);
             throw e;
         }
     } else {
-        throw new Error('It is absolutly necessary to provide a config!')
+        throw new Error('It is absolutly necessary to provide a config!');
     }
 
     return config;
@@ -149,14 +153,16 @@ export function setupAxeConfig(config: Config): Spec {
     const axeConfig: Spec = {};
     try {
         if (config.axeConfig?.locale) {
-                axeConfig.locale = JSON.parse(
-                fs.readFileSync('./node_modules/axe-core/locales/' + config.axeConfig.locale + '.json').toString('utf-8'),
+            axeConfig.locale = JSON.parse(
+                fs
+                    .readFileSync('./node_modules/axe-core/locales/' + config.axeConfig.locale + '.json')
+                    .toString('utf-8'),
             );
         } else if (config.axeConfig?.localePath) {
             axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
         }
-    } catch(e) {
-        error('Locale not found. Using Standard locale "en"')
+    } catch (e) {
+        error('Locale not found. Using Standard locale "en"');
     }
     return axeConfig;
 }

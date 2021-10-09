@@ -9,7 +9,7 @@ export interface ListenerObject {
     listeners: Event[];
 }
 export interface SpanElement {
-    elementId: string; 
+    elementId: string;
     spanId: string;
     visible: boolean;
 }

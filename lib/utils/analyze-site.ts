@@ -13,6 +13,8 @@ const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
 const rootDomain = { value: '' };
 
+const savedScreenshotHtmls: Map<string, string> = new Map();
+
 export async function analyzeSite(
     axeSpecs: Spec,
     firstpage: Page,
@@ -22,34 +24,35 @@ export async function analyzeSite(
     alreadyVisited: Map<string, SitecheckerViewport>,
     alreadyParsed: string[],
     notCheckedLinks: string[],
-    link?: string
+    link?: string,
 ): Promise<ResultByUrl[]> {
     if (config.crawl === false) {
-        const resultsAsPromise = lastValueFrom(from(config.urlsToAnalyze)
-            .pipe(
+        const resultsAsPromise = lastValueFrom(
+            from(config.urlsToAnalyze).pipe(
                 mergeMap(async (url) => {
                     const page = await browser.newPage();
                     const viewport = firstpage.viewport();
-                    if(viewport) {
+                    if (viewport) {
                         await page.setViewport(viewport);
                     }
 
-                    const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited);
+                    const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
                     await page.close();
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            ));
+            ),
+        );
         const result = await resultsAsPromise;
         resultsByUrl.push(...result);
     } else {
         let url;
-        if(!link) {
+        if (!link) {
             url = config.urlsToAnalyze[0];
         } else {
             url = link;
         }
-        
+
         if (!url.startsWith('https://') && !url.startsWith('http://')) {
             url = 'https://' + url;
         }
@@ -58,7 +61,7 @@ export async function analyzeSite(
         }
         log('Start analyze of ' + url);
 
-        resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited));
+        resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls));
 
         const html = await firstpage.content();
         const links = getLinks(
@@ -72,24 +75,25 @@ export async function analyzeSite(
             alreadyVisited,
         );
 
-        const results = lastValueFrom(from(links.entries())
-            .pipe(
+        const results = lastValueFrom(
+            from(links.entries()).pipe(
                 mergeMap(async ([i, link]) => {
                     log(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
                     const page = await browser.newPage();
                     const viewport = firstpage.viewport();
-                    if(viewport) {
+                    if (viewport) {
                         await page.setViewport(viewport);
                     }
                     if (alreadyVisited.get(link)) {
                         return null;
                     }
-                    const result = await analyzeUrl(page, link, axeSpecs, config, alreadyVisited);
+                    const result = await analyzeUrl(page, link, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
                     await page.close();
                     return result;
                 }, 4),
                 toArray<ResultByUrl | null>(),
-            ));
+            ),
+        );
         resultsByUrl.push(...(await results));
 
         if (config.analyzeClicks)
@@ -118,12 +122,13 @@ export async function analyzeSite(
                     alreadyVisited,
                     alreadyParsed,
                     notCheckedLinks,
-                    link
+                    link,
                 );
                 log(config.debugMode, 'Finished analyze of Site: ' + link);
             }
         }
     }
+    savedScreenshotHtmls.clear();
     return resultsByUrl.filter(notEmpty);
 }
 

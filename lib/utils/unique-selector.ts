@@ -14,7 +14,13 @@ function uniqueQuery(aSel: string[], dom: JSDOM.JSDOM): boolean {
     return dom.window.document.querySelectorAll(aSel.join('>')).length === 1;
 }
 
-function getSelector(aSel: string[], el: Element, sSel: string | undefined, aAttr: string[], dom: JSDOM.JSDOM): boolean {
+function getSelector(
+    aSel: string[],
+    el: Element,
+    sSel: string | undefined,
+    aAttr: string[],
+    dom: JSDOM.JSDOM,
+): boolean {
     // 1. Check ID first
     // NOTE: ID must be unique amongst all IDs in an HTML5 document.
     // https://www.w3.org/TR/html5/dom.html#the-id-attribute

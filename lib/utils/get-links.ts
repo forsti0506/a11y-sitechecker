@@ -1,6 +1,6 @@
 import JSDOM from 'jsdom';
 import chalk from 'chalk';
-import { getUniqueSelector } from './UniqueSelector';
+import { getUniqueSelector } from './unique-selector';
 import { debug, endsWithAny, isAbsoluteUrl, shouldElementBeIgnored } from './helper-functions';
 import { Config, SitecheckerViewport } from '../models/config';
 

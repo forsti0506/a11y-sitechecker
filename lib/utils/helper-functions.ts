@@ -58,7 +58,7 @@ export async function waitForHTML(page: Page, timeout = 30000, debugMode = false
 }
 
 export function getEscaped(link: string): string {
-    return link.replace(/[`~ !@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_');
+    return link.replace(/[`~ !@#$%^&*()_|+\-=?;:'",.<>{}\\[\]/]/gi, '_').replace('\n', '');
 }
 export function shouldElementBeIgnored(element: Element, elementstoIgnore: string[] | undefined): boolean {
     if (!elementstoIgnore) return false;
@@ -70,32 +70,12 @@ export function shouldElementBeIgnored(element: Element, elementstoIgnore: strin
     return shouldElementBeIgnored;
 }
 
-export async function saveScreenshot(
-    page: Page,
-    path: string | undefined,
-    fileName: string | undefined,
-    saveImage: boolean | undefined,
-    debugMode = false,
-): Promise<void> {
-    if (saveImage) {
-        try {
-            if (!path?.endsWith('/')) {
-                path = path + '/';
-            }
-            await page.screenshot({ path: path + fileName });
-            debug(debugMode, path + fileName + ' saved');
-        } catch (error) {
-            log(error + '. Image not saved. Analyze not stopped!');
-        }
-    }
-}
-
 export function writeToJsonFile(data: string, path: string, vp: SitecheckerViewport): void {
     log(chalk.blue('#############################################################################################'));
     log(chalk.blue(`Writing results to ${path}/results_${vp.width}_${vp.height}'.json`));
     log(chalk.blue('#############################################################################################'));
     if (!fs.existsSync(path)) {
-        fs.mkdirSync(path, {recursive: true});
+        fs.mkdirSync(path, { recursive: true });
     }
     fs.writeFileSync(path + '/results_' + vp.width + '_' + vp.height + '.json', data);
 }

@@ -1,10 +1,12 @@
 import {
     A11ySitecheckerResult,
     FullCheckerSingleResult,
-    NodeResult, Result, ResultByUrl
+    NodeResult,
+    Result,
+    ResultByUrl,
 } from '../models/a11y-sitechecker-result';
 
-export function setResult(
+function setResult(
     violations: FullCheckerSingleResult[],
     violation: Result,
     result: ResultByUrl,

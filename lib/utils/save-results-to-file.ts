@@ -7,8 +7,11 @@ import { defineExtraTags } from '../utils/define-extratags';
 import { setupSiteresult } from '../utils/setup-siteresult';
 import { getEscaped, log } from './helper-functions';
 
-
-export async function saveResultsToFile(config: Config, sitecheckerResult: A11ySitecheckerResult, i: number): Promise<void> {
+export async function saveResultsToFile(
+    config: Config,
+    sitecheckerResult: A11ySitecheckerResult,
+    i: number,
+): Promise<void> {
     log('#############################################################################################');
     log('Updating resultsFolder with file with Current Time Result');
     log('#############################################################################################');
@@ -75,7 +78,13 @@ export async function saveResultsToFile(config: Config, sitecheckerResult: A11yS
     defineExtraTags(sitecheckerResult, config);
     fs.writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
     fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
-    const basePath = config.resultsPathPerUrl + getEscaped(id) + '_' + sitecheckerResult.testEnvironment?.windowWidth + '_' + sitecheckerResult.testEnvironment?.windowHeight;
+    const basePath =
+        config.resultsPathPerUrl +
+        getEscaped(id) +
+        '_' +
+        sitecheckerResult.testEnvironment?.windowWidth +
+        '_' +
+        sitecheckerResult.testEnvironment?.windowHeight;
 
     const violationsPath = basePath + '_violations.json';
     const incompletesPath = basePath + '_incompletes.json';

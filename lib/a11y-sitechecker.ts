@@ -9,12 +9,7 @@ import { executeLogin } from './utils/login';
 import { mergeResults } from './utils/result-functions';
 import { prepareWorkspace } from './utils/setup-config';
 
-
-export async function entry(
-    config: Config,
-    axeSpecs: Spec,
-    onlyReturn?: boolean,
-): Promise<A11ySitecheckerResult[]> {
+export async function entry(config: Config, axeSpecs: Spec, onlyReturn?: boolean): Promise<A11ySitecheckerResult[]> {
     try {
         prepareWorkspace(config);
         log(
@@ -47,8 +42,12 @@ async function checkSite(
         width: vp.width,
         height: vp.height,
     });
-    await executeLogin( page, config);
-    const usedLocale = config.axeConfig?.locale ? config.axeConfig?.locale : (config.axeConfig?.localePath ? config.axeConfig?.localePath : 'en')
+    await executeLogin(page, config);
+    const usedLocale = config.axeConfig?.locale
+        ? config.axeConfig?.locale
+        : config.axeConfig?.localePath
+        ? config.axeConfig?.localePath
+        : 'en';
 
     const result: A11ySitecheckerResult = {
         testEngine: undefined,
@@ -75,7 +74,7 @@ async function checkSite(
     mergeResults(report, result);
     if (result.violations.length > config.threshold) {
         throw new Error(
-            'Threshold not met. There are ' + result.violations.length + ' errors. Threshold was: ' + config.threshold,
+            'Threshold (' + config.threshold + ') not met. There are ' + result.violations.length + ' errors.',
         );
     }
     if (config.json) {
