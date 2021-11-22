@@ -12,7 +12,7 @@
         "@axe-core/puppeteer": "^4.2.2",
         "chalk": "^4.1.2",
         "commander": "^8.1.0",
-        "jsdom": "^17.0.0",
+        "jsdom": "^18.1.1",
         "puppeteer": "^10.2.0",
         "rxjs": "^7.3.0",
         "uuid": "^8.3.2"
