@@ -19,6 +19,7 @@ export async function markAllTabableItems(
     url: string,
     config: Config,
     urlResult: ResultByUrl,
+    events?: any,
 ): Promise<void> {
     debug(config.debugMode, 'make screens for tabable items');
     try {

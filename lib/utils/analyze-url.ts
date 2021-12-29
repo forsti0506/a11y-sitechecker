@@ -9,6 +9,7 @@ import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-
 import { createUrlResult } from './create-url-result';
 import { acceptCookieConsent } from './accept-consent-screens';
 import { saveScreenshot } from './helper-saving-screenshots';
+import { markAllEvents } from './mark-all-events';
 
 export async function analyzeUrl(
     page: Page,
@@ -58,9 +59,9 @@ export async function analyzeUrl(
     if (axeResults) {
         urlResult = await createUrlResult(url, axeResults);
         await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-        await page.reload();
-        await waitForHTML(page);
-        await markAllTabableItems(page, url, config, urlResult);
+        const events = await markAllEvents(page);
+        await markAllTabableItems(page, url, config, urlResult, events);
+
         return urlResult;
     }
     return null;
