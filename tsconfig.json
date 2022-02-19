@@ -33,5 +33,8 @@
     "./bin/**/*",
     "node_modules/@types/puppeteer/index.d.ts",
     "node_modules/@types/jest",
+  ],
+  "exclude": [
+    "**/*.spec.ts",
   ]
 }
