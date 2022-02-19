@@ -19,7 +19,7 @@ export async function analyzeUrl(
     alreadyVisited: Map<string, SitecheckerViewport>,
     savedScreenshotHtmls: Map<string, string>,
 ): Promise<ResultByUrl | null> {
-    if ((await page.url()) !== url) {
+    if (page.url() !== url) {
         await page.goto(url, { waitUntil: 'load' });
         if (config.cookieText && config.cookieSelector) {
             await acceptCookieConsent(page, config);
@@ -59,7 +59,7 @@ export async function analyzeUrl(
     if (axeResults) {
         urlResult = await createUrlResult(url, axeResults);
         await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-        const events = await markAllEvents(page);
+        const events = await markAllEvents(page, config);
         await markAllTabableItems(page, url, config, urlResult, events);
 
         return urlResult;

@@ -1,6 +1,9 @@
+import { Config } from './../models/config';
 import { Page, Protocol } from 'puppeteer';
+import { debug } from './helper-functions';
 
-export async function markAllEvents(page: Page): Promise<{ [key: string]: string[] }> {
+export async function markAllEvents(page: Page, config: Config): Promise<{ [key: string]: string[] }> {
+    debug(config.debugMode, 'mark all events for ' + page.url());
     const allElements: string[] = JSON.parse(
         await page.evaluate(() => {
             const allElements = Array.from(document.querySelectorAll('*'));

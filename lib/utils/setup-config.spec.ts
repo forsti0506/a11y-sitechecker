@@ -89,7 +89,7 @@ describe('setup-config', () => {
         const config = setupConfig({ config: 'tests/setup-config/config_setup_config.json' });
         prepareWorkspace(config);
         expect(fs.existsSync('results/' + getEscaped(config.name))).toBe(true);
-        fs.rmdirSync('results', { recursive: true });
+        fs.rmSync('results', { recursive: true });
     });
 
     test('prepare-workspace with folder mentioned and save images true', async () => {
@@ -97,7 +97,7 @@ describe('setup-config', () => {
         prepareWorkspace(config);
         expect(fs.existsSync('tests/results/' + getEscaped(config.name))).toBe(true);
         expect(fs.existsSync('tests/results/' + getEscaped(config.name) + '/images')).toBe(true);
-        fs.rmdirSync('tests/results', { recursive: true });
+        fs.rmSync('tests/results', { recursive: true });
     });
 
     test('prepare-workspace with folder mentioned and save images true and image folder already here', async () => {
@@ -108,7 +108,7 @@ describe('setup-config', () => {
             prepareWorkspace(config);
             expect(fs.existsSync('tests/results/' + getEscaped(config.name))).toBe(true);
             expect(fs.existsSync('tests/results/' + getEscaped(config.name) + '/images')).toBe(true);
-            fs.rmdirSync('tests/results', { recursive: true });
+            fs.rmSync('tests/results', { recursive: true });
         } else {
             fail();
         }
