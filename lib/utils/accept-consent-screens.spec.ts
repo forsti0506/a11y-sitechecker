@@ -59,7 +59,7 @@ export const stubFrame = {
     name() {
         return 'test';
     },
-    ur() {
+    url() {
         return 'test.at';
     },
     evaluate<T extends EvaluateFn>(
