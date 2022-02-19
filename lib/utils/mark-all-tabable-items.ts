@@ -76,7 +76,7 @@ export async function markAllTabableItems(
                     el.id = 'tabitem' + tabItemCount;
                     tabItemCount++;
                 }
-                return '#' + el.id;
+                return "[id='" + el.id + "']";
             });
     });
 

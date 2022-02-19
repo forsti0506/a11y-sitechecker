@@ -1,3 +1,27 @@
+# [5.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.2.0...v5.0.0) (2021-10-09)
+
+
+### Bug Fixes
+
+* \n ignored in links ([e2d2c53](https://github.com/forsti0506/a11y-sitechecker/commit/e2d2c530c1b40d6f2b5caa58a0f077b62f9ac9eb))
+* spelling in actions ([afc9eab](https://github.com/forsti0506/a11y-sitechecker/commit/afc9eabe248049389e720b350f0420f71b667b36))
+* test file with skip ([6e22fbe](https://github.com/forsti0506/a11y-sitechecker/commit/6e22fbeda30d91ec0c4b666c83de61d706928bd5))
+* **eslint,prettier:** new configs ([cf50e00](https://github.com/forsti0506/a11y-sitechecker/commit/cf50e007ce809c78805ea8b89248a7e504df31e9))
+* **husky:** new configs for husky and commitlint ([2d8f418](https://github.com/forsti0506/a11y-sitechecker/commit/2d8f418eb30fe4378c84103c2b63845c88124ca1))
+* **tests:** fix tests for changed text ([cefefdf](https://github.com/forsti0506/a11y-sitechecker/commit/cefefdf942a5cfdd3fd3af913ef187c3983fbd60))
+* remove some non null assertions ([d5a8002](https://github.com/forsti0506/a11y-sitechecker/commit/d5a8002bd41c138709a48cdf816c5fb9cc5bdd1f))
+
+
+### Features
+
+* **taborder:** taborder provide 1 image per tabable object ([8c28e43](https://github.com/forsti0506/a11y-sitechecker/commit/8c28e438ddc06a3123db3a5d2eea333a1539ab7e))
+* Errors are now shot by clipping the element. Performance improve + new algorithm to check it ([eb0ccbd](https://github.com/forsti0506/a11y-sitechecker/commit/eb0ccbd25bb751713b8a0df5a567236556005313))
+
+
+### BREAKING CHANGES
+
+* **taborder:** completly refectored taborder method
+
 # [4.2.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.1.0...v4.2.0) (2021-08-29)
 
 
