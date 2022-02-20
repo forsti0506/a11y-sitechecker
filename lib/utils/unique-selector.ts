@@ -1,6 +1,6 @@
 import JSDOM from 'jsdom';
 
-export function getUniqueSelector(elSrc: Node, dom: JSDOM.JSDOM): string {
+export function getUniqueSelector(elSrc: Node, dom?: JSDOM.JSDOM): string {
     let sSel;
     const aAttr = ['name', 'value', 'title', 'placeholder', 'data-*'],
         aSel: string[] = [];
@@ -10,28 +10,46 @@ export function getUniqueSelector(elSrc: Node, dom: JSDOM.JSDOM): string {
     }
     return '';
 }
-function uniqueQuery(aSel: string[], dom: JSDOM.JSDOM): boolean {
-    return dom.window.document.querySelectorAll(aSel.join('>')).length === 1;
+export function uniqueQuery(aSel: string[], dom?: JSDOM.JSDOM): boolean {
+    try {
+        return dom
+            ? dom.window.document.querySelectorAll(aSel.join('>')).length === 1
+            : document.querySelectorAll(aSel.join('>')).length === 1;
+    } catch (e) {
+        const queryStringValidCss: string[] = [];
+        aSel.forEach((a) => {
+            queryStringValidCss.push(
+                a.substring(0, a.indexOf('.')) + "[class='" + a.substring(a.indexOf('.') + 1, a.length) + "']",
+            );
+        });
+        return dom
+            ? dom.window.document.querySelectorAll(queryStringValidCss.join('>')).length === 1
+            : document.querySelectorAll(queryStringValidCss.join('>')).length === 1;
+    }
 }
 
-function getSelector(
+export function getSelector(
     aSel: string[],
     el: Element,
     sSel: string | undefined,
     aAttr: string[],
-    dom: JSDOM.JSDOM,
+    dom?: JSDOM.JSDOM,
 ): boolean {
     // 1. Check ID first
     // NOTE: ID must be unique amongst all IDs in an HTML5 document.
     // https://www.w3.org/TR/html5/dom.html#the-id-attribute
     if (el?.id) {
-        aSel.unshift('#' + el.id);
+        if (el.id.match(/^\d/)) {
+            aSel.unshift("[id='" + el.id + "']");
+        } else {
+            aSel.unshift('#' + el.id);
+        }
         return true;
     }
     aSel.unshift((sSel = el.nodeName.toLowerCase()));
     // 2. Try to select by classes
-    if (el?.className) {
-        aSel[0] = sSel += '.' + el.className.trim().replace(/ +/g, '.');
+    if (el?.getAttribute('class')) {
+        aSel[0] = sSel += '.' + el.getAttribute('class')?.trim().replace(/ +/g, '.');
         if (uniqueQuery(aSel, dom)) return true;
     }
     // 3. Try to select by classes + attributes

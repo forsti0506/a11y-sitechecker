@@ -7,7 +7,7 @@ import { Config, SitecheckerViewport } from '../models/config';
 import { analyzeUrl } from './analyze-url';
 import { clickingElements } from './clicking-elements';
 import { getLinks } from './get-links';
-import { log } from './helper-functions';
+import { debug, log } from './helper-functions';
 
 const elementsToClick: Map<string, string[]> = new Map<string, string[]>();
 
@@ -78,7 +78,7 @@ export async function analyzeSite(
         const results = lastValueFrom(
             from(links.entries()).pipe(
                 mergeMap(async ([i, link]) => {
-                    log(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
+                    debug(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
                     const page = await browser.newPage();
                     const viewport = firstpage.viewport();
                     if (viewport) {

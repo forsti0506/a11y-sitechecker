@@ -101,6 +101,6 @@ describe('a11y-sitechecker', () => {
             .then((e) => {
                 expect(e.length).toBe(10);
             })
-            .catch((e) => expect(e.message).toContain('Cannot read property'));
+            .catch((e) => expect(e.message).toContain('Cannot read properties'));
     });
 });

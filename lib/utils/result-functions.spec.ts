@@ -27,7 +27,7 @@ describe('result-functions', () => {
         resultsByUrls.push(resultByUrl1 as unknown as ResultByUrl);
         const result: A11ySitecheckerResult = {
             analyzedUrls: [],
-            tabableImages: [],
+            tabables: [],
         } as unknown as A11ySitecheckerResult;
         mergeResults(resultsByUrls, result);
         expect(result.toolOptions).toBe('test');
@@ -50,6 +50,7 @@ describe('result-functions', () => {
             incomplete: [],
             inapplicable: [],
             passes: [],
+            tabables: [],
         };
 
         const resultByUrl2 = {
@@ -68,6 +69,7 @@ describe('result-functions', () => {
             incomplete: [],
             inapplicable: [],
             passes: [],
+            tabables: [],
         };
 
         const resultsByUrls: ResultByUrl[] = [];
@@ -75,7 +77,7 @@ describe('result-functions', () => {
         resultsByUrls.push(resultByUrl2 as unknown as ResultByUrl);
         const result: A11ySitecheckerResult = {
             analyzedUrls: [],
-            tabableImages: [],
+            tabables: [],
             violations: [],
         } as unknown as A11ySitecheckerResult;
         mergeResults(resultsByUrls, result);

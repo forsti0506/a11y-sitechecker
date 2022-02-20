@@ -31,7 +31,7 @@ export async function makeScreenshotsWithErrorsBorderd(
         currentMapObject = uniqueNamePerUrl.get(resultByUrl.url);
     }
 
-    debug(config.debugMode, 'make screenshots with border');
+    debug(config.debugMode, 'make screenshots with border for ' + page.url());
     try {
         await page.exposeFunction('debug', debug);
     } catch (e: any) {

@@ -123,6 +123,9 @@ export function setupConfig(options: OptionValues): Config {
             if (configFile.threshold) {
                 config.threshold = configFile.threshold;
             }
+            if (configFile.screenshotPadding) {
+                config.screenshotPadding = configFile.screenshotPadding;
+            }
         } catch (e: any) {
             error(e);
             throw e;
@@ -141,7 +144,7 @@ export function prepareWorkspace(config: Config): void {
     if (config.imagesPath && !fs.existsSync(config.imagesPath) && config.saveImages) {
         fs.mkdirSync(config.imagesPath, { recursive: true });
     } else if (config.imagesPath && config.saveImages) {
-        fs.rmdirSync(config.imagesPath, { recursive: true });
+        fs.rmSync(config.imagesPath, { recursive: true });
         fs.mkdirSync(config.imagesPath, { recursive: true });
     }
     if (config.resultsPathPerUrl && !fs.existsSync(config.resultsPathPerUrl)) {

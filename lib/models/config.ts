@@ -1,4 +1,4 @@
-import { LaunchOptions } from 'puppeteer';
+import { BrowserLaunchArgumentOptions } from 'puppeteer';
 import { resultGroups, RunOnly, TagValue } from 'axe-core';
 
 export interface Config {
@@ -9,7 +9,7 @@ export interface Config {
     login?: Login;
     saveImages?: boolean;
     imagesPath?: string;
-    launchOptions?: LaunchOptions;
+    launchOptions?: BrowserLaunchArgumentOptions;
     ignoreElementAttributeValues?: string[];
     urlsToAnalyze: string[];
     clickableItemSelector?: string;
@@ -26,6 +26,7 @@ export interface Config {
     name: string;
     cookieText?: string;
     cookieSelector?: string;
+    screenshotPadding?: number;
 }
 
 interface AxeConfig {

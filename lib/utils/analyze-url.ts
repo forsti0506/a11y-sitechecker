@@ -9,6 +9,7 @@ import { makeScreenshotsWithErrorsBorderd } from './make-sreenshots-with-errors-
 import { createUrlResult } from './create-url-result';
 import { acceptCookieConsent } from './accept-consent-screens';
 import { saveScreenshot } from './helper-saving-screenshots';
+import { markAllEvents } from './mark-all-events';
 
 export async function analyzeUrl(
     page: Page,
@@ -18,7 +19,7 @@ export async function analyzeUrl(
     alreadyVisited: Map<string, SitecheckerViewport>,
     savedScreenshotHtmls: Map<string, string>,
 ): Promise<ResultByUrl | null> {
-    if ((await page.url()) !== url) {
+    if (page.url() !== url) {
         await page.goto(url, { waitUntil: 'load' });
         if (config.cookieText && config.cookieSelector) {
             await acceptCookieConsent(page, config);
@@ -58,9 +59,9 @@ export async function analyzeUrl(
     if (axeResults) {
         urlResult = await createUrlResult(url, axeResults);
         await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-        await page.reload();
-        await waitForHTML(page);
-        await markAllTabableItems(page, url, config, urlResult);
+        const events = await markAllEvents(page, config);
+        await markAllTabableItems(page, url, config, urlResult, events);
+
         return urlResult;
     }
     return null;

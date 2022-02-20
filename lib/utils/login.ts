@@ -30,7 +30,7 @@ export async function executeLogin(page: Page, config: Config): Promise<number> 
         }
     }
 
-    for (const step of config.login?.steps) {
+    for (const step of config.login.steps) {
         for (const input of step.input) {
             await page.waitForSelector(input.selector, { timeout: config.timeout });
             debug(config.debugMode, 'Waited for selector ' + input.selector);

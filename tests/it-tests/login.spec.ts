@@ -45,7 +45,7 @@ describe('login', () => {
     test('should not be able to login', async () => {
         expect.assertions(1);
         config.login = {
-            url: 'https://www.forsti.eu/wp-admin',
+            url: 'https://forsti.eu/wp-admin',
             steps: [
                 {
                     submit: '#wp-submit',

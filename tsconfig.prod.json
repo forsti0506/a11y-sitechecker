@@ -5,10 +5,10 @@
     "sourceMap": false,
     "removeComments": true,
     "declaration": true,
-    "target": "es2017",
+    "target": "es2021",
     "strict": true,
     "lib": [
-      "es2017",
+      "es2021",
       "dom"
     ],
     "types": [

@@ -8,7 +8,7 @@ describe('setup-siteresult', () => {
             inapplicable: [testViolation, testViolation],
             incomplete: [testViolation],
             passes: [testViolation],
-            tabableImages: [],
+            tabables: [],
             testEngine: { name: 'test', version: '1.0' },
             testEnvironment: { userAgent: 'Hello', windowHeight: 100, windowWidth: 100 },
             testRunner: { name: 'axe' },
@@ -25,7 +25,7 @@ describe('setup-siteresult', () => {
             countPasses: 1,
             countViolations: 1,
             id: 'test',
-            tabableImages: [],
+            tabables: [],
             testEngine: {
                 name: 'test',
                 version: '1.0',

@@ -61,7 +61,7 @@ async function checkSite(
         incomplete: [],
         passes: [],
         analyzedUrls: [],
-        tabableImages: [],
+        tabables: [],
         usedLocale: usedLocale,
     };
 

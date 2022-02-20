@@ -4,7 +4,7 @@ import 'jest';
 import { Config } from '../lib/models/config';
 import { cleanUpAfterTest, initBeforeTest } from '../lib/utils/test-helper-functions.spec';
 import * as sitechecker from '../lib/a11y-sitechecker';
-import { defaultFunction } from './a11y-sitechecker';
+import { defaultFunction } from './a11y-sitechecker_code';
 import { program } from 'commander';
 import * as saveResultsToFile from '../lib/utils/save-results-to-file';
 

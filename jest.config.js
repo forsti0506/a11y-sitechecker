@@ -30,5 +30,5 @@ module.exports = {
   },
   setupFilesAfterEnv: ['./jest.setup.js'],
   "coverageReporters": ["json-summary", "json", "text"],
-  "preset": "jest-puppeteer"
+  "preset": "jest-puppeteer",
 }
