@@ -1,5 +1,6 @@
 import JSDOM from 'jsdom';
 
+// dom is optional to use it in puppeteer too
 export function getUniqueSelector(elSrc: Node, dom?: JSDOM.JSDOM): string {
     let sSel;
     const aAttr = ['name', 'value', 'title', 'placeholder', 'data-*'],
