@@ -1,3 +1,23 @@
+# [6.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v5.0.0...v6.0.0) (2022-02-20)
+
+
+### Bug Fixes
+
+* about:blank error in consent screen, node 16 deprectations ([365a8ce](https://github.com/forsti0506/a11y-sitechecker/commit/365a8ce564d8a7662c86bd93ad638c5ab71148fd))
+* add comment ([8bc151f](https://github.com/forsti0506/a11y-sitechecker/commit/8bc151f60339991f66acab710ee370e24fec6196))
+* test for consent screens ([776456f](https://github.com/forsti0506/a11y-sitechecker/commit/776456f471f8d10c926a09a4c8af34b65c34f4c9))
+* tests for new node version ([a7d1bbf](https://github.com/forsti0506/a11y-sitechecker/commit/a7d1bbfa815da379c0f7960b9a7fdd252e6ce214))
+
+
+### Features
+
+* return elements which needs check or are definitly not focusable ([10a47ad](https://github.com/forsti0506/a11y-sitechecker/commit/10a47ad5cd346c6245c7b87e18ca4215e295531a))
+
+
+### BREAKING CHANGES
+
+* see commits before to see the changed behaviors
+
 # [5.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v4.2.0...v5.0.0) (2021-10-09)
 
 
