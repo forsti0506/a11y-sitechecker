@@ -16,5 +16,8 @@ export async function createUrlResult(url: string, axeResults: AxeResults): Prom
         timestamp: axeResults.timestamp,
         toolOptions: axeResults.toolOptions,
         tabableImages: [],
+        keyboardAccessibles: [],
+        needsCheck: [],
+        notFocusableClickables: [],
     };
 }

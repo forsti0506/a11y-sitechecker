@@ -19,6 +19,6 @@ export function setupSiteresult(id: string, sitecheckerResult: A11ySitecheckerRe
             .map((v) => v.nodes.length)
             .reduce((count, value) => count + value, 0),
         countInapplicable: sitecheckerResult.inapplicable.length,
-        tabableImages: sitecheckerResult.tabableImages,
+        tabables: sitecheckerResult.tabables,
     };
 }

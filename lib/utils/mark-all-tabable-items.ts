@@ -5,13 +5,29 @@ import { ResultByUrl } from '../models/a11y-sitechecker-result';
 import { isElementVisible, elementIntersected, highestZIndex } from './is-element-visible';
 import { exposeDepsJs } from './expose-deep-js';
 import { saveScreenshotSingleDomElement } from './helper-saving-screenshots';
+import JSDOM from 'jsdom';
+import { getSelector, getUniqueSelector, uniqueQuery } from './unique-selector';
 
 declare global {
     interface Window {
         debug(debugMode: boolean, message: string, ...optionalParams: unknown[]): void;
         isElementVisible(dom: string | null): boolean;
         highestZIndex(): number;
+        getUniqueSelector(elSrc: Node, dom?: JSDOM.JSDOM): string;
     }
+}
+
+function getStandardHTMLTags() {
+    return ['a', 'area', 'button', 'input', 'textarea', 'select', 'details', 'iframe'];
+}
+
+function isElementMaybeVisible(el: Element): unknown {
+    return (
+        !(el as HTMLElement).hasAttribute('disabled') &&
+        el.getClientRects().length > 0 &&
+        window.getComputedStyle(el).visibility !== 'hidden' &&
+        el.getAttribute('tabindex') !== '-1'
+    );
 }
 
 export async function markAllTabableItems(
@@ -19,7 +35,7 @@ export async function markAllTabableItems(
     url: string,
     config: Config,
     urlResult: ResultByUrl,
-    events?: any,
+    events: { [key: string]: string[] },
 ): Promise<void> {
     debug(config.debugMode, 'make screens for tabable items');
     try {
@@ -32,6 +48,13 @@ export async function markAllTabableItems(
     await page.evaluate(exposeDepsJs({ isElementVisible }));
     await page.evaluate(exposeDepsJs({ highestZIndex }));
     await page.evaluate(exposeDepsJs({ elementIntersected }));
+
+    await page.evaluate(exposeDepsJs({ getUniqueSelector }));
+    await page.evaluate(exposeDepsJs({ uniqueQuery }));
+    await page.evaluate(exposeDepsJs({ getSelector }));
+
+    await page.evaluate(exposeDepsJs({ isElementMaybeVisible }));
+    await page.evaluate(exposeDepsJs({ getStandardHTMLTags }));
 
     const focusableElements = await page.evaluate(() => {
         const styles = `
@@ -51,20 +74,13 @@ export async function markAllTabableItems(
 
         //just to ensure position
         window.scrollTo(0, 0);
-        let tabItemCount = 0;
         // selecting all focusable elements in the tabbing order
         return Array.from(
             document.querySelectorAll(
                 'a[href], area[href], button, input, textarea, select, details, iframe, [tabindex]:not([tabindex^="-"])',
             ),
         )
-            .filter(
-                (el) =>
-                    !(el as HTMLElement).hasAttribute('disabled') &&
-                    el.getClientRects().length > 0 &&
-                    window.getComputedStyle(el).visibility !== 'hidden' &&
-                    el.getAttribute('tabindex') !== '-1',
-            )
+            .filter((el) => isElementMaybeVisible(el))
             .sort((el1, el2) => {
                 return (
                     Number.parseInt(el1.getAttribute('tabindex') || '0') -
@@ -72,19 +88,16 @@ export async function markAllTabableItems(
                 );
             })
             .map((el) => {
-                if (!el.id) {
-                    el.id = 'tabitem' + tabItemCount;
-                    tabItemCount++;
-                }
-                return "[id='" + el.id + "']";
+                return window.getUniqueSelector(el);
             });
     });
 
     for (const [i, focusableElement] of focusableElements.entries()) {
         const image = getEscaped(url) + '_' + i + '.png';
-        await page.evaluate(
-            async (focusableElement, i, debugMode) => {
-                const element = document.querySelector(focusableElement);
+        const resultFromEvaluation = await page.evaluate(
+            async (focusableElement, i, debugMode, events) => {
+                const element: Element & { scrollIntoViewIfNeeded: any } = document.querySelector(focusableElement);
+                const parsedEvents: { [key: string]: string[] } = JSON.parse(events);
                 if (!element) return;
                 const elementVisible = window.isElementVisible(focusableElement);
                 window.debug(debugMode, JSON.stringify(element.getBoundingClientRect()));
@@ -112,7 +125,32 @@ export async function markAllTabableItems(
                 }
 
                 const tabNumberSpan = document.createElement('SPAN');
-                const tabNumberText = document.createTextNode(i.toString());
+                const clickEvent = parsedEvents['click']?.find((e) => e === focusableElement);
+                const keyPressEvent = parsedEvents['keypress']?.find((e) => e === focusableElement);
+                const keyDownEvent = parsedEvents['keydown']?.find((e) => e === focusableElement);
+                const keyUpEvent = parsedEvents['keyup']?.find((e) => e === focusableElement);
+
+                const result: { keyboardaccessible?: string; needsCheck?: string } = {};
+
+                let elementCorrectAccessible = true;
+
+                if (
+                    (element.nodeName.toLowerCase() === 'a' || element.nodeName.toLowerCase() === 'area') &&
+                    element.getAttribute('href') === ''
+                ) {
+                    elementCorrectAccessible = !!(clickEvent && (keyPressEvent || keyDownEvent || keyUpEvent));
+                } else if (!getStandardHTMLTags().includes(element.nodeName.toLowerCase())) {
+                    elementCorrectAccessible = !!(clickEvent && (keyPressEvent || keyDownEvent || keyUpEvent));
+                }
+
+                if (elementCorrectAccessible) {
+                    result.keyboardaccessible = focusableElement;
+                } else {
+                    result.needsCheck = focusableElement;
+                }
+
+                window.debug(debugMode, 'Element is correct accessible: ' + elementCorrectAccessible);
+                const tabNumberText = document.createTextNode(i.toString() + (elementCorrectAccessible ? '' : 'C'));
                 const elementRect = element.getBoundingClientRect();
                 tabNumberSpan.appendChild(tabNumberText);
 
@@ -131,18 +169,38 @@ export async function markAllTabableItems(
                         (window.highestZIndex() || 1),
                 );
                 document.body.appendChild(tabNumberSpan);
+                return JSON.stringify(result || '');
             },
             focusableElement,
             i,
             config.debugMode,
+            JSON.stringify(events),
         );
+
+        const resultFromEvaluationParsed: { keyboardaccessible?: string; needsCheck?: string } | undefined =
+            resultFromEvaluation ? JSON.parse(resultFromEvaluation) : undefined;
+
+        if (resultFromEvaluationParsed && resultFromEvaluationParsed.needsCheck) {
+            urlResult.needsCheck.push(resultFromEvaluationParsed.needsCheck);
+        }
+
+        if (resultFromEvaluationParsed && resultFromEvaluationParsed.keyboardaccessible) {
+            urlResult.keyboardAccessibles.push(resultFromEvaluationParsed.keyboardaccessible);
+        }
+
+        const valueToRemove = resultFromEvaluationParsed?.needsCheck || resultFromEvaluationParsed?.keyboardaccessible;
+
+        if (valueToRemove) {
+            events['click'] = events['click'].filter((c) => c !== valueToRemove);
+        }
+
         const screenshotResult = await saveScreenshotSingleDomElement(
             page,
             config.imagesPath,
             image,
             config.saveImages,
             focusableElement,
-            10,
+            config.screenshotPadding || 10,
             config.debugMode,
         );
         await page.evaluate((i) => {
@@ -152,6 +210,23 @@ export async function markAllTabableItems(
             urlResult.tabableImages.push(image);
         } else if (typeof screenshotResult === 'string') {
             urlResult.tabableImages.push(screenshotResult);
+        }
+    }
+
+    for (const clickEvent of events['click']) {
+        const notFocusableClickable = await page.evaluate((clickEvent) => {
+            const clickElement = document.querySelector(clickEvent);
+            if (
+                clickElement &&
+                isElementMaybeVisible(clickElement) &&
+                !getStandardHTMLTags().includes(clickElement.tagName.toLowerCase())
+            ) {
+                return clickEvent;
+            }
+            return null;
+        }, clickEvent);
+        if (notFocusableClickable) {
+            urlResult.notFocusableClickables.push(notFocusableClickable);
         }
     }
 }

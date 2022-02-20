@@ -12,10 +12,13 @@ export interface SiteResult {
     countPasses: number;
     countIncomplete: number;
     countInapplicable: number;
-    tabableImages: UrlWithTabableImages[];
+    tabables: KeyboardAccessPerUrl[];
 }
 
-interface UrlWithTabableImages {
+export interface KeyboardAccessPerUrl {
     url: string;
+    keyboardAccessibles: string[];
+    needsCheck: string[];
+    notFocusableClickables: string[];
     images: string[];
 }

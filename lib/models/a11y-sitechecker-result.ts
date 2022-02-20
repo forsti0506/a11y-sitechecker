@@ -1,4 +1,5 @@
 import { ImpactValue, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
+import { KeyboardAccessPerUrl } from './site-result';
 
 export interface A11ySitecheckerResult {
     toolOptions: RunOptions | undefined;
@@ -11,14 +12,9 @@ export interface A11ySitecheckerResult {
     inapplicable: FullCheckerSingleResult[];
     violations: FullCheckerSingleResult[];
     analyzedUrls: string[];
-    tabableImages: UrlWithTabableImages[];
+    tabables: KeyboardAccessPerUrl[];
     usedLocale: string;
     name: string;
-}
-
-interface UrlWithTabableImages {
-    url: string;
-    images: string[];
 }
 
 export interface ResultByUrl {
@@ -33,6 +29,9 @@ export interface ResultByUrl {
     incomplete: Result[];
     inapplicable: Result[];
     tabableImages: string[];
+    keyboardAccessibles: string[];
+    needsCheck: string[];
+    notFocusableClickables: string[];
 }
 
 export interface Result {

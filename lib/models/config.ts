@@ -26,6 +26,7 @@ export interface Config {
     name: string;
     cookieText?: string;
     cookieSelector?: string;
+    screenshotPadding?: number;
 }
 
 interface AxeConfig {

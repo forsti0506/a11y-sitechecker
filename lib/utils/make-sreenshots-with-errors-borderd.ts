@@ -34,14 +34,15 @@ export async function makeScreenshotsWithErrorsBorderd(
     debug(config.debugMode, 'make screenshots with border for ' + page.url());
     try {
         await page.exposeFunction('debug', debug);
-        await page.evaluate(exposeDepsJs({ isElementVisible }));
-        await page.evaluate(exposeDepsJs({ highestZIndex }));
-        await page.evaluate(exposeDepsJs({ elementIntersected }));
     } catch (e: any) {
         if (config.debugMode) {
             error(e.message + '. Ignored because normally it means that function already exposed');
         }
     }
+
+    await page.evaluate(exposeDepsJs({ isElementVisible }));
+    await page.evaluate(exposeDepsJs({ highestZIndex }));
+    await page.evaluate(exposeDepsJs({ elementIntersected }));
 
     for (const result of resultByUrl.violations) {
         for (const node of result.nodes) {

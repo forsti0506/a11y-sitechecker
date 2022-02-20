@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/a11y-sitechecker.svg)](https://badge.fury.io/js/a11y-sitechecker)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cc8d2ac7f50c487db55ff311a8ac351e)](https://www.codacy.com/gh/forsti0506/a11y-sitechecker/dashboard?utm_source=github.com&utm_medium=referral&utm_content=forsti0506/a11y-sitechecker&utm_campaign=Badge_Grade)
 ![Commits since last release](https://img.shields.io/github/commits-since/forsti0506/a11y-sitechecker/latest?color=green&style=flat-square)
-![Dependency status](https://img.shields.io/david/forsti0506/a11y-sitechecker?style=flat-square)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/forsti0506/a11y-sitechecker)
 ![Downloads per month](https://img.shields.io/npm/dm/a11y-sitechecker)
 
 A11y-sitecheker is a tool to check a site against accessibility criteria. It
@@ -28,7 +28,7 @@ errors, shows the tab-order and other features.
 
 | Statements                  | Branches                | Functions                 | Lines             |
 | --------------------------- | ----------------------- | ------------------------- | ----------------- |
-| ![Statements](https://img.shields.io/badge/statements-2.57%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-0%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-2.06%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-2.72%25-red.svg?style=flat) |
+| ![Statements](https://img.shields.io/badge/statements-47.47%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-39.49%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-47.42%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-48.39%25-red.svg?style=flat) |
 
 ### Install
 
@@ -70,6 +70,8 @@ export async function entry(
 
 ### Configuration File Options
 
+Every option can be inserted in a json Format and wil be parsed at startup. Examples are below, how to define it in a json file!
+
 #### Overview
 
 ```typescript
@@ -98,6 +100,7 @@ export interface Config {
     name: string;
     cookieSelector?: string; // provide a selector for clicking cookie consent button (example: "[id*=cookie] a, [class*=cookie] a, [id*=cookie] button, [class*=cookie] button, [id*=didomi] button")
     cookieText?: string; //provides a text for cookie consent text (example: "^(Alle akzeptieren|Akzeptieren|Verstanden|Zustimmen|Okay|OK|Alle Cookies akzeptieren)$")
+    screenshotPadding?: number; //padding for making screenshots (Standardvalue is 10). Sometime you like to see more of the element, because you are using small elements, like icon Buttons to check
 }
 ```
 

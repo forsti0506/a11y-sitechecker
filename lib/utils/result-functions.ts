@@ -57,7 +57,13 @@ function setResult(
 export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): void {
     for (const resultByUrl of resultsByUrls) {
         result.analyzedUrls.push(resultByUrl.url);
-        result.tabableImages.push({ url: resultByUrl.url, images: resultByUrl.tabableImages });
+        result.tabables.push({
+            url: resultByUrl.url,
+            images: resultByUrl.tabableImages,
+            keyboardAccessibles: resultByUrl.keyboardAccessibles,
+            needsCheck: resultByUrl.needsCheck,
+            notFocusableClickables: resultByUrl.notFocusableClickables,
+        });
         for (const violation of resultByUrl.violations) {
             result.violations = setResult(result.violations, violation, resultByUrl);
         }

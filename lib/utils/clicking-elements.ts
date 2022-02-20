@@ -76,7 +76,7 @@ export async function clickingElements(
                         await page.goto(url, { waitUntil: 'load' });
                         await waitForHTML(page);
                     } else if (config.analyzeClicksWithoutNavigation) {
-                        debug(config.debugMode, 'Experimental feature! Please check if there are to many clicks!');
+                        debug(config.debugMode, 'Experimental feature! Please check if there are too many clicks!');
                         const axe = await setupAxe(page, axeSpecs, config);
                         const axeResults = await axe.analyze();
                         resultsByUrl.push(await createUrlResult(url + '_' + element + '_clicked', axeResults));
