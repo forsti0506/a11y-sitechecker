@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/forsti0506/a11y-sitechecker/compare/v6.0.0...v6.0.1) (2022-02-21)
+
+
+### Bug Fixes
+
+* invalid tsconfig.json ([fec6051](https://github.com/forsti0506/a11y-sitechecker/commit/fec6051e38956500bb01dcb4581689bcec9b123e))
+
 # [6.0.0](https://github.com/forsti0506/a11y-sitechecker/compare/v5.0.0...v6.0.0) (2022-02-20)
 
 
