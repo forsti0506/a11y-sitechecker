@@ -59,7 +59,7 @@
     "lint": "tsc --noEmit && eslint . --ext js,ts --quiet --fix",
     "semantic-release": "semantic-release",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent --expand --verbose",
-    "test:withIts": "jest --config=jest-it.config.js",
+    "test:withIts": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest-it.config.cjs",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "test:local": "jest --watch",
     "prepare_husky": "husky install",

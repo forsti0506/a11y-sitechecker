@@ -2,7 +2,6 @@ import { Config } from '../models/config';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 import { jest } from '@jest/globals';
 import { Page } from 'puppeteer';
-import FunctionLike = jest.FunctionLike;
 
 jest.unstable_mockModule('./utils/helper-functions', () => ({
     writeToJsonFile: jest.fn(),
@@ -72,7 +71,8 @@ export const stubFrame = {
     url() {
         return 'test.at';
     },
-    evaluate<T extends FunctionLike>(pageFunction: T, ...args: []): Promise<T> {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    evaluate<T extends Function>(pageFunction: T, ...args: []): Promise<T> {
         if (typeof pageFunction === 'string') {
             return Promise.resolve(pageFunction);
         } else {
