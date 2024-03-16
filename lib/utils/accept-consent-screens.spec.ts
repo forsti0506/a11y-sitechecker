@@ -2,6 +2,7 @@ import { Config } from '../models/config';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 import { jest } from '@jest/globals';
 import { Page } from 'puppeteer';
+import FunctionLike = jest.FunctionLike;
 
 jest.unstable_mockModule('./utils/helper-functions', () => ({
     writeToJsonFile: jest.fn(),
@@ -50,13 +51,13 @@ describe('accept-consent-screens', () => {
 });
 
 export const stubPage = {
-    evaluate(test: () => number) {
+    evaluate(_test: () => number) {
         return Promise.resolve(10);
     },
     content() {
         return 'html';
     },
-    waitForTimeout(time: number) {
+    waitForTimeout(_time: number) {
         return Promise.resolve();
     },
     frames() {
@@ -71,7 +72,7 @@ export const stubFrame = {
     url() {
         return 'test.at';
     },
-    evaluate<T extends Function>(pageFunction: T, ...args: []): Promise<T> {
+    evaluate<T extends FunctionLike>(pageFunction: T, ...args: []): Promise<T> {
         if (typeof pageFunction === 'string') {
             return Promise.resolve(pageFunction);
         } else {
@@ -81,7 +82,7 @@ export const stubFrame = {
 };
 
 export const mockDocument = {
-    querySelectorAll(test: string) {
+    querySelectorAll(_test: string) {
         return [];
     },
 };

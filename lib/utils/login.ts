@@ -44,9 +44,9 @@ export async function executeLogin(page: Page, config: Config): Promise<number> 
         debug(config.debugMode, 'Navigation finished: ' + page.url());
         await waitForHTML(page);
         await saveScreenshot(page, config.imagesPath, 'afterLogin.png', config.saveImages);
-    } catch (e) {
+    } catch (_e) {
         // eslint-disable-next-line
-        log(chalk.red('No Navigation after Login. Please check if it\'s working as expected!'));
+        log(chalk.red("No Navigation after Login. Please check if it's working as expected!"));
     }
     debug(config.debugMode, 'Finished Login Script: ' + config.login.url);
     return 1;

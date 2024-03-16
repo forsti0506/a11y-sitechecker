@@ -26,7 +26,7 @@ describe('markAllTabaleItems', () => {
         const pages = await browser.pages();
         await pages[0].goto('https://forsti.eu');
         let nrOfCalls = 0;
-        jest.spyOn(pages[0], 'evaluate').mockImplementation((fn) => {
+        jest.spyOn(pages[0], 'evaluate').mockImplementation(() => {
             if (nrOfCalls === 8) {
                 nrOfCalls++;
                 return Promise.resolve(['test1', 'test2']);

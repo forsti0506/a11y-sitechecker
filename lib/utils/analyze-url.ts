@@ -19,61 +19,57 @@ export async function analyzeUrl(
     alreadyVisited: Map<string, SitecheckerViewport>,
     savedScreenshotHtmls: Map<string, string>,
 ): Promise<ResultByUrl | null> {
-    try {
-        if (page.url() !== url) {
-            try {
-                await page.goto(url, { waitUntil: 'load' });
-            } catch (e: unknown) {
-                if (e instanceof Error) {
-                    log(e?.message);
-                }
-            }
-
-            if (config.cookieText && config.cookieSelector) {
-                await acceptCookieConsent(page, config);
-            }
-            await waitForHTML(page, config.timeout, config.debugMode);
-        } else {
-            debug(config.debugMode, 'URL already open.' + url);
-        }
-        const analyzedSiteViewport = alreadyVisited.get(url);
-        if (
-            analyzedSiteViewport &&
-            analyzedSiteViewport.width === page.viewport()?.width &&
-            analyzedSiteViewport.height === page.viewport()?.height
-        ) {
-            debug(config.debugMode, 'Already visited: ' + url);
-            return null;
-        }
-        const viewport = page.viewport();
-        if (viewport) {
-            alreadyVisited.set(url, viewport);
-        }
-
-        log('Currently analyzing ' + url);
-
-        if (config.saveImages) {
-            await saveScreenshot(page, config.imagesPath, getEscaped(url) + '.png', config.saveImages);
-        }
-
-        let axeResults;
+    if (page.url() !== url) {
         try {
-            const axe = await setupAxe(page, axeSpecs, config);
-            axeResults = await axe.analyze();
-        } catch (e) {
-            error(e + '. Error Axe');
+            await page.goto(url, { waitUntil: 'load' });
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                log(e?.message);
+            }
         }
-        let urlResult: ResultByUrl;
-        if (axeResults) {
-            urlResult = await createUrlResult(url, axeResults);
-            await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
-            const events = await markAllEvents(page, config);
-            await markAllTabableItems(page, url, config, urlResult, events);
 
-            return urlResult;
+        if (config.cookieText && config.cookieSelector) {
+            await acceptCookieConsent(page, config);
         }
-        return null;
-    } catch (e) {
-        throw e;
+        await waitForHTML(page, config.timeout, config.debugMode);
+    } else {
+        debug(config.debugMode, 'URL already open.' + url);
     }
+    const analyzedSiteViewport = alreadyVisited.get(url);
+    if (
+        analyzedSiteViewport &&
+        analyzedSiteViewport.width === page.viewport()?.width &&
+        analyzedSiteViewport.height === page.viewport()?.height
+    ) {
+        debug(config.debugMode, 'Already visited: ' + url);
+        return null;
+    }
+    const viewport = page.viewport();
+    if (viewport) {
+        alreadyVisited.set(url, viewport);
+    }
+
+    log('Currently analyzing ' + url);
+
+    if (config.saveImages) {
+        await saveScreenshot(page, config.imagesPath, getEscaped(url) + '.png', config.saveImages);
+    }
+
+    let axeResults;
+    try {
+        const axe = await setupAxe(page, axeSpecs, config);
+        axeResults = await axe.analyze();
+    } catch (e) {
+        error(e + '. Error Axe');
+    }
+    let urlResult: ResultByUrl;
+    if (axeResults) {
+        urlResult = await createUrlResult(url, axeResults);
+        await makeScreenshotsWithErrorsBorderd(urlResult, page, config, savedScreenshotHtmls);
+        const events = await markAllEvents(page, config);
+        await markAllTabableItems(page, url, config, urlResult, events);
+
+        return urlResult;
+    }
+    return null;
 }

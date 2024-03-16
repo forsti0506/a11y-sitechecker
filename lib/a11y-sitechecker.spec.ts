@@ -13,7 +13,7 @@ jest.unstable_mockModule('./utils/analyze-site.js', () => ({
 }));
 
 jest.unstable_mockModule('./utils/result-functions', () => ({
-    mergeResults: jest.fn().mockImplementation((report: unknown, result: unknown) => {
+    mergeResults: jest.fn().mockImplementation((_report: unknown, result: unknown) => {
         if (mergeResultsRetValue) return mergeResultsRetValue;
         return result;
     }),

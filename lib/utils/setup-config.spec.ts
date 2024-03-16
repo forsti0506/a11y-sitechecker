@@ -1,4 +1,3 @@
-import { AxePuppeteer } from '@axe-core/puppeteer';
 import { jest } from '@jest/globals';
 import puppeteer, { Browser } from 'puppeteer';
 import { Config } from '../models/config';

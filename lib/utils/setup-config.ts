@@ -164,7 +164,7 @@ export function setupAxeConfig(config: Config): Spec {
         } else if (config.axeConfig?.localePath) {
             axeConfig.locale = JSON.parse(fs.readFileSync(config.axeConfig.localePath).toString('utf-8'));
         }
-    } catch (e) {
+    } catch (_e) {
         error('Locale not found. Using Standard locale "en"');
     }
     return axeConfig;

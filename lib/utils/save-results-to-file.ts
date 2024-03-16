@@ -65,7 +65,7 @@ export async function saveResultsToFile(
                 ],
             });
         }
-    } catch (e) {
+    } catch (_e) {
         id = uuidv4();
         const fileResult: FilesByDate = {
             date: new Date(),
