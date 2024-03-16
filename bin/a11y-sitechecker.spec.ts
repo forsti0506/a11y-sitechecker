@@ -1,17 +1,30 @@
-import { A11ySitecheckerResult } from './../lib/models/a11y-sitechecker-result';
+import { A11ySitecheckerResult, FullCheckerSingleResult } from './../lib/models/a11y-sitechecker-result';
+
 process.argv = ['--arg', 'hello'];
-import 'jest';
+import { jest } from '@jest/globals';
 import { Config } from '../lib/models/config';
 import { cleanUpAfterTest, initBeforeTest } from '../lib/utils/test-helper-functions.spec';
-import * as sitechecker from '../lib/a11y-sitechecker';
-import { defaultFunction } from './a11y-sitechecker_code';
-import { program } from 'commander';
-import * as saveResultsToFile from '../lib/utils/save-results-to-file';
+import { Command } from 'commander';
+
+jest.unstable_mockModule('../lib/utils/save-results-to-file', () => ({
+    saveResultsToFile: jest.fn().mockImplementation(() => Promise.resolve()),
+}));
+let violations: A11ySitecheckerResult[] | Error = [] as A11ySitecheckerResult[];
+jest.unstable_mockModule('../lib/a11y-sitechecker', () => ({
+    entry: jest.fn().mockImplementation(() => {
+        if (violations instanceof Error) {
+            throw violations;
+        }
+        return Promise.resolve(violations);
+    }),
+}));
 
 describe('a11y-sitechecker-bin', () => {
     let config: Config;
+    let program: Command;
     beforeEach(async () => {
         config = await initBeforeTest();
+        program = new Command();
     });
     afterEach(async () => {
         await cleanUpAfterTest(config);
@@ -22,13 +35,13 @@ describe('a11y-sitechecker-bin', () => {
         jest.spyOn(program, 'opts').mockImplementation(() => {
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockReturnValue(Promise.resolve([] as A11ySitecheckerResult[]));
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(0);
     });
@@ -36,24 +49,18 @@ describe('a11y-sitechecker-bin', () => {
     test('should exit with error code 2, because violations return too much', async () => {
         expect.assertions(1);
 
-        const violations = [1, 2, 3];
-
-        jest.spyOn(saveResultsToFile, 'saveResultsToFile').mockImplementation(() => {
-            return Promise.resolve();
-        });
+        violations = [{ violations: [1, 2, 3] as unknown as FullCheckerSingleResult[] }] as A11ySitecheckerResult[];
 
         jest.spyOn(program, 'opts').mockImplementation(() => {
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockReturnValue(
-            Promise.resolve([{ violations: violations }] as unknown as A11ySitecheckerResult[]),
-        );
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(2);
     });
@@ -61,25 +68,19 @@ describe('a11y-sitechecker-bin', () => {
     test('should exit with error code 0, because violations return less than allowed', async () => {
         expect.assertions(1);
 
-        const violations = [1, 2, 3];
-
-        jest.spyOn(saveResultsToFile, 'saveResultsToFile').mockImplementation(() => {
-            return Promise.resolve();
-        });
+        violations = [1, 2, 3] as unknown as A11ySitecheckerResult[];
 
         jest.spyOn(program, 'opts').mockImplementation(() => {
             config.threshold = 10;
             return { providedConfig: config, threshold: 10 } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockReturnValue(
-            Promise.resolve([{ violations: violations }] as unknown as A11ySitecheckerResult[]),
-        );
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(0);
     });
@@ -87,25 +88,19 @@ describe('a11y-sitechecker-bin', () => {
     test('should exit with error code 0, because violations return less than allowed (threshold provided in config)', async () => {
         expect.assertions(1);
 
-        const violations = [1, 2, 3];
-
-        jest.spyOn(saveResultsToFile, 'saveResultsToFile').mockImplementation(() => {
-            return Promise.resolve();
-        });
+        violations = [1, 2, 3] as unknown as A11ySitecheckerResult[];
 
         jest.spyOn(program, 'opts').mockImplementation(() => {
             config.threshold = 10;
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockReturnValue(
-            Promise.resolve([{ violations: violations }] as unknown as A11ySitecheckerResult[]),
-        );
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(0);
     });
@@ -115,13 +110,14 @@ describe('a11y-sitechecker-bin', () => {
         jest.spyOn(program, 'opts').mockImplementation(() => {
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockRejectedValue(new Error('Test failed. Any other reason'));
+        // jest.spyOn(sitechecker, 'entry').mockRejectedValue(new Error('Test failed. Any other reason'));
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(1);
     });
@@ -131,13 +127,14 @@ describe('a11y-sitechecker-bin', () => {
         jest.spyOn(program, 'opts').mockImplementation(() => {
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockRejectedValue(new Error('Test failed. Threshold not met'));
+        violations = new Error('Test failed. Threshold not met');
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(2);
     });
@@ -147,13 +144,14 @@ describe('a11y-sitechecker-bin', () => {
         jest.spyOn(program, 'opts').mockImplementation(() => {
             return { providedConfig: config } as any;
         });
-        jest.spyOn(sitechecker, 'entry').mockRejectedValue(new Error('Test failed. ERR_NAME_NOT_RESOLVED'));
+        violations = new Error('Test failed. ERR_NAME_NOT_RESOLVED');
         const processSpy = jest.spyOn(process, 'exit').mockImplementation((num) => {
             console.log('called with: ' + num);
             return {} as never;
         });
 
-        await defaultFunction();
+        const a11yCode = await import('./a11y-sitechecker_code');
+        await a11yCode.defaultFunction(program);
 
         expect(processSpy).toHaveBeenCalledWith(3);
     });

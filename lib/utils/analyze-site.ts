@@ -26,107 +26,125 @@ export async function analyzeSite(
     notCheckedLinks: string[],
     link?: string,
 ): Promise<ResultByUrl[]> {
-    if (config.crawl === false) {
-        const resultsAsPromise = lastValueFrom(
-            from(config.urlsToAnalyze).pipe(
-                mergeMap(async (url) => {
-                    const page = await browser.newPage();
-                    const viewport = firstpage.viewport();
-                    if (viewport) {
-                        await page.setViewport(viewport);
-                    }
+    try {
+        if (!config.crawl) {
+            const resultsAsPromise = lastValueFrom(
+                from(config.urlsToAnalyze).pipe(
+                    mergeMap(async (url) => {
+                        const page = await browser.newPage();
+                        const viewport = firstpage.viewport();
+                        if (viewport) {
+                            await page.setViewport(viewport);
+                        }
 
-                    const result = await analyzeUrl(page, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
-                    await page.close();
-                    return result;
-                }, 4),
-                toArray<ResultByUrl | null>(),
-            ),
-        );
-        const result = await resultsAsPromise;
-        resultsByUrl.push(...result);
-    } else {
-        let url;
-        if (!link) {
-            url = config.urlsToAnalyze[0];
+                        const result = await analyzeUrl(
+                            page,
+                            url,
+                            axeSpecs,
+                            config,
+                            alreadyVisited,
+                            savedScreenshotHtmls,
+                        );
+                        await page.close();
+                        return result;
+                    }, 4),
+                    toArray<ResultByUrl | null>(),
+                ),
+            );
+            const result = await resultsAsPromise;
+            resultsByUrl.push(...result);
         } else {
-            url = link;
-        }
+            let url;
+            if (!link) {
+                url = config.urlsToAnalyze[0];
+            } else {
+                url = link;
+            }
 
-        if (!url.startsWith('https://') && !url.startsWith('http://')) {
-            url = 'https://' + url;
-        }
-        if (url.endsWith('/')) {
-            url = url.substring(0, url.length - 1);
-        }
-        log('Start analyze of ' + url);
+            if (!url.startsWith('https://') && !url.startsWith('http://')) {
+                url = 'https://' + url;
+            }
+            if (url.endsWith('/')) {
+                url = url.substring(0, url.length - 1);
+            }
+            log('Start analyze of ' + url);
 
-        resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls));
+            resultsByUrl.push(await analyzeUrl(firstpage, url, axeSpecs, config, alreadyVisited, savedScreenshotHtmls));
 
-        const html = await firstpage.content();
-        const links = getLinks(
-            html,
-            url,
-            config,
-            alreadyParsed,
-            rootDomain,
-            elementsToClick,
-            notCheckedLinks,
-            alreadyVisited,
-        );
-
-        const results = lastValueFrom(
-            from(links.entries()).pipe(
-                mergeMap(async ([i, link]) => {
-                    debug(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
-                    const page = await browser.newPage();
-                    const viewport = firstpage.viewport();
-                    if (viewport) {
-                        await page.setViewport(viewport);
-                    }
-                    if (alreadyVisited.get(link)) {
-                        return null;
-                    }
-                    const result = await analyzeUrl(page, link, axeSpecs, config, alreadyVisited, savedScreenshotHtmls);
-                    await page.close();
-                    return result;
-                }, 4),
-                toArray<ResultByUrl | null>(),
-            ),
-        );
-        resultsByUrl.push(...(await results));
-
-        if (config.analyzeClicks)
-            await clickingElements(
-                config,
+            const html = await firstpage.content();
+            const links = getLinks(
+                html,
                 url,
-                firstpage,
-                elementsToClick,
-                axeSpecs,
-                resultsByUrl,
-                browser,
-                alreadyVisited,
+                config,
                 alreadyParsed,
+                rootDomain,
+                elementsToClick,
                 notCheckedLinks,
+                alreadyVisited,
             );
 
-        for (const [i, link] of links.entries()) {
-            log(config.debugMode, 'parsing ' + i + ' of ' + (links.length - 1));
-            if (!alreadyParsed.includes(link)) {
-                await analyzeSite(
-                    axeSpecs,
-                    firstpage,
+            const results = lastValueFrom(
+                from(links.entries()).pipe(
+                    mergeMap(async ([i, link]) => {
+                        debug(config.debugMode, 'Visiting ' + i + ' of ' + (links.length - 1));
+                        const page = await browser.newPage();
+                        const viewport = firstpage.viewport();
+                        if (viewport) {
+                            await page.setViewport(viewport);
+                        }
+                        if (alreadyVisited.get(link)) {
+                            return null;
+                        }
+                        const result = await analyzeUrl(
+                            page,
+                            link,
+                            axeSpecs,
+                            config,
+                            alreadyVisited,
+                            savedScreenshotHtmls,
+                        );
+                        await page.close();
+                        return result;
+                    }, 4),
+                    toArray<ResultByUrl | null>(),
+                ),
+            );
+            resultsByUrl.push(...(await results));
+
+            if (config.analyzeClicks)
+                await clickingElements(
                     config,
+                    url,
+                    firstpage,
+                    elementsToClick,
+                    axeSpecs,
                     resultsByUrl,
                     browser,
                     alreadyVisited,
                     alreadyParsed,
                     notCheckedLinks,
-                    link,
                 );
-                log(config.debugMode, 'Finished analyze of Site: ' + link);
+
+            for (const [i, link] of links.entries()) {
+                log(config.debugMode, 'parsing ' + i + ' of ' + (links.length - 1));
+                if (!alreadyParsed.includes(link)) {
+                    await analyzeSite(
+                        axeSpecs,
+                        firstpage,
+                        config,
+                        resultsByUrl,
+                        browser,
+                        alreadyVisited,
+                        alreadyParsed,
+                        notCheckedLinks,
+                        link,
+                    );
+                    log(config.debugMode, 'Finished analyze of Site: ' + link);
+                }
             }
         }
+    } catch (e) {
+        throw e;
     }
     savedScreenshotHtmls.clear();
     return resultsByUrl.filter(notEmpty);

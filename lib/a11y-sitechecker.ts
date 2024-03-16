@@ -1,6 +1,6 @@
 import { Spec } from 'axe-core';
 import chalk from 'chalk';
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser } from 'puppeteer';
 import { A11ySitecheckerResult } from './models/a11y-sitechecker-result';
 import { Config, SitecheckerViewport } from './models/config';
 import { analyzeSite } from './utils/analyze-site';
@@ -36,51 +36,55 @@ async function checkSite(
     vp: SitecheckerViewport,
     onlyReturn?: boolean,
 ): Promise<A11ySitecheckerResult> {
-    const browser = await puppeteer.launch(config.launchOptions);
-    const page = (await browser.pages())[0];
-    await page.setViewport({
-        width: vp.width,
-        height: vp.height,
-    });
-    await executeLogin(page, config);
-    const usedLocale = config.axeConfig?.locale
-        ? config.axeConfig?.locale
-        : config.axeConfig?.localePath
-        ? config.axeConfig?.localePath
-        : 'en';
+    const browser: Browser = await puppeteer.launch(config.launchOptions);
+    try {
+        const page = (await browser.pages())[0];
+        await page.setViewport({
+            width: vp.width,
+            height: vp.height,
+        });
+        await executeLogin(page, config);
+        const usedLocale = config.axeConfig?.locale
+            ? config.axeConfig?.locale
+            : config.axeConfig?.localePath
+              ? config.axeConfig?.localePath
+              : 'en';
 
-    const result: A11ySitecheckerResult = {
-        testEngine: undefined,
-        testEnvironment: undefined,
-        testRunner: undefined,
-        timestamp: new Date().toISOString(),
-        toolOptions: undefined,
-        name: '',
-        violations: [],
-        inapplicable: [],
-        incomplete: [],
-        passes: [],
-        analyzedUrls: [],
-        tabables: [],
-        usedLocale: usedLocale,
-    };
+        let result: A11ySitecheckerResult = {
+            testEngine: undefined,
+            testEnvironment: undefined,
+            testRunner: undefined,
+            timestamp: new Date().toISOString(),
+            toolOptions: undefined,
+            name: '',
+            violations: [],
+            inapplicable: [],
+            incomplete: [],
+            passes: [],
+            analyzedUrls: [],
+            tabables: [],
+            usedLocale: usedLocale,
+        };
 
-    const alreadyVisited: Map<string, SitecheckerViewport> = new Map<string, SitecheckerViewport>();
-    const report = await analyzeSite(axeSpecs, page, config, [], browser, alreadyVisited, [], []);
+        const alreadyVisited: Map<string, SitecheckerViewport> = new Map<string, SitecheckerViewport>();
+        const report = await analyzeSite(axeSpecs, page, config, [], browser, alreadyVisited, [], []);
 
-    await browser.close();
-    result.name = config.name;
+        await browser.close();
+        result.name = config.name;
 
-    mergeResults(report, result);
-    if (result.violations.length > config.threshold) {
-        throw new Error(
-            'Threshold (' + config.threshold + ') not met. There are ' + result.violations.length + ' errors.',
-        );
+        result = mergeResults(report, result);
+        if (result.violations.length > config.threshold) {
+            throw new Error(
+                'Threshold (' + config.threshold + ') not met. There are ' + result.violations.length + ' errors.',
+            );
+        }
+        if (config.json) {
+            writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPathPerUrl, vp);
+        } else if (!onlyReturn) {
+            log(JSON.stringify(report, null, 4));
+        }
+        return result;
+    } finally {
+        await browser?.close();
     }
-    if (config.json) {
-        writeToJsonFile(JSON.stringify(result, null, 2), config.resultsPathPerUrl, vp);
-    } else if (!onlyReturn) {
-        log(JSON.stringify(report, null, 4));
-    }
-    return result;
 }

@@ -1,4 +1,12 @@
-import { ImpactValue, RunOptions, TagValue, TestEngine, TestEnvironment, TestRunner } from 'axe-core';
+import {
+    ImpactValue,
+    RunOptions,
+    TagValue,
+    TestEngine,
+    TestEnvironment,
+    TestRunner,
+    UnlabelledFrameSelector,
+} from 'axe-core';
 import { KeyboardAccessPerUrl } from './site-result';
 
 export interface A11ySitecheckerResult {
@@ -47,15 +55,15 @@ export interface Result {
 interface AxeNodeResult {
     html: string;
     impact?: ImpactValue;
-    target: string[];
+    target: UnlabelledFrameSelector;
     xpath?: string[];
-    ancestry?: string[];
     any: CheckResult[];
     all: CheckResult[];
     none: CheckResult[];
     failureSummary?: string;
     element?: HTMLElement;
     image?: string;
+    ancestry?: UnlabelledFrameSelector;
 }
 
 export interface FullCheckerSingleResult {

@@ -3,7 +3,7 @@ import JSDOM from 'jsdom';
 // dom is optional to use it in puppeteer too
 export function getUniqueSelector(elSrc: Node, dom?: JSDOM.JSDOM): string {
     let sSel;
-    const aAttr = ['name', 'value', 'title', 'placeholder', 'data-*'],
+    const aAttr = ['name', 'value', 'placeholder'],
         aSel: string[] = [];
     while (elSrc.parentNode) {
         if (getSelector(aSel, elSrc as Element, sSel, aAttr, dom)) return aSel.join(' > ');
@@ -11,12 +11,15 @@ export function getUniqueSelector(elSrc: Node, dom?: JSDOM.JSDOM): string {
     }
     return '';
 }
+
 export function uniqueQuery(aSel: string[], dom?: JSDOM.JSDOM): boolean {
     try {
+        console.debug(aSel.join('>'));
         return dom
             ? dom.window.document.querySelectorAll(aSel.join('>')).length === 1
             : document.querySelectorAll(aSel.join('>')).length === 1;
     } catch (e) {
+        console.error(e);
         const queryStringValidCss: string[] = [];
         aSel.forEach((a) => {
             queryStringValidCss.push(
@@ -49,8 +52,13 @@ export function getSelector(
     }
     aSel.unshift((sSel = el.nodeName.toLowerCase()));
     // 2. Try to select by classes
-    if (el?.getAttribute('class')) {
-        aSel[0] = sSel += '.' + el.getAttribute('class')?.trim().replace(/ +/g, '.');
+    const classContent = el.getAttribute('class');
+    if (classContent && !classContent.includes('\r') && !classContent.includes('\n')) {
+        if (classContent?.includes('-')) {
+            aSel[0] = sSel += '[class*= "' + classContent?.trim().replace(/ +/g, ' ') + '"]';
+        } else {
+            aSel[0] = sSel += '.' + classContent?.trim().replace(/ +/g, '.');
+        }
         if (uniqueQuery(aSel, dom)) return true;
     }
     // 3. Try to select by classes + attributes

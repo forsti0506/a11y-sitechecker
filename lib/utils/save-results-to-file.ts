@@ -1,11 +1,11 @@
-import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { A11ySitecheckerResult } from '../models/a11y-sitechecker-result';
 import { AnalyzedSite, FilesByDate } from '../models/analyzed-site';
 import { Config } from '../models/config';
-import { defineExtraTags } from '../utils/define-extratags';
-import { setupSiteresult } from '../utils/setup-siteresult';
+import { defineExtraTags } from './define-extratags';
+import { setupSiteresult } from './setup-siteresult';
 import { getEscaped, log } from './helper-functions';
+import { readFileSync, writeFileSync } from 'fs';
 
 export async function saveResultsToFile(
     config: Config,
@@ -38,7 +38,7 @@ export async function saveResultsToFile(
     let fileObject: AnalyzedSite[];
     let id: string;
     try {
-        const data = fs.readFileSync(config.resultsPath + 'files.json');
+        const data = readFileSync(config.resultsPath + 'files.json');
         fileObject = JSON.parse(data.toString());
         if (fileObject.filter((f) => f.url.includes(config.name)).length > 0) {
             id = fileObject.filter((f) => f.url.includes(config.name))[0]._id;
@@ -76,8 +76,8 @@ export async function saveResultsToFile(
 
     const siteResult = setupSiteresult(id, sitecheckerResult);
     defineExtraTags(sitecheckerResult, config);
-    fs.writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
-    fs.writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
+    writeFileSync(fileToSave, JSON.stringify(siteResult, null, 4));
+    writeFileSync(config.resultsPath + 'files.json', JSON.stringify(fileObject, null, 4));
     const basePath =
         config.resultsPathPerUrl +
         getEscaped(id) +
@@ -91,8 +91,8 @@ export async function saveResultsToFile(
     const passesPath = basePath + '_passes.json';
     const inapplicablesPath = basePath + '_inapplicables.json';
 
-    fs.writeFileSync(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
-    fs.writeFileSync(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
-    fs.writeFileSync(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
-    fs.writeFileSync(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
+    writeFileSync(violationsPath, JSON.stringify(sitecheckerResult.violations, null, 4));
+    writeFileSync(incompletesPath, JSON.stringify(sitecheckerResult.incomplete, null, 4));
+    writeFileSync(passesPath, JSON.stringify(sitecheckerResult.passes, null, 4));
+    writeFileSync(inapplicablesPath, JSON.stringify(sitecheckerResult.inapplicable, null, 4));
 }

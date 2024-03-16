@@ -15,19 +15,19 @@ errors, shows the tab-order and other features.
 
 ## Features
 
--   Crawls Websites automatically for accessibility issues
-    -   In addition clicking all Clickable Items (Alpha Status)
--   Analyze a Set of URLs agains accessibility criteria
--   Provide Images for
-    -   Tab-Order (A C means you have to check if there are click and key interaction is possible!)
-    -   Errors highlighted
-    -   View of site in general
--   Results for different viewports
+- Crawls Websites automatically for accessibility issues
+    - In addition clicking all Clickable Items (Alpha Status)
+- Analyze a Set of URLs agains accessibility criteria
+- Provide Images for
+    - Tab-Order (A C means you have to check if there are click and key interaction is possible!)
+    - Errors highlighted
+    - View of site in general
+- Results for different viewports
 
 ## Test Coverage
 
-| Statements                  | Branches                | Functions                 | Lines             |
-| --------------------------- | ----------------------- | ------------------------- | ----------------- |
+| Statements                                                                         | Branches                                                                      | Functions                                                                        | Lines                                                                    |
+|------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------|
 | ![Statements](https://img.shields.io/badge/statements-53.47%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-40.6%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-45.28%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-54.84%25-red.svg?style=flat) |
 
 ### Install
@@ -70,7 +70,8 @@ export async function entry(
 
 ### Configuration File Options
 
-Every option can be inserted in a json Format and wil be parsed at startup. Examples are below, how to define it in a json file!
+Every option can be inserted in a json Format and wil be parsed at startup. Examples are below, how to define it in a
+json file!
 
 #### Overview
 
@@ -115,7 +116,7 @@ The name is the major element to identify your run! You have to provide it
 
 ```json
 {
-    "name": "MyName"
+  "name": "MyName"
 }
 ```
 
@@ -125,8 +126,8 @@ Define if output should be to a json file. You can additionally add a path to st
 
 ```json
 {
-    "json": true,
-    "resultsPath": "to a folder, starting with the folder where the script is executed"
+  "json": true,
+  "resultsPath": "to a folder, starting with the folder where the script is executed"
 }
 ```
 
@@ -137,10 +138,10 @@ you can provide your own locale with a path!
 
 ```json
 {
-    "axeConfig": {
-        "locale": "de",
-        "localePath": "path to locale"
-    }
+  "axeConfig": {
+    "locale": "de",
+    "localePath": "path to locale"
+  }
 }
 ```
 
@@ -152,45 +153,46 @@ repeat this steps if needed!
 
 ```json
 {
-    "login": {
-        "url": "http://myloginurl.at", 
-        "steps": [
-            {
-                "input": [
-                    {
-                        "selector": "#user_login",
-                        "value": "user"
-                    },
-                    {
-                        "selector": "#user_pass",
-                        "value": "passwort"
-                    }
-                ],
-                "submit": "#wp-submit"
-            }
-        ]
-    }
+  "login": {
+    "url": "http://myloginurl.at",
+    "steps": [
+      {
+        "input": [
+          {
+            "selector": "#user_login",
+            "value": "user"
+          },
+          {
+            "selector": "#user_pass",
+            "value": "passwort"
+          }
+        ],
+        "submit": "#wp-submit"
+      }
+    ]
+  }
 }
 ```
 
 ##### Images
 
-If you like to take Screenshots during the evaluation, define it here! The images are saved in a folder images under the results path!
+If you like to take Screenshots during the evaluation, define it here! The images are saved in a folder images under the
+results path!
 
 ```json
 {
-    "saveImages": true,
+  "saveImages": true
 }
 ```
 
 ##### Launch Options
 
 You can define launch Options for puppeteer. Please see the
-documentation <a href="https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#puppeteerlaunchoptions">here</a>
+documentation <a href="https://github.com/puppeteer/puppeteer/blob/main/docs/api/puppeteer.launchoptions.md">here</a>
 
 ```json
 {
-    "launchOptions": {}
+  "launchOptions": {}
 }
 ```
 
@@ -201,18 +203,23 @@ the crawle should not do a logout!
 
 ```json
 {
-    "ignoreElementAttributeValues": ["logout"]
+  "ignoreElementAttributeValues": [
+    "logout"
+  ]
 }
 ```
 
 ##### Links to Analyze
 
-You have to define the links you like to analyze. If you specify 1 link, you can use the crawl function, which crawls then the url. If you provide more then 1 url, you are not allowed to set crawl to true. It is by default false!
+You have to define the links you like to analyze. If you specify 1 link, you can use the crawl function, which crawls
+then the url. If you provide more then 1 url, you are not allowed to set crawl to true. It is by default false!
 
 ```json
 {
-    "urlsToAnalyze": ["www.test.at"],
-    "crawl": true
+  "urlsToAnalyze": [
+    "www.test.at"
+  ],
+  "crawl": true
 }
 ```
 
@@ -223,8 +230,8 @@ by this selector : "button, select, details, [tabindex]:not([tabindex="-1"])" Yo
 
 ```json
 {
-    "analyzeClicks": true,
-    "clickableItemSelector": "button, details"
+  "analyzeClicks": true,
+  "clickableItemSelector": "button, details"
 }
 ```
 
@@ -234,7 +241,7 @@ It is possible to analyze button clicks which does not affect the url. If you li
 
 ```json
 {
-    "analyzeClicksWithoutNavigation": true
+  "analyzeClicksWithoutNavigation": true
 }
 ```
 
@@ -244,7 +251,7 @@ You can activate/deactive the analyze of clicks (alpha status). Standard is fals
 
 ```json
 {
-    "analyzeClicks": true
+  "analyzeClicks": true
 }
 ```
 
@@ -256,8 +263,8 @@ a threshold (same like in the command line). Standard: threshold 0, timeout 3000
 
 ```json
 {
-    "threshold": 100,
-    "timeout": 1000
+  "threshold": 100,
+  "timeout": 1000
 }
 ```
 
@@ -267,7 +274,7 @@ Activating the debugMode leads to more logs presented in the console output. By 
 
 ```json
 {
-    "debugMode": true
+  "debugMode": true
 }
 ```
 
@@ -278,12 +285,12 @@ accessibility problems! Standard viewport ist 1920\*1080!
 
 ```json
 {
-    "viewports": [
-        {
-            "width": 1920,
-            "height": 1080
-        }
-    ]
+  "viewports": [
+    {
+      "width": 1920,
+      "height": 1080
+    }
+  ]
 }
 ```
 
@@ -295,7 +302,10 @@ Standard is violations and incomplete!
 
 ```json
 {
-    "resultTypes": ["violations", "incomplete"]
+  "resultTypes": [
+    "violations",
+    "incomplete"
+  ]
 }
 ```
 
@@ -305,9 +315,13 @@ ID-Tags are used to mark axe-core rules with own Tags (for example if someone wa
 
 ```json
 {
-    "idTags": {
-        "aria-required-attr": ["XYZ"],
-        "meta-viewport": ["XYZ"]
-    }
+  "idTags": {
+    "aria-required-attr": [
+      "XYZ"
+    ],
+    "meta-viewport": [
+      "XYZ"
+    ]
+  }
 }
 ```

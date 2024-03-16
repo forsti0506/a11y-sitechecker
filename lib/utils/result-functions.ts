@@ -20,7 +20,7 @@ function setResult(
                 reportViolation.nodes.push({
                     none: node.none,
                     any: node.any,
-                    targetResult: { urls: [result.url], target: node.target },
+                    targetResult: { urls: [result.url], target: node.target as string[] },
                     all: node.all,
                     html: node.html,
                     image: node.image,
@@ -54,7 +54,7 @@ function setResult(
     return violations;
 }
 
-export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): void {
+export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheckerResult): A11ySitecheckerResult {
     for (const resultByUrl of resultsByUrls) {
         result.analyzedUrls.push(resultByUrl.url);
         result.tabables.push({
@@ -82,4 +82,5 @@ export function mergeResults(resultsByUrls: ResultByUrl[], result: A11ySitecheck
     result.testRunner = resultsByUrls[0].testRunner;
     result.testEnvironment = resultsByUrls[0].testEnvironment;
     result.testEngine = resultsByUrls[0].testEngine;
+    return result;
 }

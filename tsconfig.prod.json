@@ -1,11 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "sourceMap": false,
     "removeComments": true,
     "declaration": true,
-    "target": "es2021",
+    "target": "esnext",
     "strict": true,
     "lib": [
       "es2021",
@@ -17,7 +17,7 @@
   },
   "include": [
     "./lib/**/*",
-    "./bin/**/*",
+    "./bin/**/*"
   ],
   "exclude": [
     "node_modules",

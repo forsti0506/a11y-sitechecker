@@ -1,8 +1,15 @@
 import { Config } from '../models/config';
-import { acceptCookieConsent } from './accept-consent-screens';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
-import * as debug from './helper-functions';
-import { EvaluateFn, EvaluateFnReturnType, Page, SerializableOrJSHandle, UnwrapPromiseLike } from 'puppeteer/lib/types';
+import { jest } from '@jest/globals';
+import { Page } from 'puppeteer';
+
+jest.unstable_mockModule('./utils/helper-functions', () => ({
+    writeToJsonFile: jest.fn(),
+    debug: jest.fn(),
+    log: jest.fn(),
+    error: jest.fn(),
+    waitForHTML: jest.fn(),
+}));
 
 describe('accept-consent-screens', () => {
     let config: Config;
@@ -17,17 +24,18 @@ describe('accept-consent-screens', () => {
 
     test('no cookie selector provided', async () => {
         expect.assertions(2);
-        const spyDebug = jest.spyOn(debug, 'debug');
         const stubFrameSpy = jest.spyOn(stubFrame, 'evaluate');
 
-        await acceptCookieConsent(stubPage, config);
+        const cookie = await import('./accept-consent-screens');
+        await cookie.acceptCookieConsent(stubPage, config);
         expect(stubFrameSpy).not.toBeCalled();
-        expect(spyDebug).toBeCalledWith(true, 'No cookie element found. Iframe Name or Url: test');
+        const helper = await import('./helper-functions');
+        expect(helper.debug).toBeCalledWith(true, 'No cookie element found. Iframe Name or Url: test');
     });
 
     test('unknown cookie selector provided', async () => {
         expect.assertions(1);
-        const spyDebug = jest.spyOn(debug, 'debug');
+        const helper = await import('./helper-functions');
         Object.defineProperty(global, 'document', {
             writable: true,
             value: mockDocument,
@@ -35,8 +43,9 @@ describe('accept-consent-screens', () => {
 
         config.cookieSelector = 'test';
         config.cookieText = 'accept';
-        await acceptCookieConsent(stubPage, config);
-        expect(spyDebug).toBeCalledWith(true, 'Check frame test for consent button');
+        const cookie = await import('./accept-consent-screens');
+        await cookie.acceptCookieConsent(stubPage, config);
+        expect(helper.debug).toBeCalledWith(true, 'Check frame test for consent button');
     });
 });
 
@@ -62,12 +71,9 @@ export const stubFrame = {
     url() {
         return 'test.at';
     },
-    evaluate<T extends EvaluateFn>(
-        pageFunction: T,
-        ...args: SerializableOrJSHandle[]
-    ): Promise<UnwrapPromiseLike<EvaluateFnReturnType<T>>> {
+    evaluate<T extends Function>(pageFunction: T, ...args: []): Promise<T> {
         if (typeof pageFunction === 'string') {
-            return Promise.resolve(pageFunction as UnwrapPromiseLike<EvaluateFnReturnType<T>>);
+            return Promise.resolve(pageFunction);
         } else {
             return Promise.resolve(pageFunction(args));
         }

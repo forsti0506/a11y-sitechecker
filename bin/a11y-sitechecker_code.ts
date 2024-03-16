@@ -2,14 +2,15 @@
 
 // This file is the entry point if you are using it through the command line
 
-import { program } from 'commander';
+import { Command } from 'commander';
 import { entry } from '../lib/a11y-sitechecker';
 import { error } from '../lib/utils/helper-functions';
 import { saveResultsToFile } from '../lib/utils/save-results-to-file';
 import { setupAxeConfig, setupConfig } from '../lib/utils/setup-config';
 import pkg from '../package.json';
 
-export const defaultFunction = async (): Promise<void> => {
+export const defaultFunction = async (program?: Command): Promise<void> => {
+    program = program ?? new Command();
     program
         .version(pkg.version)
         .usage('[options] <paths>')

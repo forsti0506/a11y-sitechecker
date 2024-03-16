@@ -2,25 +2,27 @@ import { Config } from '../models/config';
 import { markAllTabableItems } from './mark-all-tabable-items';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 import { ResultByUrl } from '../models/a11y-sitechecker-result';
-import puppeteer from 'puppeteer';
-import 'jest';
+import puppeteer, { Browser } from 'puppeteer';
+import { expect, jest, test } from '@jest/globals';
 
 describe('markAllTabaleItems', () => {
     let config: Config;
     let urlResult: Partial<ResultByUrl>;
+    let browser: Browser;
 
     beforeEach(async () => {
         config = await initBeforeTest();
         config.timeout = 15000;
         config.debugMode = true;
     });
-    afterEach(() => {
+    afterEach(async () => {
+        await browser?.close();
         return cleanUpAfterTest(config);
     });
     test('should be able to call markAllTabableItems', async () => {
         expect.assertions(1);
 
-        const browser = await puppeteer.launch(config.launchOptions);
+        browser = await puppeteer.launch(config.launchOptions);
         const pages = await browser.pages();
         await pages[0].goto('https://forsti.eu');
         let nrOfCalls = 0;

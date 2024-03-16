@@ -19,10 +19,10 @@ export async function acceptCookieConsent(page: Page, config: Config): Promise<v
                     (cookieSelector, cookieText, count) => {
                         const elements = document.querySelectorAll(cookieSelector);
                         const cookieElements = Array.from(elements).filter((d) =>
-                            RegExp(cookieText, 'i').test(d.textContent.trim()),
+                            RegExp(cookieText, 'i').test(d.textContent!.trim()),
                         );
                         if (cookieElements && cookieElements.length > 0) {
-                            const element: HTMLElement = cookieElements[0];
+                            const element: Element = cookieElements[0];
                             if (!element.id) {
                                 element.setAttribute('id', 'consent_screen_' + count);
                             }

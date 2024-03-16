@@ -23,7 +23,7 @@ export async function saveScreenshotSingleDomElement(
                     if (!elementVisible) {
                         const oldScrollValues = { x: window.scrollX, y: window.scrollY };
                         window.debug(debugMode, 'Element not visible. Try to scroll into view');
-                        element.scrollIntoViewIfNeeded(true);
+                        element.scrollIntoView();
                         const newScrollValues = { x: window.scrollX, y: window.scrollY };
                         window.debug(
                             debugMode,

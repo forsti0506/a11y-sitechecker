@@ -19,5 +19,6 @@ describe('login', () => {
         const browser = await puppeteer.launch(config.launchOptions);
         const pages = await browser.pages();
         await expect(executeLogin(pages[0], config)).resolves.toBe(0);
+        await browser.close();
     });
 });

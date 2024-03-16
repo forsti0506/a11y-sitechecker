@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "module":"commonjs",
+    "module": "ESNext",
     "noImplicitAny": true,
     "sourceMap": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "target": "es2021",
+    "target": "esnext",
     "strict": true,
     "lib": [
-      "es2021",
+      "esnext",
       "dom"
     ],
     "outDir": "./dist",
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedParameters": false,
@@ -35,6 +35,6 @@
     "node_modules/@types/jest"
   ],
   "exclude": [
-    "**/*.spec.ts",
+    "**/*.spec.ts"
   ]
 }

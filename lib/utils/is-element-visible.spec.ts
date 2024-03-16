@@ -1,23 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-import { TextEncoder, TextDecoder } from 'util';
-global.TextEncoder = TextEncoder;
-(global as any).TextDecoder = TextDecoder;
-import JSDOM from 'jsdom';
+import { JSDOM } from 'jsdom';
+import { jest } from '@jest/globals';
 import { Config } from '../models/config';
 import { isElementVisible } from './is-element-visible';
 import { cleanUpAfterTest, initBeforeTest } from './test-helper-functions.spec';
 
 describe('is-element-visible', () => {
     let config: Config;
-    let jsdom: JSDOM.JSDOM;
+    let jsdom: JSDOM;
 
     beforeEach(async () => {
         config = await initBeforeTest();
         config.timeout = 15000;
 
-        jsdom = new JSDOM.JSDOM(`
+        jsdom = new JSDOM(`
         <!DOCTYPE html>
         <html lang="en">
         <head><title>TypeScript Dom Manipulation</title></head>

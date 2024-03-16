@@ -54,7 +54,7 @@ export async function makeScreenshotsWithErrorsBorderd(
                     config.imagesPath,
                     image,
                     config.saveImages,
-                    node.target[0],
+                    node.target[0] as string,
                     10,
                     config.debugMode,
                 );
