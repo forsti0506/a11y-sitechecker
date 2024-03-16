@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/forsti0506/a11y-sitechecker/compare/v6.0.1...v6.1.0) (2024-03-16)
+
+
+### Features
+
+* Update deps and switch to ecma script ([7a636bf](https://github.com/forsti0506/a11y-sitechecker/commit/7a636bfa19bef6e0551a5e73804dd3c980f34d8f))
+
 ## [6.0.1](https://github.com/forsti0506/a11y-sitechecker/compare/v6.0.0...v6.0.1) (2022-02-21)
 
 
