@@ -1,124 +1,124 @@
 {
-  "name": "a11y-sitechecker",
-  "version": "6.0.1",
-  "description": "",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/forsti0506/a11y-sitechecker.git"
-  },
-  "main": "./lib/a11y-sitechecker.js",
-  "types": "./lib/a11y-sitechecker.d.ts",
-  "dependencies": {
-    "@axe-core/puppeteer": "^4.8.5",
-    "chalk": "^5.3.0p",
-    "commander": "^12.0.0",
-    "cross-env": "^7.0.3",
-    "jest-environment-jsdom": "^29.7.0",
-    "jsdom": "^24.0.0",
-    "leaked-handles": "^5.2.0",
-    "puppeteer": "^22.4.1",
-    "rxjs": "^7.8.1",
-    "uuid": "^9.0.1"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^19.0.3",
-    "@commitlint/config-conventional": "^19.0.3",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "^11.0.3",
-    "@semantic-release/release-notes-generator": "^12.1.0",
-    "@types/jest": "^29.5.12",
-    "@types/jsdom": "^21.1.6",
-    "@types/node": "^20.11.25",
-    "@types/prettyjson": "^0.0.33",
-    "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
-    "copyfiles": "^2.4.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-promise": "^6.1.1",
-    "husky": "^9.0.11",
-    "istanbul-badges-readme": "^1.8.5",
-    "jest": "^29.7.0",
-    "jest-puppeteer": "^10.0.1",
-    "prettier": "^3.2.5",
-    "semantic-release": "^23.0.2",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
-  },
-  "scripts": {
-    "build": "tsc && copyfiles README.md dist",
-    "build:prod": "npm run lint && tsc --project tsconfig.prod.json && copyfiles README.md dist",
-    "lint": "tsc --noEmit && eslint . --ext js,ts --quiet --fix",
-    "semantic-release": "semantic-release",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent --expand --verbose",
-    "test:withIts": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest-it.config.cjs",
-    "test:coverage": "jest --coverage --detectOpenHandles",
-    "test:local": "jest --watch",
-    "prepare_husky": "husky install",
-    "badge-script": "istanbul-badges-readme && git add .",
-    "update-major-deps": "npx npm-check-updates -u",
-    "testlocal": "npm run build && node .\\dist\\bin\\a11y-sitechecker.js  --config=config.json"
-  },
-  "bin": {
-    "a11y-sitechecker": "./bin/a11y-sitechecker.js"
-  },
-  "keywords": [
-    "accessibility",
-    "a11y",
-    "testing",
-    "automated testing",
-    "accessibility testing",
-    "universal design",
-    "Design4all",
-    "automation",
-    "test",
-    "accessible"
-  ],
-  "author": "Martin Forstner",
-  "license": "GPL-3.0-or-later",
-  "type": "module",
-  "files": [
-    "lib",
-    "bin"
-  ],
-  "release": {
-    "branches": [
-      "main",
-      "next"
+    "name": "a11y-sitechecker",
+    "version": "6.0.1",
+    "description": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/forsti0506/a11y-sitechecker.git"
+    },
+    "main": "./lib/a11y-sitechecker.js",
+    "types": "./lib/a11y-sitechecker.d.ts",
+    "dependencies": {
+        "@axe-core/puppeteer": "^4.8.5",
+        "chalk": "^5.3.0p",
+        "commander": "^12.0.0",
+        "cross-env": "^7.0.3",
+        "jest-environment-jsdom": "^29.7.0",
+        "jsdom": "^24.0.0",
+        "leaked-handles": "^5.2.0",
+        "puppeteer": "^22.4.1",
+        "rxjs": "^7.8.1",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^19.0.3",
+        "@commitlint/config-conventional": "^19.0.3",
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^9.2.6",
+        "@semantic-release/npm": "^11.0.3",
+        "@semantic-release/release-notes-generator": "^12.1.0",
+        "@types/jest": "^29.5.12",
+        "@types/jsdom": "^21.1.6",
+        "@types/node": "^20.11.25",
+        "@types/prettyjson": "^0.0.33",
+        "@types/uuid": "^9.0.8",
+        "@typescript-eslint/eslint-plugin": "^7.1.1",
+        "@typescript-eslint/parser": "^7.1.1",
+        "copyfiles": "^2.4.1",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^5.1.3",
+        "eslint-plugin-promise": "^6.1.1",
+        "husky": "^9.0.11",
+        "istanbul-badges-readme": "^1.8.5",
+        "jest": "^29.7.0",
+        "jest-puppeteer": "^10.0.1",
+        "prettier": "^3.2.5",
+        "semantic-release": "^23.0.2",
+        "ts-jest": "^29.1.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.4.2"
+    },
+    "scripts": {
+        "build": "tsc && copyfiles README.md dist",
+        "build:prod": "npm run lint && tsc --project tsconfig.prod.json && copyfiles README.md dist",
+        "lint": "tsc --noEmit && eslint . --ext js,ts --quiet --fix",
+        "semantic-release": "semantic-release",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent --expand --verbose",
+        "test:withIts": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest-it.config.cjs",
+        "test:coverage": "jest --coverage --detectOpenHandles",
+        "test:local": "jest --watch",
+        "prepare_husky": "husky install",
+        "badge-script": "istanbul-badges-readme && git add .",
+        "update-major-deps": "npx npm-check-updates -u",
+        "testlocal": "npm run build && node .\\dist\\bin\\a11y-sitechecker.js  --config=config.json"
+    },
+    "bin": {
+        "a11y-sitechecker": "./bin/a11y-sitechecker.js"
+    },
+    "keywords": [
+        "accessibility",
+        "a11y",
+        "testing",
+        "automated testing",
+        "accessibility testing",
+        "universal design",
+        "Design4all",
+        "automation",
+        "test",
+        "accessible"
     ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "dist",
-          "tarballDir": "release"
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "CHANGELOG.md"
-          ]
-        }
-      ],
-      [
-        "@semantic-release/github",
-        {
-          "assets": "release/*.tgz"
-        }
-      ]
-    ]
-  }
+    "author": "Martin Forstner",
+    "license": "GPL-3.0-or-later",
+    "type": "module",
+    "files": [
+        "lib",
+        "bin"
+    ],
+    "release": {
+        "branches": [
+            "main",
+            "next"
+        ],
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            "@semantic-release/changelog",
+            [
+                "@semantic-release/npm",
+                {
+                    "pkgRoot": "dist",
+                    "tarballDir": "release"
+                }
+            ],
+            [
+                "@semantic-release/git",
+                {
+                    "assets": [
+                        "CHANGELOG.md"
+                    ]
+                }
+            ],
+            [
+                "@semantic-release/github",
+                {
+                    "assets": "release/*.tgz"
+                }
+            ]
+        ]
+    }
 }
